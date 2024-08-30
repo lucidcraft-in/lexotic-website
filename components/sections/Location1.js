@@ -24,12 +24,12 @@ const swiperOptions = {
 	centeredSlides: true,
 	breakpoints: {
 		600: {
-			slidesPerView: 2,
+			slidesPerView: 3,
 			spaceBetween: 20,
 			centeredSlides: false,
 		},
 		991: {
-			slidesPerView: 3,
+			slidesPerView: 2,
 			spaceBetween: 20,
 			centeredSlides: false,
 		},
@@ -47,63 +47,77 @@ import Link from "next/link"
 
 export default function Location1() {
 	return (
-		<>
-
-			<section className="flat-section-v3 flat-location bg-surface">
-				<div className="container-full">
-					<div className="box-title text-center wow fadeInUpSmall" data-wow-delay=".2s" data-wow-duration="2000ms">
-						<div className="text-subtitle text-primary">Explore Cities</div>
-						<h4 className="mt-4">Our Location For You</h4>
-					</div>
-					<div className="wow fadeInUpSmall" data-wow-delay=".4s" data-wow-duration="2000ms">
-						<div className="swiper tf-sw-location overlay">
-							<Swiper {...swiperOptions} className="swiper-wrapper">
-								<SwiperSlide>
-									<Link href="#" className="box-location">
-										<div className="image">
-											<img src="/images/dubai.jpg"
-												style={{
-													widt: '100%',
-													height: '100%',
-													overflow: 'hidden'
-												}}
-												alt="image-location" />
-										</div>
-										<div className="content">
-											<span className="sub-title">321 Property</span>
-											<h6 className="title">United Arab Emirates</h6>
-										</div>
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="#" className="box-location">
-										<div className="image">
-											<img src="/images/taj_mahal_agra.jpg"
-												style={{
-													widt: '100%',
-													height: '100%',
-													overflow: 'hidden'
-												}}
-												alt="image-location" />
-										</div>
-										<div className="content">
-											<span className="sub-title">221 Property</span>
-											<h6 className="title">Taj Mahal, India</h6>
-										</div>
-									</Link>
-								</SwiperSlide>
-								{/* <SwiperSlide>
-									<Link href="#" className="box-location">
-										<div className="image">
-											<img src="/images/location/location-5.jpg" alt="image-location" />
-										</div>
-										<div className="content">
-											<span className="sub-title">128 Property</span>
-											<h6 className="title">Seoul, South Korea</h6>
-										</div>
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
+    <>
+      <section className="flat-section-v3 flat-location bg-surface">
+        <div className="container-full">
+          <div
+            className="box-title text-center wow fadeInUpSmall"
+            data-wow-delay=".2s"
+            data-wow-duration="2000ms"
+          >
+            <div className="text-subtitle text-primary">Explore Cities</div>
+            <h4 className="mt-4">Our Location For You</h4>
+          </div>
+          <div
+            className="wow fadeInUpSmall"
+            data-wow-delay=".4s"
+            data-wow-duration="2000ms"
+          >
+            <div className="swiper tf-sw-location overlay">
+              <Swiper {...swiperOptions} className="swiper-wrapper">
+                <SwiperSlide>
+                  <Link href="#" className="box-location">
+                    <div className="image">
+                      <img
+                        src="/images/dubai.png"
+                        style={{
+                          widt: '100%',
+                          height: '100%',
+                          overflow: 'hidden',
+                        }}
+                        alt="image-location"
+                      />
+                    </div>
+                    <div className="content">
+                      <span className="sub-title">321 Property</span>
+                      <h6 className="title">United Arab Emirates</h6>
+                    </div>
+                  </Link>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <Link href="#" className="box-location">
+                    <div className="image">
+                      <img
+                        src="/images/india.png"
+                        style={{
+                          widt: '100%',
+                          height: '100%',
+                          overflow: 'hidden',
+                        }}
+                        alt="image-location"
+                      />
+                    </div>
+                    <div className="content">
+                      <span className="sub-title">221 Property</span>
+                      <h6 className="title">Taj Mahal, India</h6>
+                    </div>
+                  </Link>
+                </SwiperSlide>
+                {/* <SwiperSlide>
+                  <Link href="#" className="box-location">
+                    <div className="image">
+                      <img
+                        src="/images/location/location-5.jpg"
+                        alt="image-location"
+                      />
+                    </div>
+                    <div className="content">
+                      <span className="sub-title">128 Property</span>
+                      <h6 className="title">Seoul, South Korea</h6>
+                    </div>
+                  </Link>
+                </SwiperSlide>
+                <SwiperSlide>
 									<Link href="#" className="box-location">
 										<div className="image">
 											<img src="/images/location/location-3.jpg" alt="image-location" />
@@ -136,15 +150,19 @@ export default function Location1() {
 										</div>
 									</Link>
 								</SwiperSlide> */}
-							</Swiper>
-							<div className="box-navigation">
-								<div className="navigation swiper-nav-next nav-next-location"><span className="icon icon-arr-l" /></div>
-								<div className="navigation swiper-nav-prev nav-prev-location"><span className="icon icon-arr-r" /></div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-		</>
-	)
+              </Swiper>
+              <div className="box-navigation">
+                <div className="navigation swiper-nav-next nav-next-location">
+                  <span className="icon icon-arr-l" />
+                </div>
+                <div className="navigation swiper-nav-prev nav-prev-location">
+                  <span className="icon icon-arr-r" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
 }
