@@ -15,13 +15,13 @@ export default function Recommended1() {
 	const [selectedCategory, setSelectedCategory] = useState("");
 	const [product, setProduct] = useState([])
 
-	const handleCategorySelect = async (index, categoryType) => {
+	const handleCategorySelect = async (index, categoryId) => {
 		setIsTab(index);
-		setSelectedCategory(categoryType);
+		setSelectedCategory(categoryId);
 		setIsVisible(false)
 
 		try {
-			const response = await Axios.get(`/productsbycata/${categoryType}`);
+			const response = await Axios.get(`/productsbycata/${categoryId}`);
 			if (response.status === 200) {
 				const data = Array.isArray(response.data) ? response.data : []; // Ensure data is an array
 				setProduct(response.data.products);
@@ -127,7 +127,7 @@ console.log(product)
 									<a
 										className={isTab === index ? "nav-link-item active" : "nav-link-item"}
 										data-bs-toggle="tab"
-										onClick={() => handleCategorySelect(index, cat?.cattype)}
+										onClick={() => handleCategorySelect(index, cat?._id)}
 									>{cat.cattype}</a>
 								</li>
 
