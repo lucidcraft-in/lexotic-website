@@ -35,7 +35,7 @@ export default function Recommended1() {
 			setIsVisible(true); // Show content after fetching data
 		}
 	};
-console.log(product)
+	console.log(product)
 
 
 
@@ -146,7 +146,7 @@ console.log(product)
 												<div className="archive-top">
 													<Link href="/property-details-v1" className="images-group">
 														<div className="images-style">
-															<img src={pro.photos[0]?.url || "images/placeholder.jpg"} alt={pro.photos[0]?.title || "property image"} />
+															<img src="images/2.jpg" alt="property image" />
 														</div>
 														<div className="top">
 															<ul className="d-f lex gap-8">
@@ -331,7 +331,7 @@ console.log(product)
 															<span>600 SqFT</span>
 														</li>
 													</ul>
-												</div>
+												</div> 
 											</div>
 											<div className="archive-bottom d-flex justify-content-between align-items-center">
 												<div className="d-flex gap-8 align-items-center">
