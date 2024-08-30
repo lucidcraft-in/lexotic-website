@@ -15,8 +15,8 @@ export default function Login() {
 									<h3 className="title text-center">Log In</h3>
 									<form action="#">
 										<fieldset className="box-fieldset">
-											<label htmlFor="name">Your Names<span>*</span>:</label>
-											<input type="text" className="form-contact style-1" defaultValue="themesflat@gmail.com|" />
+											<label htmlFor="name">Username<span>*</span>:</label>
+											<input type="text" className="form-contact style-1" defaultValue="enter username" />
 										</fieldset>
 										<fieldset className="box-fieldset">
 											<label htmlFor="pass">Password<span>*</span>:</label>

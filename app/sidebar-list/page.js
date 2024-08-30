@@ -1,15 +1,36 @@
 'use client'
+import Axios from "@/components/axios/axios"
 import RangeSlider from "@/components/elements/RangeSlider"
 import SidebarFilter from "@/components/elements/SidebarFilter"
 import TabNav from "@/components/elements/TabNav"
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 export default function SidebarList() {
 	const [isTab, setIsTab] = useState(2)
 	const handleTab = (i) => {
 		setIsTab(i)
 	}
+
+
+	const [product, setProduct] = useState([])
+
+
+	useEffect(() => {
+		getData()
+	}, [])
+
+	const getData = async () => {
+		try {
+			const res = await Axios.get(`getproducts`)
+			console.log(res)
+			setProduct(res.data)
+
+		} catch (error) {
+			console.log('error')
+		}
+	}
+
 	return (
 		<>
 
@@ -17,7 +38,7 @@ export default function SidebarList() {
 				<section className="flat-section-v6 flat-recommended flat-sidebar">
 					<div className="container">
 						<div className="box-title-listing">
-							<h5>Property listing</h5>
+							<h5>Product List</h5>
 							<div className="box-filter-tab">
 								<ul className="nav-tab-filter" role="tablist">
 									<li className="nav-tab-item" onClick={() => handleTab(1)}>
@@ -145,7 +166,7 @@ export default function SidebarList() {
 											</div>
 										</div>
 									</div >
-									<div className="widget-box bg-surface box-latest-property">
+									{/* <div className="widget-box bg-surface box-latest-property">
 										<div className="h7 fw-7 title">Latest Propeties</div>
 										<ul>
 											<li className="latest-property-item">
@@ -249,7 +270,7 @@ export default function SidebarList() {
 												</div>
 											</li>
 										</ul>
-									</div>
+									</div> */}
 								</div >
 							</div >
 							<div className="col-xl-8 col-lg-7">
@@ -754,67 +775,70 @@ export default function SidebarList() {
 									</div>
 									<div className={isTab == 2 ? "tab-pane fade show active" : "tab-pane fade"} id="listLayout" role="tabpanel">
 										<div className="row">
-											<div className="col-md-12">
-												<div className="homeya-box list-style-1 list-style-2">
-													<Link href="/property-details-v1" className="images-group">
-														<div className="images-style">
-															<img src="/images/home/house-9.jpg" alt="img" />
-														</div>
-														<div className="top">
-															<ul className="d-flex gap-4 flex-wrap">
-																<li className="flag-tag style-1">For Sale</li>
-															</ul>
-															<ul className="d-flex gap-4">
-																<li className="box-icon w-32">
-																	<span className="icon icon-arrLeftRight" />
-																</li>
-																<li className="box-icon w-32">
-																	<span className="icon icon-heart" />
-																</li>
-																<li className="box-icon w-32">
-																	<span className="icon icon-eye" />
-																</li>
-															</ul>
-														</div>
-														<div className="bottom">
-															<span className="flag-tag style-2">Villa</span>
-														</div>
-													</Link>
-													<div className="content">
-														<div className="archive-top">
-															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Casa Lomas de Machalí Machas</Link></div>
-															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
-															<ul className="meta-list">
-																<li className="item">
-																	<i className="icon icon-bed" />
-																	<span>4</span>
-																</li>
-																<li className="item">
-																	<i className="icon icon-bathtub" />
-																	<span>2</span>
-																</li>
-																<li className="item">
-																	<i className="icon icon-ruler" />
-																	<span>600 SqFT</span>
-																</li>
-															</ul>
-														</div>
-														<div className="d-flex justify-content-between align-items-center archive-bottom">
-															<div className="d-flex gap-8 align-items-center">
-																<div className="avatar avt-40 round">
-																	<img src="/images/avatar/avt-8.jpg" alt="avt" />
-																</div>
-																<span>Jacob Jones</span>
+											{product?.map((pro) => (
+												<div className="col-md-12">
+													<div className="homeya-box list-style-1 list-style-2">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-9.jpg" alt="img" />
 															</div>
-															<div className="d-flex align-items-center">
-																<div className="h7 fw-7">$5050,00</div>
-																<span className="text-variant-1">/SqFT</span>
+															<div className="top">
+																<ul className="d-flex gap-4 flex-wrap">
+																	<li className="flag-tag style-1">For Rent</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">{pro.title}</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="archive-top">
+																<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">{pro.name}</Link></div>
+																<div className="desc"><i className="icon icon-mapPin" /><p>{pro?.location?.address}</p> </div>
+																<ul className="meta-list">
+																	<li className="item">
+																		<i className="icon icon-bed" />
+																		<span>4</span>
+																	</li>
+																	<li className="item">
+																		<i className="icon icon-bathtub" />
+																		<span>2</span>
+																	</li>
+																	<li className="item">
+																		<i className="icon icon-ruler" />
+																		<span>600 SqFT</span>
+																	</li>
+																</ul>
+															</div>
+															<div className="d-flex justify-content-between align-items-center archive-bottom">
+																<div className="d-flex gap-8 align-items-center">
+																	<div className="avatar avt-40 round">
+																		<img src="/images/avatar/avt-8.jpg" alt="avt" />
+																	</div>
+																	<span>{pro.owner.name}</span>
+																</div>
+																<div className="d-flex align-items-center">
+																	<div className="h7 fw-7">{pro.price}</div>
+																	<span className="text-variant-1">/SqFT</span>
+																</div>
 															</div>
 														</div>
 													</div>
 												</div>
-											</div>
-											<div className="col-md-12">
+											))}
+
+											{/* <div className="col-md-12">
 												<div className="homeya-box list-style-1 list-style-2">
 													<Link href="/property-details-v1" className="images-group">
 														<div className="images-style">
@@ -1173,7 +1197,7 @@ export default function SidebarList() {
 														</div>
 													</div>
 												</div>
-											</div>
+											</div> */}
 										</div>
 										<ul className="justify-content-center wd-navigation">
 											<li><Link href="#" className="nav-item active">1</Link></li>

@@ -1,6 +1,39 @@
 import Link from "next/link"
+import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Axios from "../axios/axios";
+
 
 export default function ModalLogin({ isLogin, handleLogin, isRegister, handleRegister }) {
+
+	const [username, setUsername] = useState("")
+	const [pass, setPass] = useState("")
+	const [loading, setLoading] = useState(false);
+
+
+
+	const handleSubmit = async (e) => {
+		e.preventDefault()
+		setLoading(true);
+
+		try {
+			const res = await Axios.post(`/login`, {
+				username, password: pass
+			})
+			console.log(res, "login data")
+			toast.success("success", { autoClose: 3000 })
+			sessionStorage.setItem("UserInfo", username)
+			setLoading(false);
+
+
+
+		} catch (error) {
+			toast.error("error", { autoClose: 3000 })
+			setLoading(false);
+
+		}
+	}
 	return (
 		<>
 			<div className={`modal fade ${isLogin ? "show d-block" : ""}`} id="modalLogin">
@@ -8,16 +41,20 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 					<div className="modal-content">
 						<div className="flat-account bg-surface">
 							<h3 className="title text-center">Log In</h3>
-							<span className="close-modal icon-close2" onClick={handleLogin} />
-							<form action="#">
+							<span className="close-modal icon-close2" onClick={handleSubmit} />
+							<form onSubmit={handleSubmit} >
 								<fieldset className="box-fieldset">
-									<label htmlFor="name">Your Names<span>*</span>:</label>
-									<input type="text" className="form-contact style-1" defaultValue="themesflat@gmail.com|" />
+									<label htmlFor="name">Username<span>*</span>:</label>
+									<input type="text" className="form-contact style-1" placeholder="Enter Username"
+										onChange={(e) => setUsername(e.target.value)}
+										autoComplete="off" />
 								</fieldset>
 								<fieldset className="box-fieldset">
 									<label htmlFor="pass">Password<span>*</span>:</label>
 									<div className="box-password">
-										<input type="password" className="form-contact style-1 password-field" placeholder="Password" />
+										<input type="password" className="form-contact style-1 password-field" placeholder="Password"
+											onChange={(e) => setPass(e.target.value)}
+											autoComplete="off" />
 										<span className="show-pass">
 											<i className="icon-pass icon-eye" />
 											<i className="icon-pass icon-eye-off" />
@@ -46,7 +83,25 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 										Continue with Twitter
 									</Link>
 								</div>
-								<button type="submit" className="tf-btn primary w-100">Login</button>
+								<div>
+									{loading ? (
+										<div
+											className="spinner-border text-primary"
+											role="status"
+										>
+											<span className="visually-hidden">
+
+											</span>
+										</div>) : (
+										<div>
+											
+											<button type="submit" className="tf-btn primary w-100">Login</button>
+
+										</div>
+
+									)
+									}
+								</div>
 								<div className="mt-12 text-variant-1 text-center noti">Not registered yet?
 									<a onClick={() => { handleLogin(); handleRegister() }} className="text-black fw-5">Sign Up</a>
 								</div>

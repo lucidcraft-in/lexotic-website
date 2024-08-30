@@ -5,7 +5,7 @@ export default function Property1() {
 	return (
 		<>
 
-			<section className="flat-section flat-property">
+			{/* <section className="flat-section flat-property">
 				<div className="container">
 					<div className="box-title style-1 wow fadeInUpSmall" data-wow-delay=".2s" data-wow-duration="2000ms">
 						<div className="box-left">
@@ -256,7 +256,7 @@ export default function Property1() {
 						</div>
 					</div>
 				</div>
-			</section>
+			</section> */}
 		</>
 	)
 }

@@ -25,12 +25,13 @@ export default function PropertyHalfmapList() {
 
 	const getData = async () => {
 		const res = await Axios.get(`/cart/${userId}`)
+		console.log(res.data)
+		setCart(res.data)
 		if (res === 201) {
 			setCart(res.data)
 		}
 
 	}
-
 
 
 	return (
@@ -143,7 +144,7 @@ export default function PropertyHalfmapList() {
 					</div > */}
 					<div className="wrap-inner">
 						<div className="box-title-listing style-1">
-							<h5>Property listing b for ball</h5>
+							<h5>Cart List</h5>
 							<div className="box-filter-tab">
 								<ul className="nav-tab-filter" role="tablist">
 									<li className="nav-tab-item" onClick={() => handleTab(1)}>
@@ -715,10 +716,9 @@ export default function PropertyHalfmapList() {
 										</div>
 									</div> */}
 
-									{/* {cart?.map((cart) => ( */}
-
 
 									<div className="col-md-12">
+									{cart?.map((cart) => (
 
 										<div className="homeya-box list-style-1 list-style-2">
 											<Link href="/property-details-v1" className="images-group">
@@ -757,7 +757,7 @@ export default function PropertyHalfmapList() {
 														</li>
 														<li className="item">
 															<i className="icon icon-bathtub" />
-															<span>2</span>
+															<span>{cart.items[0]?.quantity}</span>
 														</li>
 														<li className="item">
 															<i className="icon icon-ruler" />
@@ -770,17 +770,25 @@ export default function PropertyHalfmapList() {
 														<div className="avatar avt-40 round">
 															<img src="/images/avatar/avt-9.jpg" alt="avt" />
 														</div>
-														<span>Annette Black</span>
+														{/* <span>Annette Black</span> */}
+														<span>Total Price : {cart?.totalRentalPrice}</span>
 													</div>
 													<div className="d-flex align-items-center">
-														<div className="h7 fw-7">$250,00</div>
+														<div className="h7 fw-7">{cart.items[0].pricePerDay}</div>
 														<span className="text-variant-1">/month</span>
 													</div>
 												</div>
 											</div>
 										</div>
+							 ))}
+
 									</div>
-									{/* // ))} */}
+
+									<div className="d-flex justify-content-center ">
+										<button type="submit" className="btn btn-primary "> Checkoaddut</button>
+									</div>
+
+
 
 
 								</div>
