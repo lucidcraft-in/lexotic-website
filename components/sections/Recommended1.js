@@ -23,9 +23,9 @@ export default function Recommended1() {
 		try {
 			const response = await Axios.get(`/productsbycata/${categoryId}`);
 			if (response.status === 200) {
-				const data = Array.isArray(response.data) ? response.data : []; // Ensure data is an array
-				setProduct(response.data.products);
-				console.log(response.data.products);
+				const data = Array.isArray(response.data.products) ? response.data.products : []; // Ensure data is an array
+				setProduct(data);
+				// console.log(response.data.products);
 			} else {
 				console.error('Failed to fetch products:', response.statusText);
 			}
@@ -37,24 +37,37 @@ export default function Recommended1() {
 	};
 	console.log(product)
 
+const userInfo = sessionStorage.getItem("UserInfo")
+if(userInfo){
+	const {userId,username,token}=JSON.parse(userInfo)
+	console.log(userId)
+}
+const handleAddCart = async()=>{
+
+	const data={
+		userId,
+		items:[
+			{
+				productId:product._id,
+				rentalStartDate,
+				rentalEndDate,
+				priceperdat:product.offerPrice,
+				quantity
+
+			}
+		]
 
 
-	// const getData = async () => {
-	// 	try {
+	}
 
-	// 		const res = await Axios.get(`getproducts`)
-	// 		console.log(res.data)
-	// 		setProduct(res.data)
+	try {
+		const res= await Axios.post(`cart`,data)
+		
+	} catch (error) {
+		
+	}
+}
 
-	// 	} catch (error) {
-	// 		console.log('error')
-
-	// 	}
-
-	// }
-
-
-	// Fetch categories from API
 
 	useEffect(() => {
 		fetchCategories();
@@ -125,8 +138,8 @@ export default function Recommended1() {
 
 								<li className="nav-tab-item" key={cat._id} >
 									<a
-										className={isTab === index ? "nav-link-item active" : "nav-link-item"}
-										data-bs-toggle="tab"
+										className="nav-link-item active" 
+										// data-bs-toggle="tab"
 										onClick={() => handleCategorySelect(index, cat?._id)}
 									>{cat.cattype}</a>
 								</li>
@@ -136,7 +149,7 @@ export default function Recommended1() {
 
 
 						<div className="tab-content">
-							<div style={{ opacity: isVisible ? 1 : 0 }} className={isTab == 1 ? "tab-pane fade show active" : "tab-pane fade"} id="viewAll" role="tabpanel">
+							<div >
 								<div className="row"
 								>
 									{product?.map((pro) => (
@@ -151,7 +164,7 @@ export default function Recommended1() {
 														<div className="top">
 															<ul className="d-f lex gap-8">
 																<li className="flag-tag success">Featured</li>
-																<li className="flag-tag style-1">For Sale</li>
+																<li className="flag-tag style-1">For Rent</li>
 															</ul>
 															<ul className="d-flex gap-4"
 															>
@@ -205,7 +218,8 @@ export default function Recommended1() {
 														<span className="text-variant-1">/SqFT</span>
 													</div>
 													<div className="mt-3 ">
-														<button className="p-2 me-3 btn btn-primary" type="submit">
+														<button className="p-2 me-3 btn btn-primary" type="submit"
+														onClick={handleAddCart}>
 															Add to Cart
 														</button>
 														<button className="p-2 btn btn-info" type="submit">
@@ -223,7 +237,7 @@ export default function Recommended1() {
 									<Link href="#" className="tf-btn primary size-1">View All Properties</Link>
 								</div>
 							</div>
-							<div style={{ opacity: isVisible ? 1 : 0 }} className={isTab == 2 ? "tab-pane fade show active" : "tab-pane fade"} id="apartment" role="tabpanel">
+							{/* <div style={{ opacity: isVisible ? 1 : 0 }} className={isTab == 2 ? "tab-pane fade show active" : "tab-pane fade"} id="apartment" role="tabpanel">
 								<div className="row">
 									<div className="col-xl-4 col-lg-6 col-md-6">
 										<div className="homeya-box">
@@ -2087,7 +2101,7 @@ export default function Recommended1() {
 								<div className="text-center">
 									<Link href="#" className="tf-btn primary size-1">View All Properties</Link>
 								</div>
-							</div>
+							</div> */}
 						</div>
 					</div>
 				</div>

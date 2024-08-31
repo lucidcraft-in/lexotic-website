@@ -23,7 +23,9 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 			})
 			console.log(res, "login data")
 			toast.success("success", { autoClose: 3000 })
-			sessionStorage.setItem("UserInfo", username)
+
+			const{token,userId}=res.data
+			sessionStorage.setItem("UserInfo", JSON.stringify({userId,username,token}))
 			setLoading(false);
 
 
