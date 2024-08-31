@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Axios from "../axios/axios"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { useParams } from "next/navigation";
 
 
 
@@ -14,6 +15,7 @@ export default function Recommended1() {
 	const [categories, setCategories] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState("");
 	const [product, setProduct] = useState([])
+	const { id } = useParams
 
 	const handleCategorySelect = async (index, categoryId) => {
 		setIsTab(index);
@@ -37,36 +39,36 @@ export default function Recommended1() {
 	};
 	console.log(product)
 
-const userInfo = sessionStorage.getItem("UserInfo")
-if(userInfo){
-	const {userId,username,token}=JSON.parse(userInfo)
-	console.log(userId)
-}
-const handleAddCart = async()=>{
-
-	const data={
-		userId,
-		items:[
-			{
-				productId:product._id,
-				rentalStartDate,
-				rentalEndDate,
-				priceperdat:product.offerPrice,
-				quantity
-
-			}
-		]
-
-
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token } = JSON.parse(userInfo)
+		console.log(userId)
 	}
+	const handleAddCart = async () => {
 
-	try {
-		const res= await Axios.post(`cart`,data)
-		
-	} catch (error) {
-		
+		const data = {
+			userId,
+			items: [
+				{
+					productId: product._id,
+					rentalStartDate,
+					rentalEndDate,
+					priceperdat: product.offerPrice,
+					quantity
+
+				}
+			]
+
+
+		}
+
+		try {
+			const res = await Axios.post(`cart`, data)
+
+		} catch (error) {
+
+		}
 	}
-}
 
 
 	useEffect(() => {
@@ -138,7 +140,7 @@ const handleAddCart = async()=>{
 
 								<li className="nav-tab-item" key={cat._id} >
 									<a
-										className="nav-link-item active" 
+										className="nav-link-item active"
 										// data-bs-toggle="tab"
 										onClick={() => handleCategorySelect(index, cat?._id)}
 									>{cat.cattype}</a>
@@ -211,21 +213,19 @@ const handleAddCart = async()=>{
 															<img src="/images/avatar/avt-6.jpg" alt="avt" />
 														</div>
 														<span>{pro.owner.name}</span>
-
 													</div>
 													<div className="d-flex align-items-center">
 														<h6>{pro?.offerPrice}</h6>
 														<span className="text-variant-1">/SqFT</span>
 													</div>
 													<div className="mt-3 ">
-														<button className="p-2 me-3 btn btn-primary" type="submit"
-														onClick={handleAddCart}>
-															Add to Cart
-														</button>
-														<button className="p-2 btn btn-info" type="submit">
-															Book
-														</button>
+														<Link href={`/property-details-v1`} >
+															<button className="p-2 btn btn-primary" type="submit">
+																Book Now
+															</button>
+														</Link>
 													</div>
+
 												</div>
 											</div>
 										</div>
