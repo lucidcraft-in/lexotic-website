@@ -39,36 +39,6 @@ export default function Recommended1() {
 	};
 	console.log(product)
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token } = JSON.parse(userInfo)
-		console.log(userId)
-	}
-	const handleAddCart = async () => {
-
-		const data = {
-			userId,
-			items: [
-				{
-					productId: product._id,
-					rentalStartDate,
-					rentalEndDate,
-					priceperdat: product.offerPrice,
-					quantity
-
-				}
-			]
-
-
-		}
-
-		try {
-			const res = await Axios.post(`cart`, data)
-
-		} catch (error) {
-
-		}
-	}
 
 
 	useEffect(() => {
@@ -219,7 +189,8 @@ export default function Recommended1() {
 														<span className="text-variant-1">/SqFT</span>
 													</div>
 													<div className="mt-3 ">
-														<Link href={`/property-details-v1`} >
+														<Link href={{pathname:"/property-details-v1",query:{_id:pro?._id}}} 
+														>
 															<button className="p-2 btn btn-primary" type="submit">
 																Book Now
 															</button>

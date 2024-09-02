@@ -7,30 +7,95 @@ import TabNav from "@/components/elements/TabNav"
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTrash } from "@fortawesome/fontawesome-free"
 export default function PropertyHalfmapList() {
 	const [isTab, setIsTab] = useState(2)
 	const handleTab = (i) => {
 		setIsTab(i)
 	}
 
-	const [cart, setCart] = useState([])
-
-	const userId = "66b9835f0a8b491f43302e66"
-
+	let user = null
 
 	useEffect(() => {
 
 		getData()
-	}, [])
+	}, [user])
+
+	const [cart, setCart] = useState([])
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token } = JSON.parse(userInfo)
+		console.log(userId)
+		user = userId
+	}
+
+
+	
 
 	const getData = async () => {
-		const res = await Axios.get(`/cart/${userId}`)
-		console.log(res.data)
-		setCart(res.data)
-		if (res === 201) {
-			setCart(res.data)
+		try {
+			const res = await Axios.get(`/cart/${user}`);
+			console.log(res.data);
+			// Ensure the response structure matches your expectations
+			setCart(res.data || { items: [] }); // Default to empty items array if data is not available
+		} catch (error) {
+			console.error("Failed to fetch cart data:", error);
+			setCart({ items: [] }); // Handle error by setting an empty cart
+		}
+	};
+	
+	console.log(cart)
+
+	const handleCheckout = async (e) => {
+		e.preventDefault()
+		let totalAmount = 0
+
+		if(!cart || !cart.item){
+			console.log("cart data is not available")
+			return
+		}
+		const items = cart.items.map(item => {
+			const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24);
+			const totalItemPrice = item.pricePerDay * item.quantity * days;
+			totalAmount += totalItemPrice;
+			return {
+				...item,
+				totalItemPrice
+			};
+		});
+
+
+
+		const data = {
+			userId: user,
+			items,
+			totalAmount,
+			orderDate: new Date().toISOString(),
+			orderStatus: 'pending',
+			status: 'done',
+			createdAt: new Date().toISOString(),
+			updatedAt: new DataView().toISOString()
+
 		}
 
+		try {
+			const res = await Axios.post(`/order`, data)
+			console.log("order created successfully", res.data)
+
+		} catch (error) {
+			console.log("failed to create order", error)
+
+		}
+	}
+
+	const onRemove = async (cartId) => {
+		console.log(cartId)
+		const del = await Axios.delete(`/cart/${cartId}`)
+		console.log("deleted successfully", del)
+		getData()
 	}
 
 
@@ -718,74 +783,82 @@ export default function PropertyHalfmapList() {
 
 
 									<div className="col-md-12">
-									{cart?.map((cart) => (
+										{cart?.map((cart) => (
 
-										<div className="homeya-box list-style-1 list-style-2">
-											<Link href="/property-details-v1" className="images-group">
-												<div className="images-style">
-													<img src="/images/home/house-5.jpg" alt="img" />
-												</div>
-												<div className="top">
-													<ul className="d-flex">
-														<li className="flag-tag style-1">For Rent</li>
-													</ul>
-													<ul className="d-flex gap-4">
-														<li className="box-icon w-32">
-															<span className="icon icon-arrLeftRight" />
-														</li>
-														<li className="box-icon w-32">
-															<span className="icon icon-heart" />
-														</li>
-														<li className="box-icon w-32">
-															<span className="icon icon-eye" />
-														</li>
-													</ul>
-												</div>
-
-												<div className="bottom">
-													<span className="flag-tag style-2">apartment</span>
-												</div>
-											</Link>
-											<div className="content">
-												<div className="archive-top">
-													<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
-													<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
-													<ul className="meta-list">
-														<li className="item">
-															<i className="icon icon-bed" />
-															<span>4</span>
-														</li>
-														<li className="item">
-															<i className="icon icon-bathtub" />
-															<span>{cart.items[0]?.quantity}</span>
-														</li>
-														<li className="item">
-															<i className="icon icon-ruler" />
-															<span>600 SqFT</span>
-														</li>
-													</ul>
-												</div>
-												<div className="d-flex justify-content-between align-items-center archive-bottom">
-													<div className="d-flex gap-8 align-items-center">
-														<div className="avatar avt-40 round">
-															<img src="/images/avatar/avt-9.jpg" alt="avt" />
-														</div>
-														{/* <span>Annette Black</span> */}
-														<span>Total Price : {cart?.totalRentalPrice}</span>
+											<div className="homeya-box list-style-1 list-style-2">
+												<Link href="/property-details-v1" className="images-group">
+													<div className="images-style">
+														<img src="/images/home/house-5.jpg" alt="img" />
 													</div>
-													<div className="d-flex align-items-center">
-														<div className="h7 fw-7">{cart.items[0].pricePerDay}</div>
-														<span className="text-variant-1">/month</span>
+													<div className="top">
+														<ul className="d-flex">
+															<li className="flag-tag style-1">For Rent</li>
+														</ul>
+														<ul className="d-flex gap-4">
+															<li className="box-icon w-32">
+																<span className="icon icon-arrLeftRight" />
+															</li>
+															<li className="box-icon w-32">
+																<span className="icon icon-heart" />
+															</li>
+															<li className="box-icon w-32">
+																<span className="icon icon-eye" />
+															</li>
+														</ul>
+													</div>
+
+													<div className="bottom">
+														<span className="flag-tag style-2">apartment</span>
+													</div>
+												</Link>
+												<div className="content">
+													<div className="archive-top">
+														<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
+														<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+														<ul className="meta-list">
+															<li className="item">
+																<i className="icon icon-bed" />
+																<span>4</span>
+															</li>
+															<li className="item">
+																<i className="icon icon-bathtub" />
+																<span>{cart.items[0]?.quantity}</span>
+															</li>
+															<li className="item">
+																<i className="icon icon-ruler" />
+																<span>600 SqFT</span>
+															</li>
+														</ul>
+													</div>
+													<div className="d-flex justify-content-between align-items-center archive-bottom">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-9.jpg" alt="avt" />
+															</div>
+															{/* <span>Annette Black</span> */}
+															<span>Total Price : {cart?.totalRentalPrice}</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<div className="h7 fw-7">{cart.items[0].pricePerDay}</div>
+															<span className="text-variant-1">/month</span>
+														</div>
+														{/* Remove Icon Button */}
+														<button
+															className="btn btn-danger"
+															onClick={() => onRemove(cart._id)}
+															aria-label="Remove item"
+														>
+															Remove
+														</button>
 													</div>
 												</div>
 											</div>
-										</div>
-							 ))}
+										))}
 
 									</div>
 
 									<div className="d-flex justify-content-center ">
-										<button type="submit" className="btn btn-primary "> Checkoaddut</button>
+										<button type="submit" className="btn btn-primary " onClick={handleCheckout}> Check Out</button>
 									</div>
 
 
