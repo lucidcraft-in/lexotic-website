@@ -14,37 +14,55 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
 
 
-	const handleSubmit = async (e) => {
+	const handleUserSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
 
 		try {
-			// Call a generic endpoint to check the login type
-			const checkRes = await Axios.post(`/logincheck`, {
+
+
+
+
+			// User login
+			const res = await Axios.post(`/loginuser`, {
 				username, password: pass
 			});
 
-			console.log(checkRes, "login check data");
 
-			const { isFlag } = checkRes.data;
+			const { token, userId, isFlag } = res.data;
 
-			let loginRes;
-			if (isFlag) {
-				// User login
-				loginRes = await Axios.post(`/loginuser`, {
-					username, password: pass
-				});
-			} else {
-				// Merchant login
-				loginRes = await Axios.post(`/loginmerchant`, {
-					username, password: pass
-				});
-			}
 
-			console.log(loginRes, "final login data");
+			// Store user or merchant data in session storage
+			sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
 
-			const { token, userId, merchantId } = loginRes.data;
-			const id = isFlag ? userId : merchantId;
+			toast.success("Success", { autoClose: 3000 });
+			setLoading(false);
+
+		} catch (error) {
+			toast.error("Error", { autoClose: 3000 });
+			setLoading(false);
+		}
+	};
+
+
+
+	const handleMerchantSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+
+		try {
+
+
+
+
+			// User login
+			const res = await Axios.post(`/loginmerchant`, {
+				username, password: pass
+			});
+
+
+			const { token, userId, isFlag } = res.data;
+
 
 			// Store user or merchant data in session storage
 			sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
@@ -61,8 +79,6 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
 
 
-
-
 	return (
 		<>
 			<div className={`modal fade ${isLogin ? "show d-block" : ""}`} id="modalLogin">
@@ -70,9 +86,9 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 					<div className="modal-content">
 						<div className="flat-account bg-surface">
 							<h3 className="title text-center">{isMerchant ? "Login as Merchant" : "Login as User"}</h3>
-							<span className="close-modal icon-close2" onClick={handleSubmit} />
+							<span className="close-modal icon-close2"  />
 							{isMerchant ? (
-								<form onSubmit={handleSubmit} >
+								<form onSubmit={handleMerchantSubmit} >
 									<fieldset className="box-fieldset">
 										<label htmlFor="name">Username<span>*</span>:</label>
 										<input type="text" className="form-contact style-1" placeholder="Enter Username"
@@ -139,7 +155,7 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
 								</form>
 							) : (
-								<form onSubmit={handleSubmit} >
+								<form onSubmit={handleUserSubmit} >
 									<fieldset className="box-fieldset">
 										<label htmlFor="name">Username<span>*</span>:</label>
 										<input type="text" className="form-contact style-1" placeholder="Enter Username"
