@@ -4,6 +4,9 @@ import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
 export default function MyProperty() {
 
+
+
+
 	return (
 		<>
 			<DeleteFile />
@@ -36,17 +39,18 @@ export default function MyProperty() {
 				</div>
 			</div>
 			<div className="widget-box-2 wd-listing">
-				<h6 className="title">My Properties</h6>
+				<h6 className="title">My Product</h6>
 				<div className="wrap-table">
 					<div className="table-responsive">
 						<table>
 							<thead>
 								<tr>
+									<th>Name</th>
 									<th>Title</th>
-									<th>Date Published</th>
-									<th>Status</th>
-									<th>Feature</th>
-									<th>Action</th>
+									<th>Description</th>
+									<th>Price</th>
+									<th>OfferPrice</th>
+									{/* <th>Action</th> */}
 								</tr>
 							</thead>
 							<tbody>

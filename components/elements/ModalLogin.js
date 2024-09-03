@@ -14,28 +14,54 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
 
 	const handleSubmit = async (e) => {
-		e.preventDefault()
+		e.preventDefault();
 		setLoading(true);
 
 		try {
-			const res = await Axios.post(`/login`, {
+			// Call a generic endpoint to check the login type
+			const checkRes = await Axios.post(`/logincheck`, {
 				username, password: pass
-			})
-			console.log(res, "login data")
-			toast.success("success", { autoClose: 3000 })
+			});
 
-			const{token,userId}=res.data
-			sessionStorage.setItem("UserInfo", JSON.stringify({userId,username,token}))
+			console.log(checkRes, "login check data");
+
+			const { isFlag } = checkRes.data;
+
+			let loginRes;
+			if (isFlag) {
+				// User login
+				loginRes = await Axios.post(`/loginuser`, {
+					username, password: pass
+				});
+			} else {
+				// Merchant login
+				loginRes = await Axios.post(`/loginmerchant`, {
+					username, password: pass
+				});
+			}
+
+			console.log(loginRes, "final login data");
+
+			const { token, userId, merchantId } = loginRes.data;
+			const id = isFlag ? userId : merchantId;
+
+			// Store user or merchant data in session storage
+			sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
+
+			toast.success("Success", { autoClose: 3000 });
 			setLoading(false);
-
-
 
 		} catch (error) {
-			toast.error("error", { autoClose: 3000 })
+			toast.error("Error", { autoClose: 3000 });
 			setLoading(false);
-
 		}
-	}
+	};
+
+
+
+
+
+
 	return (
 		<>
 			<div className={`modal fade ${isLogin ? "show d-block" : ""}`} id="modalLogin">
@@ -96,7 +122,7 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 											</span>
 										</div>) : (
 										<div>
-											
+
 											<button type="submit" className="tf-btn primary w-100">Login</button>
 
 										</div>

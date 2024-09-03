@@ -142,11 +142,13 @@ export default function PropertyDetailsV1({ searchParams }) {
 			userId: user,
 			items,
 			totalRentalPrice,
+			merchantId:product.owner.merchantId,
 			createdAt,
 			updatedAt
 
 		}
 		
+		console.log(data)
 
 		try {
 			const res = await Axios.post(`/cart`, data)
@@ -877,7 +879,7 @@ const cartId=(cart._id)
 										</div> */}
 										<button className="tf-btn primary w-100 mb-3" >Book Now</button>
 
-										<Link href={{pathname:"/pricing",query:{_id:searchParams._id}}} cart={cart}>
+										<Link href={{pathname:"/property-halfmap-list",query:{_id:searchParams._id}}} cart={cart}>
 										<button className="tf-btn primary w-100" >Check out</button>
 
 										</Link>
