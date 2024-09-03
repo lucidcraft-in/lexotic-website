@@ -88,7 +88,7 @@ export default function Footer1() {
 				<div className="bottom-footer">
 					<div className="container">
 						<div className="content-footer-bottom">
-							<div className="copyright">©{new Date().getFullYear()} Homzen. All Rights Reserved.</div>
+							<div className="copyright">©{new Date().getFullYear()} Lexotic. All Rights Reserved.</div>
 							<ul className="menu-bottom">
 								<li><Link href="/our-service">Terms Of Services</Link> </li>
 								<li><Link href="/pricing">Privacy Policy</Link> </li>

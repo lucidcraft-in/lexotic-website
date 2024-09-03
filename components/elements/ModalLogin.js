@@ -10,6 +10,7 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 	const [username, setUsername] = useState("")
 	const [pass, setPass] = useState("")
 	const [loading, setLoading] = useState(false);
+	const [isMerchant, setIsMerchant] = useState(false);
 
 
 
@@ -68,76 +69,157 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 				<div className="modal-dialog modal-dialog-centered">
 					<div className="modal-content">
 						<div className="flat-account bg-surface">
-							<h3 className="title text-center">Log In</h3>
+							<h3 className="title text-center">{isMerchant ? "Login as Merchant" : "Login as User"}</h3>
 							<span className="close-modal icon-close2" onClick={handleSubmit} />
-							<form onSubmit={handleSubmit} >
-								<fieldset className="box-fieldset">
-									<label htmlFor="name">Username<span>*</span>:</label>
-									<input type="text" className="form-contact style-1" placeholder="Enter Username"
-										onChange={(e) => setUsername(e.target.value)}
-										autoComplete="off" />
-								</fieldset>
-								<fieldset className="box-fieldset">
-									<label htmlFor="pass">Password<span>*</span>:</label>
-									<div className="box-password">
-										<input type="password" className="form-contact style-1 password-field" placeholder="Password"
-											onChange={(e) => setPass(e.target.value)}
+							{isMerchant ? (
+								<form onSubmit={handleSubmit} >
+									<fieldset className="box-fieldset">
+										<label htmlFor="name">Username<span>*</span>:</label>
+										<input type="text" className="form-contact style-1" placeholder="Enter Username"
+											onChange={(e) => setUsername(e.target.value)}
 											autoComplete="off" />
-										<span className="show-pass">
-											<i className="icon-pass icon-eye" />
-											<i className="icon-pass icon-eye-off" />
-										</span>
-									</div>
-								</fieldset>
-								<div className="d-flex justify-content-between flex-wrap gap-12">
-									<fieldset className="d-flex align-items-center gap-6">
-										<input type="checkbox" className="tf-checkbox style-2" id="cb1" />
-										<label htmlFor="cb1" className="caption-1 text-variant-1">Remember me</label>
 									</fieldset>
-									<Link href="#" className="caption-1 text-primary">Forgot password?</Link>
-								</div>
-								<div className="text-variant-1 auth-line">or sign up with</div>
-								<div className="login-social">
-									<Link href="#" className="btn-login-social">
-										<img src="/images/logo/fb.jpg" alt="img" />
-										Continue with Facebook
-									</Link>
-									<Link href="#" className="btn-login-social">
-										<img src="/images/logo/google.jpg" alt="img" />
-										Continue with Google
-									</Link>
-									<Link href="#" className="btn-login-social">
-										<img src="/images/logo/tw.jpg" alt="img" />
-										Continue with Twitter
-									</Link>
-								</div>
-								<div>
-									{loading ? (
-										<div
-											className="spinner-border text-primary"
-											role="status"
-										>
-											<span className="visually-hidden">
-
+									<fieldset className="box-fieldset">
+										<label htmlFor="pass">Password<span>*</span>:</label>
+										<div className="box-password">
+											<input type="password" className="form-contact style-1 password-field" placeholder="Password"
+												onChange={(e) => setPass(e.target.value)}
+												autoComplete="off" />
+											<span className="show-pass">
+												<i className="icon-pass icon-eye" />
+												<i className="icon-pass icon-eye-off" />
 											</span>
-										</div>) : (
-										<div>
-
-											<button type="submit" className="tf-btn primary w-100">Login</button>
-
 										</div>
+									</fieldset>
+									<div className="d-flex justify-content-between flex-wrap gap-12">
+										<fieldset className="d-flex align-items-center gap-6">
+											<input type="checkbox" className="tf-checkbox style-2" id="cb1" />
+											<label htmlFor="cb1" className="caption-1 text-variant-1">Remember me</label>
+										</fieldset>
+										<Link href="#" className="caption-1 text-primary">Forgot password?</Link>
+									</div>
+									<div className="text-variant-1 auth-line">or sign up with</div>
+									<div className="login-social">
+										<Link href="#" className="btn-login-social">
+											<img src="/images/logo/fb.jpg" alt="img" />
+											Continue with Facebook
+										</Link>
+										<Link href="#" className="btn-login-social">
+											<img src="/images/logo/google.jpg" alt="img" />
+											Continue with Google
+										</Link>
+										<Link href="#" className="btn-login-social">
+											<img src="/images/logo/tw.jpg" alt="img" />
+											Continue with Twitter
+										</Link>
+									</div>
+									<div>
+										{loading ? (
+											<div
+												className="spinner-border text-primary"
+												role="status"
+											>
+												<span className="visually-hidden">
 
-									)
-									}
-								</div>
-								<div className="mt-12 text-variant-1 text-center noti">Not registered yet?
-									<a onClick={() => { handleLogin(); handleRegister() }} className="text-black fw-5">Sign Up</a>
-								</div>
-							</form>
+												</span>
+											</div>) : (
+											<div>
+
+												<button type="submit" className="tf-btn primary w-100">Login as Merchant</button>
+
+											</div>
+
+										)
+										}
+									</div>
+									{/* <div className="mt-12 text-variant-1 text-center noti">Not registered yet?
+										<a onClick={() => { handleLogin(); handleRegister() }} className="text-black fw-5">Sign Up</a>
+
+									</div> */}
+
+								</form>
+							) : (
+								<form onSubmit={handleSubmit} >
+									<fieldset className="box-fieldset">
+										<label htmlFor="name">Username<span>*</span>:</label>
+										<input type="text" className="form-contact style-1" placeholder="Enter Username"
+											onChange={(e) => setUsername(e.target.value)}
+											autoComplete="off" />
+									</fieldset>
+									<fieldset className="box-fieldset">
+										<label htmlFor="pass">Password<span>*</span>:</label>
+										<div className="box-password">
+											<input type="password" className="form-contact style-1 password-field" placeholder="Password"
+												onChange={(e) => setPass(e.target.value)}
+												autoComplete="off" />
+											<span className="show-pass">
+												<i className="icon-pass icon-eye" />
+												<i className="icon-pass icon-eye-off" />
+											</span>
+										</div>
+									</fieldset>
+									<div className="d-flex justify-content-between flex-wrap gap-12">
+										<fieldset className="d-flex align-items-center gap-6">
+											<input type="checkbox" className="tf-checkbox style-2" id="cb1" />
+											<label htmlFor="cb1" className="caption-1 text-variant-1">Remember me</label>
+										</fieldset>
+										<Link href="#" className="caption-1 text-primary">Forgot password?</Link>
+									</div>
+									<div className="text-variant-1 auth-line">or sign up with</div>
+									<div className="login-social">
+										<Link href="#" className="btn-login-social">
+											<img src="/images/logo/fb.jpg" alt="img" />
+											Continue with Facebook
+										</Link>
+										<Link href="#" className="btn-login-social">
+											<img src="/images/logo/google.jpg" alt="img" />
+											Continue with Google
+										</Link>
+										<Link href="#" className="btn-login-social">
+											<img src="/images/logo/tw.jpg" alt="img" />
+											Continue with Twitter
+										</Link>
+									</div>
+									<div>
+										{loading ? (
+											<div
+												className="spinner-border text-primary"
+												role="status"
+											>
+												<span className="visually-hidden">
+
+												</span>
+											</div>) : (
+											<div>
+
+												<button type="submit" className="tf-btn primary w-100">Login as User</button>
+
+											</div>
+
+										)
+										}
+									</div>
+
+
+								</form>
+
+
+							)}
+							<div className="mt-12 text-variant-1 text-center noti">Not registered yet?
+								<a onClick={() => { handleLogin(); handleRegister() }} className="text-black fw-5">Sign Up</a>
+							</div>
+
+							<div className="mt-12 text-variant-1 text-center noti">
+								{isMerchant ? (
+									<a onClick={() => setIsMerchant(false)} className="text-black fw-5">Login as User</a>
+								) : (
+									<a onClick={() => setIsMerchant(true)} className="text-black fw-5">Login as Merchant</a>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			</div >
 
 			{isLogin &&
 				<div className={`modal-backdrop fade show`} onClick={handleLogin} />

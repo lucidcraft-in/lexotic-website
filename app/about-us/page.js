@@ -79,7 +79,7 @@ export default function AboutUs() {
 						<div className="container">
 							<div className="row">
 								<div className="col-md-5">
-									<h3>Welcome To The <br /> Homzen</h3>
+									<h3>Welcome To The <br /> Lexotic</h3>
 								</div>
 								<div className="col-md-7 hover-btn-view">
 									<p className="body-2 text-variant-1">Welcome to Homeya, where we turn houses into homes and dreams into reality. At Homeya, we understand that a home is more than just a physical space; it's a place where memories are created, families grow, and life unfolds. </p>
