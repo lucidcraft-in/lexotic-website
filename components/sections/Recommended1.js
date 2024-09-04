@@ -217,7 +217,7 @@ export default function Recommended1() {
 
 								</div>
 								<div className="text-center">
-									<Link href="#" className="tf-btn primary size-1">View All Properties</Link>
+									<Link href="/sidebar-list" className="tf-btn primary size-1">View All Properties</Link>
 								</div>
 							</div>
 							{/* <div style={{ opacity: isVisible ? 1 : 0 }} className={isTab == 2 ? "tab-pane fade show active" : "tab-pane fade"} id="apartment" role="tabpanel">
