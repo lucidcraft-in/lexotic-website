@@ -72,147 +72,49 @@ export default function MyProperty() {
 								<table>
 									<thead>
 										<tr>
-											<th>Name</th>
-											<th>Title</th>
-											<th>Description</th>
-											<th>Price</th>
-											<th>OfferPrice</th>
-											{/* <th>Action</th> */}
+											<th>Product Name</th>
+											<th>Rental Start Date</th>
+											<th>Rental End Date</th>
+											<th>Price per Day</th>
+											<th>Number of Person</th>
+											<th>Total Item Price</th>
+											<th>Order Date</th>
+											<th>Order Status</th>
 										</tr>
 									</thead>
-									<tbody>
-										<tr className="file-delete">
-											<td>
-												<div className="listing-box">
-													<div className="images">
-														<img src="/images/home/house-1.jpg" alt="images" />
-													</div>
-													<div className="content">
-														<div className="title"><Link href="/property-details-v1" className="link">Gorgeous Apartment Building</Link> </div>
-														<div className="text-date">12 Lowell Road, Port Washington</div>
-														<div className="text-1 fw-7">$5050,00</div>
-													</div>
-												</div>
-											</td>
-											<td>
-												<span>April 9, 2024</span>
-											</td>
-											<td>
-												<div className="status-wrap">
-													<Link href="#" className="btn-status">Published</Link>
-												</div>
-											</td>
-											<td>
-												<span>No</span>
-											</td>
-											<td>
-												<ul className="list-action">
-													<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-													<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-													<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-												</ul>
-											</td>
-										</tr>
-										{/* col 2 */}
-										<tr className="file-delete">
-											<td>
-												<div className="listing-box">
-													<div className="images">
-														<img src="/images/home/house-2.jpg" alt="images" />
-													</div>
-													<div className="content">
-														<div className="title"><Link href="/property-details-v1" className="link">Mountain Mist Retreat, Aspen</Link> </div>
-														<div className="text-date">Brian Drive, Montvale, New Jersey</div>
-														<div className="text-1 fw-7">$5050,00</div>
-													</div>
-												</div>
-											</td>
-											<td>
-												<span>April 9, 2024</span>
-											</td>
-											<td>
-												<div className="status-wrap">
-													<Link href="#" className="btn-status">Published</Link>
-												</div>
-											</td>
-											<td>
-												<span>No</span>
-											</td>
-											<td>
-												<ul className="list-action">
-													<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-													<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-													<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-												</ul>
-											</td>
-										</tr>
-										{/* col 3 */}
-										<tr className="file-delete">
-											<td>
-												<div className="listing-box">
-													<div className="images">
-														<img src="/images/home/house-3.jpg" alt="images" />
-													</div>
-													<div className="content">
-														<div className="title"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link> </div>
-														<div className="text-date">12 Lowell Road, Port Washington</div>
-														<div className="text-1 fw-7">$5050,00</div>
-													</div>
-												</div>
-											</td>
-											<td>
-												<span>April 9, 2024</span>
-											</td>
-											<td>
-												<div className="status-wrap">
-													<Link href="#" className="btn-status">Published</Link>
-												</div>
-											</td>
-											<td>
-												<span>No</span>
-											</td>
-											<td>
-												<ul className="list-action">
-													<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-													<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-													<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-												</ul>
-											</td>
-										</tr>
-										{/* col 4 */}
-										<tr className="file-delete">
-											<td>
-												<div className="listing-box">
-													<div className="images">
-														<img src="/images/home/house-4.jpg" alt="images" />
-													</div>
-													<div className="content">
-														<div className="title"><Link href="/property-details-v1" className="link">Coastal Serenity Cottage</Link> </div>
-														<div className="text-date">Brian Drive, Montvale, New Jersey</div>
-														<div className="text-1 fw-7">$5050,00</div>
-													</div>
-												</div>
-											</td>
-											<td>
-												<span>April 9, 2024</span>
-											</td>
-											<td>
-												<div className="status-wrap">
-													<Link href="#" className="btn-status">Published</Link>
-												</div>
-											</td>
-											<td>
-												<span>No</span>
-											</td>
-											<td>
-												<ul className="list-action">
-													<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-													<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-													<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-												</ul>
-											</td>
-										</tr>
-									</tbody>
+									{order?.Items?.map((item) => (
+										<tbody>
+											<tr className="file-delete">
+												<td>
+													{item?.productId}
+												</td>
+												<td>
+													{new Date(item?.rentalStartDate).toLocaleDateString()}
+												</td>
+												<td>
+													{new Date(item?.rentalEndDate).toLocaleDateString()}
+												</td>
+												<td>
+													{item?.pricePerDay}
+												</td>
+												<td>
+													{item?.quantity}
+
+												</td>
+												<td>{order?.totalItemPrice}</td>
+											</tr>
+
+											<tr>
+												{new Date(order?.orderDate).toLocaleDateString()}
+
+											</tr>
+											<tr>
+												{order?.orderStatus}
+											</tr>
+
+										</tbody>
+									))}
+
 								</table>
 							</div>
 							<ul className="wd-navigation">
