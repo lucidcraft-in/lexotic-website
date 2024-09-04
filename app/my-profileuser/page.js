@@ -8,15 +8,17 @@ export default function MyProfile() {
 
 
 	const [user, setUser] = useState([])
-	// const [name,setName]=useState('')
-	// const [email,setEmail]=useState('')
-	// const [place,setPlace]=useState('')
-	// const [post,setPost]=useState('')
-	// const [pin,setPin]=useState('')
-	// const [name,setName]=useState('')
-	// const [name,setName]=useState('')
-	// const [name,setName]=useState('')
-	// const [name,setName]=useState('')
+	const [name,setName]=useState('')
+	const [email,setEmail]=useState('')
+	const [place,setPlace]=useState('')
+	const [post,setPost]=useState('')
+	const [pin,setPin]=useState('')
+	const [phone,setPhone]=useState('')
+	const [username,setUsername]=useState('')
+	const [password,setPassword]=useState('')
+	const [newpassword,setNewPassword]=useState('')
+	const [country,setCountry]=useState('')
+	const [currency,setCurrency]=useState('')
 
 
 	let userid = null
@@ -40,13 +42,22 @@ export default function MyProfile() {
 
 	const getData = async () => {
 		const res = await Axios.get(`/user/${userid}`)
+		const userData= res.data
 		setUser(res.data)
+		setName(userData?.name)
+		setCountry(userData?.country)
+		setEmail(userData?.email)
+		setPlace(userData?.place)
+		setPhone(userData?.phone)
+		setPassword(userData.password)
+		setCurrency(userData.currency)
+		setPost(userData?.post)
+		setPin(userData?.pin)
 		
 
 	}
 
-	console.log(user)
-
+console.log(user)
 
 
 	return (
@@ -95,46 +106,55 @@ export default function MyProfile() {
 					<h6 className="title">Information</h6>
 					<div className="box box-fieldset">
 						<label htmlFor="name">Full name:<span>*</span></label>
-						<input type="text" placeholder="enter your name" className="form-control style-1" />
+						<input type="text" placeholder="enter your name" className="form-control style-1" 
+						value={name}/>
 					</div>
 					<div className="box box-fieldset">
 						<label htmlFor="desc">Email address:<span>*</span></label>
-						<input type="text" placeholder="themeflat@gmail.com" className="form-control style-1" />
+						<input type="text" placeholder="themeflat@gmail.com" className="form-control style-1"
+						value={email} />
 
 
 					</div>
 					<div className="box grid-4 gap-30">
 						<div className="box-fieldset">
 							<label htmlFor="company">Place:<span>*</span></label>
-							<input type="text" placeholder="enter your place" className="form-control style-1" />
+							<input type="text" placeholder="enter your place" className="form-control style-1"
+							value={place} />
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="position">Post:<span>*</span></label>
-							<input type="text" placeholder="enter your post" className="form-control style-1" />
+							<input type="text" placeholder="enter your post" className="form-control style-1" 
+							value={post}/>
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="num">Pin:<span>*</span></label>
-							<input type="number" placeholder="emter pin" className="form-control style-1" />
+							<input type="number" placeholder="emter pin" className="form-control style-1" 
+							value={pin}/>
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="num">Phone Number:<span>*</span></label>
-							<input type="number" placeholder="entre phone number" className="form-control style-1" />
+							<input type="number" placeholder="entre phone number" className="form-control style-1" 
+							value={phone}/>
 						</div>
 					</div>
 					<div className="box grid-4 gap-30 box-info-2">
 						<div className="box-fieldset">
 							<label htmlFor="job">Username:<span>*</span></label>
-							<input type="text" placeholder="enter username" className="form-control style-1" />
+							<input type="text" placeholder="enter username" className="form-control style-1" 
+							value={username}/>
 						</div>
 
 					</div>
 					<div className="box box-fieldset">
 						<label htmlFor="location">Country:<span>*</span></label>
-						<input type="text" placeholder="enter your country" className="form-control style-1" />
+						<input type="text" placeholder="enter your country" className="form-control style-1" 
+						value={country}/>
 					</div>
 					<div className="box box-fieldset">
 						<label htmlFor="fb">Currency:<span>*</span></label>
-						<input type="text" placeholder="#" className="form-control style-1" />
+						<input type="text" placeholder="#" className="form-control style-1" 
+						value={currency}/>
 					</div>
 					{/* <div className="box box-fieldset">
 						<label htmlFor="tw">Twitter:<span>*</span></label>
@@ -152,7 +172,8 @@ export default function MyProfile() {
 						<div className="box-fieldset">
 							<label htmlFor="old-pass">Old Password:<span>*</span></label>
 							<div className="box-password">
-								<input type="password" className="form-contact style-1 password-field" placeholder="Password" />
+								<input type="password" className="form-contact style-1 password-field" placeholder="Password"
+								value={password} />
 								<span className="show-pass">
 									<i className="icon-pass icon-eye" />
 									<i className="icon-pass icon-eye-off" />
@@ -172,7 +193,8 @@ export default function MyProfile() {
 						<div className="box-fieldset">
 							<label htmlFor="confirm-pass">Confirm Password:<span>*</span></label>
 							<div className="box-password">
-								<input type="password" className="form-contact style-1 password-field3" placeholder="Password" />
+								<input type="password" className="form-contact style-1 password-field3" placeholder="Password" 
+								value={newpassword}/>
 								<span className="show-pass3">
 									<i className="icon-pass icon-eye" />
 									<i className="icon-pass icon-eye-off" />
