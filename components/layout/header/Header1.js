@@ -11,12 +11,12 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		console.log(userId)
+		// console.log(userId)
 		user = userId
 		flag = isFlag
 	}
 
-	console.log(user)
+	// console.log(user)
 
 
 

@@ -27,12 +27,12 @@ export default function MyProfile() {
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		console.log(userId)
+		// console.log(userId)
 		userid = userId
 		flag = isFlag
 	}
 
-	console.log(userid)
+	// console.log(userid)
 
 	useEffect(() => {
 		getData()
@@ -71,13 +71,15 @@ export default function MyProfile() {
 			currency
 		}
 		try {
-			const res = await Axios.post('/updateuser', data)
+			const res = await Axios.put(`/updateuser/${userid}`, data)
 			console.log("successfully updated")
 		} catch (error) {
 			console.log(error, "some error occured!!!")
 
 		}
 	}
+
+	// console.log(userid,"hhhhhhhhhhh")
 
 	return (
 		<>
@@ -132,7 +134,7 @@ export default function MyProfile() {
 						<label htmlFor="desc">Email address:<span>*</span></label>
 						<input type="text" placeholder="themeflat@gmail.com" className="form-control style-1"
 							value={email}
-							onChange={(e) => setEmail(e.target.email)} />
+							onChange={(e) => setEmail(e.target.value)} />
 
 
 					</div>
@@ -141,7 +143,7 @@ export default function MyProfile() {
 							<label htmlFor="company">Place:<span>*</span></label>
 							<input type="text" placeholder="enter your place" className="form-control style-1"
 								value={place}
-								onChange={(e) => setPlace(e.target.place)} />
+								onChange={(e) => setPlace(e.target.value)} />
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="position">Post:<span>*</span></label>

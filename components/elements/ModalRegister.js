@@ -54,7 +54,7 @@ export default function ModalRegister({ isRegister, handleRegister, handleLogin 
 
 		try {
 			const res = await Axios.post(`/registeruser`, data)
-			console.log(res, "data")
+			// console.log(res, "data")
 			toast.success(res.json(201), { autoClose: 3000 })
 			setLoading(false)
 
@@ -81,9 +81,9 @@ export default function ModalRegister({ isRegister, handleRegister, handleLogin 
 		try {
 			setLoading(true)
 			const res = await Axios.post(`/regmerchant`, data)
-			console.log(res)
+			// console.log(res)
 			if (res.status === 201) {
-				console.log(res.data)
+				// console.log(res.data)
 				setLoading(false)
 				toast.success(res.json)
 			} else {

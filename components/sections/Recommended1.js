@@ -1,76 +1,62 @@
-'use client'
-import Link from "next/link"
-import { useState, useEffect } from "react"
-import Axios from "../axios/axios"
+'use client';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
+import Axios from '../axios/axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import { useParams } from "next/navigation";
-
-
+import { useParams } from 'next/navigation';
 
 export default function Recommended1() {
-	const [isTab, setIsTab] = useState(1)
-	const [isVisible, setIsVisible] = useState(true)
+  const [isTab, setIsTab] = useState(1);
+  const [isVisible, setIsVisible] = useState(true);
 
-	const [categories, setCategories] = useState([]);
-	const [selectedCategory, setSelectedCategory] = useState("");
-	const [product, setProduct] = useState([])
-	const { id } = useParams
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [product, setProduct] = useState([]);
+  const { id } = useParams;
 
-	const handleCategorySelect = async (index, categoryId) => {
-		setIsTab(index);
-		setSelectedCategory(categoryId);
-		setIsVisible(false)
+  const handleCategorySelect = async (index, categoryId) => {
+    setIsTab(index);
+    setSelectedCategory(categoryId);
+    setIsVisible(false);
 
-		try {
-			const response = await Axios.get(`/productsbycata/${categoryId}`);
-			if (response.status === 200) {
-				const data = Array.isArray(response.data.products) ? response.data.products : []; // Ensure data is an array
-				setProduct(data);
-				// console.log(response.data.products);
-			} else {
-				console.error('Failed to fetch products:', response.statusText);
-			}
-		} catch (error) {
-			console.error('Error fetching products:', error);
-		} finally {
-			setIsVisible(true); // Show content after fetching data
-		}
-	};
-	 
+    try {
+      const response = await Axios.get(`/productsbycata/${categoryId}`);
+      if (response.status === 200) {
+        const data = Array.isArray(response.data.products)
+          ? response.data.products
+          : []; // Ensure data is an array
+        setProduct(data);
+        // console.log(response.data.products);
+      } else {
+        console.error('Failed to fetch products:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setIsVisible(true); // Show content after fetching data
+    }
+  };
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
+  const fetchCategories = async () => {
+    try {
+      const res = await Axios.get(`getcategory`);
 
-	useEffect(() => {
-		fetchCategories();
-		 
-		
-	}, []);
+      setCategories(res.data);
 
-	const fetchCategories = async () => {
-		try {
-			const res = await Axios.get(`getcategory`)
-			 
-			setCategories(res.data)
-			 
-			handleCategorySelect(0, res.data?.[0]?._id);
+      handleCategorySelect(0, res.data?.[0]?._id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-			 
-	
-
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-
-
-
-
-	return (
+  return (
     <>
       <section className="flat-section flat-recommended">
-        
         <div className="container">
           <div
             className="text-center wow fadeInUpSmall"
@@ -152,7 +138,7 @@ export default function Recommended1() {
                               <i className="fs-16 icon icon-mapPin" />
                               <p>{pro?.location.placeName}</p>{' '}
                             </div>
-                            
+
                             <br />
                             <span>{pro.description}</span>
                           </div>
@@ -194,7 +180,6 @@ export default function Recommended1() {
                   </Link>
                 </div>
               </div>
-            
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
 export default function AddProperty({ searchParams }) {
 
-	console.log(searchParams._id)
+	// console.log(searchParams._id)
 
 
 	const [selectedRadio, setSelectedRadio] = useState('radio1')
@@ -46,7 +46,7 @@ export default function AddProperty({ searchParams }) {
 		fetchMerchants()
 
 	}, [])
-	console.log(id)
+	// console.log(id)
 	useEffect(() => {
 		if (id) {
 			fetchProductData(id)
@@ -78,7 +78,7 @@ export default function AddProperty({ searchParams }) {
 		try {
 			const res = await Axios.get(`/products/${id}`);
 			const product = res.data;
-			console.log(product)
+			// console.log(product)
 			setName(product.name);
 			setTitle(product.title);
 			setDescription(product.description);
@@ -192,8 +192,8 @@ export default function AddProperty({ searchParams }) {
 
 
 			<LayoutAdmin>
-				
-			<form onSubmit={handleSubmit}>
+
+				<form onSubmit={handleSubmit}>
 					<div>
 						<h6 className="title">Update Product</h6>
 

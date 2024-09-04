@@ -23,7 +23,7 @@ export default function SidebarList() {
 	const getData = async () => {
 		try {
 			const res = await Axios.get(`getproducts`)
-			console.log(res)
+			// console.log(res)
 			setProduct(res.data)
 
 		} catch (error) {
