@@ -8,17 +8,17 @@ export default function MyProfile() {
 
 
 	const [user, setUser] = useState([])
-	const [name,setName]=useState('')
-	const [email,setEmail]=useState('')
-	const [place,setPlace]=useState('')
-	const [post,setPost]=useState('')
-	const [pin,setPin]=useState('')
-	const [phone,setPhone]=useState('')
-	const [username,setUsername]=useState('')
-	const [password,setPassword]=useState('')
-	const [newpassword,setNewPassword]=useState('')
-	const [country,setCountry]=useState('')
-	const [currency,setCurrency]=useState('')
+	const [name, setName] = useState('')
+	const [email, setEmail] = useState('')
+	const [place, setPlace] = useState('')
+	const [post, setPost] = useState('')
+	const [pin, setPin] = useState('')
+	const [phone, setPhone] = useState('')
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
+	const [newpassword, setNewPassword] = useState('')
+	const [country, setCountry] = useState('')
+	const [currency, setCurrency] = useState('')
 
 
 	let userid = null
@@ -42,27 +42,45 @@ export default function MyProfile() {
 
 	const getData = async () => {
 		const res = await Axios.get(`/user/${userid}`)
-		const userData= res.data
+		const userData = res.data
 		setUser(res.data)
 		setName(userData?.name)
 		setCountry(userData?.country)
 		setEmail(userData?.email)
 		setPlace(userData?.place)
 		setPhone(userData?.phone)
+		setUsername(userData?.username)
 		setPassword(userData.password)
 		setCurrency(userData.currency)
 		setPost(userData?.post)
 		setPin(userData?.pin)
-		
+
 
 	}
 
-console.log(user)
+	const handleUpdate = async () => {
+		const data = {
+			name,
+			email,
+			place,
+			post,
+			pin,
+			phone,
+			username,
+			country,
+			currency
+		}
+		try {
+			const res = await Axios.post('/updateuser', data)
+			console.log("successfully updated")
+		} catch (error) {
+			console.log(error, "some error occured!!!")
 
+		}
+	}
 
 	return (
 		<>
-
 			<LayoutAdmin>
 				<div className="widget-box-2 wrap-dashboard-content-2">
 					<div className="box">
@@ -106,13 +124,15 @@ console.log(user)
 					<h6 className="title">Information</h6>
 					<div className="box box-fieldset">
 						<label htmlFor="name">Full name:<span>*</span></label>
-						<input type="text" placeholder="enter your name" className="form-control style-1" 
-						value={name}/>
+						<input type="text" placeholder="enter your name" className="form-control style-1"
+							value={name}
+							onChange={(e) => setName(e.target.value)} />
 					</div>
 					<div className="box box-fieldset">
 						<label htmlFor="desc">Email address:<span>*</span></label>
 						<input type="text" placeholder="themeflat@gmail.com" className="form-control style-1"
-						value={email} />
+							value={email}
+							onChange={(e) => setEmail(e.target.email)} />
 
 
 					</div>
@@ -120,41 +140,48 @@ console.log(user)
 						<div className="box-fieldset">
 							<label htmlFor="company">Place:<span>*</span></label>
 							<input type="text" placeholder="enter your place" className="form-control style-1"
-							value={place} />
+								value={place}
+								onChange={(e) => setPlace(e.target.place)} />
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="position">Post:<span>*</span></label>
-							<input type="text" placeholder="enter your post" className="form-control style-1" 
-							value={post}/>
+							<input type="text" placeholder="enter your post" className="form-control style-1"
+								value={post}
+								onChange={(e) => setPost(e.target.value)} />
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="num">Pin:<span>*</span></label>
-							<input type="number" placeholder="emter pin" className="form-control style-1" 
-							value={pin}/>
+							<input type="number" placeholder="emter pin" className="form-control style-1"
+								value={pin}
+								onChange={(e) => setPin(e.target.value)} />
 						</div>
 						<div className="box-fieldset">
 							<label htmlFor="num">Phone Number:<span>*</span></label>
-							<input type="number" placeholder="entre phone number" className="form-control style-1" 
-							value={phone}/>
+							<input type="number" placeholder="entre phone number" className="form-control style-1"
+								value={phone}
+								onChange={(e) => setPhone(e.target.value)} />
 						</div>
 					</div>
 					<div className="box grid-4 gap-30 box-info-2">
 						<div className="box-fieldset">
 							<label htmlFor="job">Username:<span>*</span></label>
-							<input type="text" placeholder="enter username" className="form-control style-1" 
-							value={username}/>
+							<input type="text" placeholder="enter username" className="form-control style-1"
+								value={username}
+								onChange={(e) => setUsername(e.target.value)} />
 						</div>
 
 					</div>
 					<div className="box box-fieldset">
 						<label htmlFor="location">Country:<span>*</span></label>
-						<input type="text" placeholder="enter your country" className="form-control style-1" 
-						value={country}/>
+						<input type="text" placeholder="enter your country" className="form-control style-1"
+							value={country}
+							onChange={(e) => setCountry(e.target.value)} />
 					</div>
 					<div className="box box-fieldset">
 						<label htmlFor="fb">Currency:<span>*</span></label>
-						<input type="text" placeholder="#" className="form-control style-1" 
-						value={currency}/>
+						<input type="text" placeholder="#" className="form-control style-1"
+							value={currency}
+							onChange={(e) => { setCurrency(e.target.value) }} />
 					</div>
 					{/* <div className="box box-fieldset">
 						<label htmlFor="tw">Twitter:<span>*</span></label>
@@ -165,15 +192,15 @@ console.log(user)
 						<input type="text" defaultValue="#" className="form-control style-1" />
 					</div> */}
 					<div className="box">
-						<Link href="#" className="tf-btn primary">Save &amp; Update</Link>
+						<button className="tf-btn primary" onClick={handleUpdate}>Save &amp; Update</button>
 					</div>
-					<h6 className="title">Change password</h6>
+					{/* <h6 className="title">Change password</h6>
 					<div className="box grid-3 gap-30">
 						<div className="box-fieldset">
 							<label htmlFor="old-pass">Old Password:<span>*</span></label>
 							<div className="box-password">
 								<input type="password" className="form-contact style-1 password-field" placeholder="Password"
-								value={password} />
+									value={password} />
 								<span className="show-pass">
 									<i className="icon-pass icon-eye" />
 									<i className="icon-pass icon-eye-off" />
@@ -193,18 +220,18 @@ console.log(user)
 						<div className="box-fieldset">
 							<label htmlFor="confirm-pass">Confirm Password:<span>*</span></label>
 							<div className="box-password">
-								<input type="password" className="form-contact style-1 password-field3" placeholder="Password" 
-								value={newpassword}/>
+								<input type="password" className="form-contact style-1 password-field3" placeholder="Password"
+									value={newpassword} />
 								<span className="show-pass3">
 									<i className="icon-pass icon-eye" />
 									<i className="icon-pass icon-eye-off" />
 								</span>
 							</div>
 						</div>
-					</div>
-					<div className="box">
+					</div> */}
+					{/* <div className="box">
 						<Link href="#" className="tf-btn primary">Update Password</Link>
-					</div>
+					</div> */}
 				</div>
 
 			</LayoutAdmin>

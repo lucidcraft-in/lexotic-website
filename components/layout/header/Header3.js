@@ -7,6 +7,23 @@ import MobileMenu from "../MobileMenu"
 export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu, handleMobileMenu }) {
 	const [isToggled, setToggled] = useState(false)
 	const handleToggle = () => setToggled(!isToggled)
+
+
+	let user = null
+	let flag = null
+	let name = null
+
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		console.log(userId)
+		user = userId
+		flag = isFlag
+		name = username
+	}
+
+	console.log(user)
+	
 	return (
 		<>
 
@@ -37,7 +54,7 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 										<div className="avatar avt-40 round">
 											<img src="/images/avatar/avt-2.jpg" alt="avt" />
 										</div>
-										<p className="name">Tony Nguyen<span className="icon icon-arr-down" /></p>
+										<p className="name">{name}<span className="icon icon-arr-down" /></p>
 									</a>
 									<div className={`dropdown-menu  ${isToggled ? "show" : ""}`} style={{ position: 'absolute', inset: '0px auto auto 0px', margin: 0, transform: 'translate(1494px, 62px)' }}>
 										<Link className="dropdown-item" href="/my-favorites">My Properties</Link>
