@@ -8,27 +8,45 @@ export default function Menu() {
 	const pathname = usePathname()
 	const [currentMenuItem, setCurrentMenuItem] = useState("")
 
-	useEffect(() => {
-		setCurrentMenuItem(pathname)
-	}, [pathname])
+	 
+let user = null;
+let isUser = null;
 
-	const checkCurrentMenuItem = (path) => currentMenuItem === path ? "current" : ""
-	const checkParentActive = (paths) => paths.some(path => currentMenuItem.startsWith(path)) ? "current" : ""
+const userInfo = sessionStorage.getItem('UserInfo');
+if (userInfo) {
+  const { userId, username, token, isFlag } = JSON.parse(userInfo);
+  console.log(userId);
+  user = userId;
+  isUser = isFlag;
+}
 
-	return (
-    <>
-      <ul className="navigation clearfix">
-        <li
-          className={`dropdown2 home ${checkParentActive([
-            '/home-02',
-            '/home-03',
-            '/home-04',
-            '/home-05',
-            '/home-06',
-          ])}`}
-        >
-          <Link href="/">Home</Link>
-          {/* <ul>
+console.log(isUser);
+
+console.log(userInfo);
+
+useEffect(() => {
+  setCurrentMenuItem(pathname);
+}, [pathname]);
+
+const checkCurrentMenuItem = (path) =>
+  currentMenuItem === path ? 'current' : '';
+const checkParentActive = (paths) =>
+  paths.some((path) => currentMenuItem.startsWith(path)) ? 'current' : '';
+
+return (
+  <>
+    <ul className="navigation clearfix">
+      <li
+        className={`dropdown2 home ${checkParentActive([
+          '/home-02',
+          '/home-03',
+          '/home-04',
+          '/home-05',
+          '/home-06',
+        ])}`}
+      >
+        <Link href="/">Home</Link>
+        {/* <ul>
 						<li className={`${checkCurrentMenuItem("/")}`}>
 							<Link href="/">Homepage </Link>
 						</li>
@@ -48,8 +66,8 @@ export default function Menu() {
 							<Link href="/home-06">Homepage 06</Link>
 						</li>
 					</ul> */}
-        </li>
-        <li
+      </li>
+      {/* <li
           className={`dropdown2 ${checkParentActive([
             '/property-halfmap-grid',
             '/property-halfmap-list',
@@ -81,17 +99,17 @@ export default function Menu() {
               <Link href="/sidebar-list">Find Sidebar List</Link>
             </li>
           </ul>
-        </li>
-        <li
-          className={`dropdown2 ${checkParentActive([
-            '/property-details-v1',
-            '/property-details-v2',
-            '/property-details-v3',
-            '/property-details-v4',
-          ])}`}
-        >
-          <Link href="#">Properties</Link>
-          <ul>
+        </li> */}
+      <li
+        className={`dropdown2 ${checkParentActive([
+          '/property-details-v1',
+          '/property-details-v2',
+          '/property-details-v3',
+          '/property-details-v4',
+        ])}`}
+      >
+        <Link href="/sidebar-list">Properties</Link>
+        {/* <ul>
             <li className={`${checkCurrentMenuItem('/property-details-v1')}`}>
               <Link href="/property-details-v1">Property Details 1</Link>
             </li>
@@ -104,41 +122,41 @@ export default function Menu() {
             <li className={`${checkCurrentMenuItem('/property-details-v4')}`}>
               <Link href="/property-details-v4">Property Details 4</Link>
             </li>
-          </ul>
-        </li>
-        <li
-          className={`dropdown2 ${checkParentActive([
-            '/about-us',
-            '/our-service',
-            '/pricing',
-            '/contact',
-            '/faq',
-            '/privacy-policy',
-          ])}`}
-        >
-          <Link href="#">Pages</Link>
-          <ul>
-            <li className={`${checkCurrentMenuItem('/about-us')}`}>
-              <Link href="/about-us">About Us</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/our-service')}`}>
-              <Link href="/our-service">Our Services</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/pricing')}`}>
-              <Link href="/pricing">Pricing</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/contact')}`}>
-              <Link href="/contact">Contact Us</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/faq')}`}>
-              <Link href="/faq">FAQs</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/privacy-policy')}`}>
-              <Link href="/privacy-policy">Privacy Policy</Link>
-            </li>
-          </ul>
-        </li>
-        <li
+          </ul> */}
+      </li>
+      <li
+        className={`dropdown2 ${checkParentActive([
+          '/about-us',
+          '/our-service',
+          '/pricing',
+          '/contact',
+          '/faq',
+          '/privacy-policy',
+        ])}`}
+      >
+        <Link href="#">More</Link>
+        <ul>
+          <li className={`${checkCurrentMenuItem('/about-us')}`}>
+            <Link href="/about-us">About Us</Link>
+          </li>
+          <li className={`${checkCurrentMenuItem('/our-service')}`}>
+            <Link href="/our-service">Our Services</Link>
+          </li>
+          <li className={`${checkCurrentMenuItem('/pricing')}`}>
+            <Link href="/pricing">Pricing</Link>
+          </li>
+          <li className={`${checkCurrentMenuItem('/contact')}`}>
+            <Link href="/contact">Contact Us</Link>
+          </li>
+          <li className={`${checkCurrentMenuItem('/faq')}`}>
+            <Link href="/faq">FAQs</Link>
+          </li>
+          <li className={`${checkCurrentMenuItem('/privacy-policy')}`}>
+            <Link href="/privacy-policy">Privacy Policy</Link>
+          </li>
+        </ul>
+      </li>
+      {/* <li
           className={`dropdown2 ${checkParentActive([
             '/blog',
             '/blog-grid',
@@ -157,7 +175,8 @@ export default function Menu() {
               <Link href="/blog-detail">Blog Post Details</Link>
             </li>
           </ul>
-        </li>
+        </li> */}
+      {userInfo && (
         <li
           className={`dropdown2 ${checkParentActive([
             '/dashboard',
@@ -171,31 +190,39 @@ export default function Menu() {
         >
           <Link href="#">Dashboard</Link>
           <ul>
-            <li className={`${checkCurrentMenuItem('/dashboard')}`}>
-              <Link href="/dashboard">Dashboard</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/my-favorites')}`}>
-              <Link href="/my-favorites">My Properties</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/my-invoices')}`}>
-              <Link href="/my-invoices">My Invoices</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/my-favorites')}`}>
-              <Link href="/my-favorites">My Favorites</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/reviews')}`}>
-              <Link href="/reviews">Reviews</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/my-profile')}`}>
-              <Link href="/my-profile">My Profile</Link>
-            </li>
-            <li className={`${checkCurrentMenuItem('/add-property')}`}>
-              <Link href="/add-property">Add Product</Link>
-            </li>
+            {isUser === true ? (
+              <>
+                <li className={`${checkCurrentMenuItem('/dashboard')}`}>
+                  <Link href="/my-profileuser">My Profile</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/my-favorites')}`}>
+                  <Link href="/my-orderuser">My Orders</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className={`${checkCurrentMenuItem('/my-invoices')}`}>
+                  <Link href="/my-invoices">My Invoices</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/my-favorites')}`}>
+                  <Link href="/my-favorites">My Favorites</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/reviews')}`}>
+                  <Link href="/reviews">Reviews</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/my-profile')}`}>
+                  <Link href="/my-profile">My Profile</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/add-property')}`}>
+                  <Link href="/add-property">Add Product</Link>
+                </li>
+              </>
+            )}
           </ul>
         </li>
-      </ul>
-    </>
-  );
+      )}
+    </ul>
+  </>
+);
 }
 
