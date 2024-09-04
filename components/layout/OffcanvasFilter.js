@@ -12,6 +12,9 @@ export default function OffcanvasFilter({
 	isOffcanMenu,
 	handleOffcanMenu,
 }) {
+
+
+
 	return (
 		<>
 			<div className={`offcanvas offcanvas-top canvas-filter ${isOffcanFilter ? "show" : ""}`} id="filterSearch">
@@ -44,6 +47,7 @@ export default function OffcanvasFilter({
 												<li><a onClick={handleRegister} data-bs-toggle="modal">Register</a></li>
 											</ul>
 										</div>
+
 										<div className="flat-bt-top">
 											<a className="tf-btn primary" href="add-property.html">Submit Property</a>
 										</div>

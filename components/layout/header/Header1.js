@@ -3,6 +3,28 @@ import Menu from "../Menu"
 import MobileMenu from "../MobileMenu"
 
 export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogin, handleLogin, hcls, handleRegister }) {
+
+
+	let user = null
+	let flag = null
+
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		console.log(userId)
+		user = userId
+		flag = isFlag
+	}
+
+	console.log(user)
+
+
+
+	const handleLogout = () => {
+		sessionStorage.removeItem("UserInfo")
+		alert("Are you sure do you want to logout?")
+	}
+
 	return (
 		<>
 
@@ -58,11 +80,17 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
 					<nav className="menu-box">
 						<div className="nav-logo"><Link href="/"><img src="/images/logo/logo@2x.png" alt="nav-logo" width={174} height={44} /></Link></div>
 						<div className="bottom-canvas">
-							<div className="login-box flex align-items-center">
-								<Link href="#modalLogin" data-bs-toggle="modal">Login</Link>
-								<span>/</span>
-								<Link href="#modalRegister" data-bs-toggle="modal">Register</Link>
-							</div>
+							{/* {!user ? ( */}
+								<div className="login-box flex align-items-center">
+									<Link href="#modalLogin" data-bs-toggle="modal">Login</Link>
+									<span>/</span>
+									<Link href="#modalRegister" data-bs-toggle="modal">Register</Link>
+								</div>
+							{/* ) : ( */}
+								{/* <div className="login-box flex align-items-center">
+									<button onClick={handleLogout}>Logout</button>
+								</div>
+							)} */}
 							<MobileMenu />
 							<div className="button-mobi-sell">
 								<Link className="tf-btn primary" href="/add-property">Submit Property</Link>

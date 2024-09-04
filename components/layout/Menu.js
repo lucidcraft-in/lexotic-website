@@ -156,6 +156,7 @@ export default function Menu() {
 					"/reviews",
 					"/my-profile",
 					"/add-property",
+					
 				])}`}>
 					<Link href="#">Dashboard</Link>
 					<ul>
@@ -178,8 +179,9 @@ export default function Menu() {
 							<Link href="/my-profile">My Profile</Link>
 						</li>
 						<li className={`${checkCurrentMenuItem("/add-property")}`}>
-							<Link href="/add-property">Add Property</Link>
+							<Link href="/add-property">Add Product</Link>
 						</li>
+					
 					</ul>
 				</li>
 			</ul>

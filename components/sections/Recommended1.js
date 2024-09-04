@@ -43,6 +43,7 @@ export default function Recommended1() {
 
 	useEffect(() => {
 		fetchCategories();
+		
 	}, []);
 
 	const fetchCategories = async () => {
@@ -50,6 +51,17 @@ export default function Recommended1() {
 			const res = await Axios.get(`getcategory`)
 			console.log(res)
 			setCategories(res.data)
+
+			if (categories.length > 0) {
+				// Automatically load products for the first category
+				const firstCategoryId = categories[0]._id; // Assuming categories have _id
+				console.log(firstCategoryId,"firstCategoryId")
+				handleCategorySelect(0, firstCategoryId);
+			  }
+			else {
+			  console.error('Failed to fetch categories:', response.statusText);
+			}
+	
 
 		} catch (error) {
 			console.log('error')
@@ -189,7 +201,7 @@ export default function Recommended1() {
 														<span className="text-variant-1">/SqFT</span>
 													</div>
 													<div className="mt-3 ">
-														<Link href={{pathname:"/property-details-v1",query:{_id:pro?._id}}} 
+														<Link href={{ pathname: "/property-details-v1", query: { _id: pro?._id } }}
 														>
 															<button className="p-2 btn btn-primary" type="submit">
 																Book Now

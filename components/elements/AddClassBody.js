@@ -14,7 +14,7 @@ export default function AddClassBody() {
 
 			// Add class based on pathname
 			// Add class based on pathname
-			if (pathname === '/') {
+			if (pathname === '/') {	
 				bodyElement.classList.add('counter-scroll')
 			}
 			else if (pathname === '/home-04') {

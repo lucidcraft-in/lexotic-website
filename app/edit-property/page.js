@@ -4,7 +4,12 @@ import PropertyMap from "@/components/elements/PropertyMap"
 import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-export default function AddProperty() {
+import { toast } from "react-toastify"
+export default function AddProperty({ searchParams }) {
+
+	console.log(searchParams._id)
+
+
 	const [selectedRadio, setSelectedRadio] = useState('radio1')
 
 	const handleRadioChange = (event) => {
@@ -35,19 +40,23 @@ export default function AddProperty() {
 	const [amenities, setAmenities] = useState([{ name: '', image: '' }]);
 	const [loading, setLoading] = useState(false);
 
+	const id = searchParams._id
 	useEffect(() => {
 		getData()
+		fetchMerchants()
+
 	}, [])
-
+	console.log(id)
 	useEffect(() => {
-
-		fetchMerchants();
-	}, []);
+		if (id) {
+			fetchProductData(id)
+		}
+	}, [id])
 
 	const getData = async () => {
 		try {
 			const res = await Axios.get(`getcategory`)
-			console.log(res)
+			// console.log(res)
 			setCategories(res.data)
 
 		} catch (error) {
@@ -63,6 +72,31 @@ export default function AddProperty() {
 			console.error('Error fetching merchants:', error);
 		}
 	};
+
+
+	const fetchProductData = async (id) => {
+		try {
+			const res = await Axios.get(`/products/${id}`);
+			const product = res.data;
+			console.log(product)
+			setName(product.name);
+			setTitle(product.title);
+			setDescription(product.description);
+			setPrice(product.price);
+			setOfferPrice(product.offerPrice);
+			setLocation(product.location);
+			setPhotos(product.photos);
+			setMerchantId(product.owner.merchantId);
+			setSelectedMerchant(product.owner.name);
+			setAmenities(product.amenities);
+			setCategoryId(product.categoryId);
+		} catch (error) {
+			console.error('Error fetching product data:', error);
+		}
+	};
+
+
+
 
 	const handleMerchantChange = (e) => {
 		const selectedOption = e.target.options[e.target.selectedIndex];
@@ -99,8 +133,6 @@ export default function AddProperty() {
 		setAmenities([...amenities, { name: '', image: '' }]);
 	};
 
-
-	const [product, setProduct] = useState([])
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
@@ -111,44 +143,46 @@ export default function AddProperty() {
 			return;
 		}
 
+		const productData = {
+			name,
+			title,
+			description,
+			price,
+			offerPrice,
+			location,
+			photos,
+			owner: {
+				merchantId,
+				name: selectedMerchant,
+			},
+			amenities,
+			categoryId: categoryId
+		};
+
 		try {
 
-			const ownerData = {
-				merchantId,
-				name: selectedMerchant, // The name of the selected merchant
-			};
+			const res = await Axios.put(`/products/${id}`, productData)
 
-			const res = await Axios.post(`/addproducts`, {
-				name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities
-			})
 			if (res.status === 201) {
-				setLoading(false);
-				setProduct(res.data)
-
-
-				toast.success("Category created successfully")
-				// navigate('/products');
+				toast.success("Product updated successfully");
+				navigate('/products');
 
 			} else {
-				toast.warning("Error occurred during creating");
-
-				setLoading(false);
-
-				toast.warning("error occured")
+				toast.warning("Error occurred during update");
 			}
-
 		} catch (error) {
+			toast.error("Can't update product!");
+		} finally {
 			setLoading(false);
-
-			toast.error("cant create product!!!")
-
 		}
 	};
 
-	console.log(product._id, "dataaaaaaaaaaaaaaa")
+
 	const handleCategoryChange = (e) => {
-		setCategoryId(e.target.value); // Set the categoryId from the selected option's value
+		setCategoryId(e.target.value);
 	};
+
+
 
 	return (
 		<>
@@ -156,14 +190,12 @@ export default function AddProperty() {
 			{/* <DeleteFile /> */}
 
 
+
 			<LayoutAdmin>
-
-				<Link href={{pathname:"/edit-property",query: { _id: product?._id }}} ><button className="btn btn-info">Edit Property</button></Link>
-
-
-				<form onSubmit={handleSubmit}>
+				
+			<form onSubmit={handleSubmit}>
 					<div>
-						<h6 className="title">Create Product</h6>
+						<h6 className="title">Update Product</h6>
 
 						<div className="widget-box-2">
 							<h6 className="title">Upload Media</h6>
@@ -705,7 +737,7 @@ export default function AddProperty() {
 							</fieldset>
 						</div>
 					</div> */}
-						<button className="tf-btn primary">Add Property</button>
+						<button className="tf-btn primary">Update </button>
 					</div >
 				</form>
 

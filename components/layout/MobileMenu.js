@@ -193,6 +193,7 @@ export default function MobileMenu() {
 						<li className={`${checkCurrentMenuItem("/add-property")}`}>
 							<Link href="/add-property">Add Property</Link>
 						</li>
+						
 					</ul>
 					<div className="dropdown2-btn" onClick={() => handleAccordion (6)}/>
 				</li>
