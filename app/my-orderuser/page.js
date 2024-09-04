@@ -80,6 +80,7 @@ export default function MyProperty() {
 											<th>Total Item Price</th> */}
 											<th>Order Date</th>
 											<th>Order Status</th>
+											{/* <th>view more</th> */}
 										</tr>
 									</thead>
 									{order?.map((item) => (
@@ -89,6 +90,14 @@ export default function MyProperty() {
 												<td>{new Date(order?.orderDate).toLocaleDateString()}</td>
 												<td>{order?.orderStatus}</td>
 											</tr>
+											<Link
+												href={{
+													pathname: '/order',
+													query: { _id: order?._id },
+												}}
+											>
+												<tr>View more</tr>
+											</Link>
 
 
 
