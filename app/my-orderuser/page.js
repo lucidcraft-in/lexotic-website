@@ -87,13 +87,13 @@ export default function MyProperty() {
 										<tbody>
 											<tr className="file-delete">
 
-												<td>{new Date(order?.orderDate).toLocaleDateString()}</td>
-												<td>{order?.orderStatus}</td>
+												<td>{new Date(item?.orderDate).toLocaleDateString()}</td>
+												<td>{item?.orderStatus}</td>
 											</tr>
 											<Link
 												href={{
 													pathname: '/order',
-													query: { _id: order?._id },
+													query: { _id: item?._id },
 												}}
 											>
 												<tr>View more</tr>
