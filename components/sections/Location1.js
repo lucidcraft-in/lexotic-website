@@ -3,43 +3,43 @@ import { Autoplay, Navigation, Pagination } from "swiper/modules"
 import { Swiper, SwiperSlide } from "swiper/react"
 
 const swiperOptions = {
-	modules: [Autoplay, Pagination, Navigation],
-	autoplay: {
-		delay: 2000,
-		disableOnInteraction: false,
-	},
-	speed: 2000,
-	navigation: {
-		clickable: true,
-		nextEl: ".nav-prev-location",
-		prevEl: ".nav-next-location",
-	},
-	pagination: {
-		el: ".swiper-pagination1",
-		clickable: true,
-	},
-	slidesPerView: 1,
-	loop: true,
-	spaceBetween: 30,
-	centeredSlides: true,
-	breakpoints: {
-		600: {
-			slidesPerView: 3,
-			spaceBetween: 20,
-			centeredSlides: false,
-		},
-		991: {
-			slidesPerView: 2,
-			spaceBetween: 20,
-			centeredSlides: false,
-		},
+  modules: [Autoplay, Pagination, Navigation],
+  autoplay: {
+    delay: 2000,
+    disableOnInteraction: false,
+  },
+  speed: 2000,
+  navigation: {
+    clickable: true,
+    nextEl: '.nav-prev-location',
+    prevEl: '.nav-next-location',
+  },
+  pagination: {
+    el: '.swiper-pagination1',
+    clickable: true,
+  },
+  slidesPerView: 1,
+  loop: true,
+  spaceBetween: 30,
+  centeredSlides: true,
+  breakpoints: {
+    600: {
+      slidesPerView: 3,
+      spaceBetween: 20,
+      centeredSlides: false,
+    },
+    991: {
+      slidesPerView: 3,
+      spaceBetween: 20,
+      centeredSlides: false,
+    },
 
-		1520: {
-			slidesPerView: 4,
-			spaceBetween: 30,
-		},
-	},
-}
+    1520: {
+      slidesPerView: 4,
+      spaceBetween: 30,
+    },
+  },
+};
 
 
 
@@ -103,53 +103,44 @@ export default function Location1() {
                     </div>
                   </Link>
                 </SwiperSlide>
-                {/* <SwiperSlide>
+                <SwiperSlide>
                   <Link href="#" className="box-location">
                     <div className="image">
                       <img
-                        src="/images/location/location-5.jpg"
+                        src="/images/dubai.png"
+                        style={{
+                          widt: '100%',
+                          height: '100%',
+                          overflow: 'hidden',
+                        }}
                         alt="image-location"
                       />
                     </div>
                     <div className="content">
-                      <span className="sub-title">128 Property</span>
-                      <h6 className="title">Seoul, South Korea</h6>
+                      <span className="sub-title">321 Property</span>
+                      <h6 className="title">United Arab Emirates</h6>
                     </div>
                   </Link>
                 </SwiperSlide>
                 <SwiperSlide>
-									<Link href="#" className="box-location">
-										<div className="image">
-											<img src="/images/location/location-3.jpg" alt="image-location" />
-										</div>
-										<div className="content">
-											<span className="sub-title">321 Property</span>
-											<h6 className="title">London, United Kingdom</h6>
-										</div>
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="#" className="box-location">
-										<div className="image">
-											<img src="/images/location/location-1.jpg" alt="image-location" />
-										</div>
-										<div className="content">
-											<span className="sub-title">231 Property</span>
-											<h6 className="title">Sydney, Australia</h6>
-										</div>
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="#" className="box-location">
-										<div className="image">
-											<img src="/images/location/location-2.jpg" alt="image-location" />
-										</div>
-										<div className="content">
-											<span className="sub-title">234 Property</span>
-											<h6 className="title">New Jersey, New York</h6>
-										</div>
-									</Link>
-								</SwiperSlide> */}
+                  <Link href="#" className="box-location">
+                    <div className="image">
+                      <img
+                        src="/images/india.png"
+                        style={{
+                          widt: '100%',
+                          height: '100%',
+                          overflow: 'hidden',
+                        }}
+                        alt="image-location"
+                      />
+                    </div>
+                    <div className="content">
+                      <span className="sub-title">221 Property</span>
+                      <h6 className="title">Taj Mahal, India</h6>
+                    </div>
+                  </Link>
+                </SwiperSlide>
               </Swiper>
               <div className="box-navigation">
                 <div className="navigation swiper-nav-next nav-next-location">
