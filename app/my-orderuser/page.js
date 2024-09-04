@@ -28,7 +28,7 @@ export default function MyProperty() {
 	}, [])
 
 	const getData = async () => {
-		const res = Axios.get(`/order/${user}`)
+		const res = await Axios.get(`/order/${user}`)
 		setOrder(res.data)
 	}
 	console.log(order)
@@ -72,45 +72,25 @@ export default function MyProperty() {
 								<table>
 									<thead>
 										<tr>
-											<th>Product Name</th>
+											{/* <th>Product Name</th>
 											<th>Rental Start Date</th>
 											<th>Rental End Date</th>
 											<th>Price per Day</th>
 											<th>Number of Person</th>
-											<th>Total Item Price</th>
+											<th>Total Item Price</th> */}
 											<th>Order Date</th>
 											<th>Order Status</th>
 										</tr>
 									</thead>
-									{order?.Items?.map((item) => (
+									{order?.map((item) => (
 										<tbody>
 											<tr className="file-delete">
-												<td>
-													{item?.productId}
-												</td>
-												<td>
-													{new Date(item?.rentalStartDate).toLocaleDateString()}
-												</td>
-												<td>
-													{new Date(item?.rentalEndDate).toLocaleDateString()}
-												</td>
-												<td>
-													{item?.pricePerDay}
-												</td>
-												<td>
-													{item?.quantity}
 
-												</td>
-												<td>{order?.totalItemPrice}</td>
+												<td>{new Date(order?.orderDate).toLocaleDateString()}</td>
+												<td>{order?.orderStatus}</td>
 											</tr>
 
-											<tr>
-												{new Date(order?.orderDate).toLocaleDateString()}
 
-											</tr>
-											<tr>
-												{order?.orderStatus}
-											</tr>
 
 										</tbody>
 									))}
