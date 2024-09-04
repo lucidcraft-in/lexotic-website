@@ -16,13 +16,13 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		console.log(userId)
+		// console.log(userId)
 		user = userId
 		flag = isFlag
 		name = username
 	}
 
-	console.log(user)
+	// console.log(user)
 	
 	return (
 		<>

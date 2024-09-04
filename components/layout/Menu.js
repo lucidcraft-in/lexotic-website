@@ -15,14 +15,14 @@ let isUser = null;
 const userInfo = sessionStorage.getItem('UserInfo');
 if (userInfo) {
   const { userId, username, token, isFlag } = JSON.parse(userInfo);
-  console.log(userId);
+  // console.log(userId);
   user = userId;
   isUser = isFlag;
 }
 
-console.log(isUser);
+// console.log(isUser);
 
-console.log(userInfo);
+// console.log(userInfo);
 
 useEffect(() => {
   setCurrentMenuItem(pathname);

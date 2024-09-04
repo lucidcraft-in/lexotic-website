@@ -28,7 +28,7 @@ export default function PropertyHalfmapList() {
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
 		const { userId, username, token } = JSON.parse(userInfo)
-		console.log(userId)
+		// console.log(userId)
 		user = userId
 	}
 
@@ -38,7 +38,7 @@ export default function PropertyHalfmapList() {
 	const getData = async () => {
 		try {
 			const res = await Axios.get(`/cart/${user}`);
-			console.log(res.data);
+			// console.log(res.data);
 			// Ensure the response structure matches your expectations
 			setCart(res.data || { items: [] }); // Default to empty items array if data is not available
 		} catch (error) {
@@ -47,7 +47,7 @@ export default function PropertyHalfmapList() {
 		}
 	};
 	
-	console.log(cart)
+	// console.log(cart)
 
 	const handleCheckout = async (e) => {
 		e.preventDefault()
@@ -92,7 +92,7 @@ export default function PropertyHalfmapList() {
 	}
 
 	const onRemove = async (cartId) => {
-		console.log(cartId)
+		// console.log(cartId)
 		const del = await Axios.delete(`/cart/${cartId}`)
 		console.log("deleted successfully", del)
 		getData()

@@ -37,7 +37,7 @@ export default function Recommended1() {
 			setIsVisible(true); // Show content after fetching data
 		}
 	};
-	console.log(product)
+	// console.log(product)
 
 
 
@@ -49,13 +49,13 @@ export default function Recommended1() {
 	const fetchCategories = async () => {
 		try {
 			const res = await Axios.get(`getcategory`)
-			console.log(res)
+			// console.log(res)
 			setCategories(res.data)
 
 			if (categories.length > 0) {
 				// Automatically load products for the first category
 				const firstCategoryId = categories[0]._id; // Assuming categories have _id
-				console.log(firstCategoryId,"firstCategoryId")
+				// console.log(firstCategoryId,"firstCategoryId")
 				handleCategorySelect(0, firstCategoryId);
 			  }
 			else {

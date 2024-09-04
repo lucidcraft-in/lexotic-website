@@ -112,14 +112,14 @@ export default function PropertyDetailsV1({ searchParams }) {
 	let user = null
 	if (userInfo) {
 		const { userId, username, token } = JSON.parse(userInfo)
-		console.log(userId)
+		// console.log(userId)
 		user = userId
 	}
 
 	const [cart,setCart]=useState([])
 	const handleAddCart = async (e) => {
 		e.preventDefault()
-		console.log(user)
+		// console.log(user)
 		let totalRentalPrice = 0
 		const items = [
 			{
@@ -148,7 +148,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 
 		}
 		
-		console.log(data)
+		// console.log(data)
 
 		try {
 			const res = await Axios.post(`/cart`, data)

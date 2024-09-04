@@ -47,7 +47,7 @@ export default function AddProperty() {
 	const getData = async () => {
 		try {
 			const res = await Axios.get(`getcategory`)
-			console.log(res)
+			// console.log(res)
 			setCategories(res.data)
 
 		} catch (error) {
@@ -145,7 +145,7 @@ export default function AddProperty() {
 		}
 	};
 
-	console.log(product._id, "dataaaaaaaaaaaaaaa")
+	// console.log(product._id, "dataaaaaaaaaaaaaaa")
 	const handleCategoryChange = (e) => {
 		setCategoryId(e.target.value); // Set the categoryId from the selected option's value
 	};
