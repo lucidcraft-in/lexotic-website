@@ -1,33 +1,31 @@
-'use client'
+'use client';
 
-import Axios from "@/components/axios/axios"
-import DeleteFile from "@/components/elements/DeleteFile"
-import LayoutAdmin from "@/components/layout/LayoutAdmin"
-import Link from "next/link"
-import { useEffect, useState } from "react"
+import Axios from '@/components/axios/axios';
+import DeleteFile from '@/components/elements/DeleteFile';
+import LayoutAdmin from '@/components/layout/LayoutAdmin';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 export default function MyProperty() {
+  const [order, setOrder] = useState([]);
 
-	const [order, setOrder] = useState([])
+  let user = null;
+  let flag = null;
 
+  const userInfo = sessionStorage.getItem('UserInfo');
+  if (userInfo) {
+    const { userId, username, token, isFlag } = JSON.parse(userInfo);
+    // console.log(userId)
+    user = userId;
+    flag = isFlag;
+  }
 
-	let user = null
-	let flag = null
+  console.log(user);
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		flag = isFlag
-	}
+  useEffect(() => {
+    getData();
+  }, []);
 
-	console.log(user)
-
-	useEffect(() => {
-		getData()
-	}, [])
-
-	const getData = async () => {
+  const getData = async () => {
     const res = await Axios.get(`/order/${user}`);
 
     setOrder(res.data);
