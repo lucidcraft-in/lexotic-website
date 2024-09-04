@@ -75,6 +75,15 @@ export default function Sidebar() {
             </li>
             <li
               className={`nav-menu-item ${
+                pathname === '/my-profile' ? 'active' : ''
+              }`}
+            >
+              <Link className="nav-menu-link" href="/my-profile">
+                <span className="icon icon-profile" /> My Profile
+              </Link>
+            </li>
+            <li
+              className={`nav-menu-item ${
                 pathname === '/my-property' ? 'active' : ''
               }`}
             >
@@ -85,21 +94,11 @@ export default function Sidebar() {
             </li>
             <li
               className={`nav-menu-item ${
-                pathname === '/my-invoices' ? 'active' : ''
+                pathname === '/my-order' ? 'active' : ''
               }`}
             >
-              <Link className="nav-menu-link" href="/my-invoices">
-                <span className="icon icon-file-text" /> My Invoices
-              </Link>
-            </li>
-            <li
-              className={`nav-menu-item ${
-                pathname === '/my-favorites' ? 'active' : ''
-              }`}
-            >
-              <Link className="nav-menu-link" href="/my-favorites">
-                <span className="icon icon-heart" />
-                My Favorites
+              <Link className="nav-menu-link" href="/my-order">
+                <span className="icon icon-file-text" /> My Orders
               </Link>
             </li>
             <li
@@ -108,18 +107,12 @@ export default function Sidebar() {
               }`}
             >
               <Link className="nav-menu-link" href="/reviews">
-                <span className="icon icon-review" /> Reviews
+                <span className="icon icon-heart" />
+                Reviews
               </Link>
             </li>
-            <li
-              className={`nav-menu-item ${
-                pathname === '/my-profile' ? 'active' : ''
-              }`}
-            >
-              <Link className="nav-menu-link" href="/my-profile">
-                <span className="icon icon-profile" /> My Profile
-              </Link>
-            </li>
+            
+
             <li
               className={`nav-menu-item ${
                 pathname === '/add-property' ? 'active' : ''

@@ -192,29 +192,32 @@ return (
           <ul>
             {isUser === true ? (
               <>
-                <li className={`${checkCurrentMenuItem('/dashboard')}`}>
+                <li className={`${checkCurrentMenuItem('/my-profileuser')}`}>
                   <Link href="/my-profileuser">My Profile</Link>
                 </li>
-                <li className={`${checkCurrentMenuItem('/my-favorites')}`}>
+                <li className={`${checkCurrentMenuItem('/my-orderuser')}`}>
                   <Link href="/my-orderuser">My Orders</Link>
                 </li>
               </>
             ) : (
               <>
-                <li className={`${checkCurrentMenuItem('/my-invoices')}`}>
-                  <Link href="/my-invoices">My Invoices</Link>
+                <li className={`${checkCurrentMenuItem('/my-profile')}`}>
+                  <Link href="/my-profile">My Profile</Link>
                 </li>
-                <li className={`${checkCurrentMenuItem('/my-favorites')}`}>
-                  <Link href="/my-favorites">My Favorites</Link>
+                <li className={`${checkCurrentMenuItem('/dashboard')}`}>
+                  <Link href="/dashboard">Dashboard</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/my-property')}`}>
+                  <Link href="/my-property">My Properties</Link>
+                </li>
+                <li className={`${checkCurrentMenuItem('/my-order')}`}>
+                  <Link href="/my-order">My Orders</Link>
                 </li>
                 <li className={`${checkCurrentMenuItem('/reviews')}`}>
                   <Link href="/reviews">Reviews</Link>
                 </li>
-                <li className={`${checkCurrentMenuItem('/my-profile')}`}>
-                  <Link href="/my-profile">My Profile</Link>
-                </li>
                 <li className={`${checkCurrentMenuItem('/add-property')}`}>
-                  <Link href="/add-property">Add Product</Link>
+                  <Link href="/add-property">Add Property</Link>
                 </li>
               </>
             )}
