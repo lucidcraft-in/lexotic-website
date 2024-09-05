@@ -58,7 +58,7 @@ export default function Dashboard() {
 		setOrder(res.data)
 	}
 
-	const totalOrder = order.length
+	const totalOrdercount = order.length
 	const pendingOrders = order.filter(order => order.orderStatus === 'Pending');
 
 	// Count the number of pending orders
@@ -80,6 +80,28 @@ export default function Dashboard() {
 	const countreview = review.length
 	console.log(countreview)
 
+	const [totalOrders, setTotalOrders] = useState(0);
+	const [totalAmount, setTotalAmount] = useState(0);
+
+	const handleSearch = () => {
+		if (startDate && endDate) {
+			// Filter orders based on the selected dates
+			const filteredOrders = order.filter(order => {
+				const orderDate = new Date(order.orderDate);
+				return orderDate >= startDate && orderDate <= endDate;
+			});
+console.log(filteredOrders)
+			// Calculate total orders and total amount
+			const total = filteredOrders.length;
+			const amount = filteredOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+
+			setTotalOrders(total);
+			setTotalAmount(amount);
+		} else {
+			alert('Please select both start and end dates.');
+		}
+	};
+
 	return (
 		<>
 			<DeleteFile />
@@ -91,7 +113,7 @@ export default function Dashboard() {
 								<span className="icon icon-list-dashes" />
 							</div>
 							<div className="content-box">
-								<div className="title-count">your product</div>
+								<div className="title-count">your products</div>
 								<div className="d-flex align-items-end">
 									{/* <h6 className="number" data-speed={2000} data-to={17} ><CountetNumber count={17} /></h6> */}
 									<h6 className="fw-7 text-variant-2">{countproduct}</h6>
@@ -119,7 +141,7 @@ export default function Dashboard() {
 								<div className="title-count">total orders</div>
 								<div className="d-flex align-items-end">
 									{/* <h6 className="number" data-speed={2000} data-to={1}><CountetNumber count={1} /></h6> */}
-									<h6 className="fw-7 text-variant-2">{totalOrder}</h6>
+									<h6 className="fw-7 text-variant-2">{totalOrdercount}</h6>
 
 								</div>
 							</div>
@@ -138,21 +160,31 @@ export default function Dashboard() {
 							</div>
 						</div>
 					</div>
-					{/* <div className="wrapper-content row">
+					<div className="wrapper-content row">
 						<div className="col-xl-9">
 							<div className="widget-box-2 wd-listing">
-								<h6 className="title">New Listing</h6>
+								<h6 className="title">Revenue</h6>
 								<div className="wd-filter">
-									<div className="ip-group">
+									{/* <div className="ip-group">
 										<input type="text" placeholder="Search" />
+									</div> */}
+									<div className="ip-group icon">
+										<DatePicker
+											selected={startDate}
+											onChange={(date) => setStartDate(date)}
+											className="ip-datepicker icon hasDatepicker" />
 									</div>
 									<div className="ip-group icon">
-										<DatePicker selected={startDate} onChange={(date) => setStartDate(date)} className="ip-datepicker icon hasDatepicker" />
+										<DatePicker
+											selected={endDate}
+											onChange={(date) => setEndDate(date)}
+											className="ip-datepicker icon hasDatepicker" />
 									</div>
-									<div className="ip-group icon">
-										<DatePicker selected={endDate} onChange={(date) => setEndDate(date)} className="ip-datepicker icon hasDatepicker" />
+									<div>
+										<button className="btn btn-success"
+											onClick={handleSearch}>Search</button>
 									</div>
-									<div className="ip-group">
+									{/* <div className="ip-group">
 										<select className="nice-select">
 
 											<option data-value={1} className="option selected">Select</option>
@@ -160,193 +192,39 @@ export default function Dashboard() {
 											<option data-value={3} className="option">Yesterday</option>
 
 										</select>
-									</div>
+									</div> */}
 								</div>
-								<div className="d-flex gap-4"><span className="text-primary fw-7">17</span><span className="text-variant-1">Results found</span></div>
+								{/* <div className="d-flex gap-4"><span className="text-primary fw-7">17</span><span className="text-variant-1">Results found</span></div> */}
 								<div className="wrap-table">
 									<div className="table-responsive">
 										<table>
 											<thead>
 												<tr>
-													<th>Listing</th>
-													<th>Status</th>
-													<th>Action</th>
+													<th>Total Order(count)</th>
+													<th>Amount</th>
+													{/* <th>Action</th> */}
 												</tr>
 											</thead>
 											<tbody>
 												<tr className="file-delete">
-													<td>
-														<div className="listing-box">
-															<div className="images">
-																<img src="/images/home/house-1.jpg" alt="images" />
-															</div>
-															<div className="content">
-																<div className="title"><Link href="/property-details-v1" className="link">Gorgeous Apartment Building</Link> </div>
-																<div className="text-date"><p className="fw-5"><span className="fw-4 text-variant-1">Posting date:</span> March 22, 2023</p></div>
-																<div className="text-1 fw-7">$5050,00</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														<div className="status-wrap">
-															<Link href="#" className="btn-status"> Approved</Link>
-														</div>
-													</td>
-													<td>
-														<ul className="list-action">
-															<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-															<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-														</ul>
-													</td>
+													<td>{totalOrders}</td>
+													<td>{totalAmount}</td>
+													{/* <td></td> */}
 												</tr>
-												{/* col 2 */}
-					{/* <tr className="file-delete">
-													<td>
-														<div className="listing-box">
-															<div className="images">
-																<img src="/images/home/house-2.jpg" alt="images" />
-															</div>
-															<div className="content">
-																<div className="title"><Link href="/property-details-v1" className="link">Mountain Mist Retreat, Aspen</Link> </div>
-																<div className="text-date"><p className="fw-5"><span className="fw-4 text-variant-1">Posting date:</span> March 22, 2023</p></div>
-																<div className="text-1 fw-7">$5050,00</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														<div className="status-wrap">
-															<Link href="#" className="btn-status"> Approved</Link>
-														</div>
-													</td>
-													<td>
-														<ul className="list-action">
-															<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-															<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-														</ul>
-													</td>
-												</tr> */}
-					{/* col 3 */}
-					{/* <tr className="file-delete">
-													<td>
-														<div className="listing-box">
-															<div className="images">
-																<img src="/images/home/house-3.jpg" alt="images" />
-															</div>
-															<div className="content">
-																<div className="title"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link> </div>
-																<div className="text-date"><p className="fw-5"><span className="fw-4 text-variant-1">Posting date:</span> March 22, 2023</p></div>
-																<div className="text-1 fw-7">$5050,00</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														<div className="status-wrap">
-															<Link href="#" className="btn-status"> Approved</Link>
-														</div>
-													</td>
-													<td>
-														<ul className="list-action">
-															<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-															<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-														</ul>
-													</td>
-												</tr> */}
-					{/* col 4 */}
-					{/* <tr className="file-delete">
-													<td>
-														<div className="listing-box">
-															<div className="images">
-																<img src="/images/home/house-4.jpg" alt="images" />
-															</div>
-															<div className="content">
-																<div className="title"><Link href="/property-details-v1" className="link">Coastal Serenity Cottage</Link> </div>
-																<div className="text-date"><p className="fw-5"><span className="fw-4 text-variant-1">Posting date:</span> March 22, 2023</p></div>
-																<div className="text-1 fw-7">$5050,00</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														<div className="status-wrap">
-															<Link href="#" className="btn-status"> Approved</Link>
-														</div>
-													</td>
-													<td>
-														<ul className="list-action">
-															<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-															<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-														</ul>
-													</td>
-												</tr> */}
-					{/* col 5 */}
-					{/* <tr className="file-delete">
-													<td>
-														<div className="listing-box">
-															<div className="images">
-																<img src="/images/home/house-5.jpg" alt="images" />
-															</div>
-															<div className="content">
-																<div className="title"><Link href="/property-details-v1" className="link">Sunset Heights Estate</Link> </div>
-																<div className="text-date"><p className="fw-5"><span className="fw-4 text-variant-1">Posting date:</span> March 22, 2023</p></div>
-																<div className="text-1 fw-7">$5050,00</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														<div className="status-wrap">
-															<Link href="#" className="btn-status"> Approved</Link>
-														</div>
-													</td>
-													<td>
-														<ul className="list-action">
-															<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-															<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-														</ul>
-													</td>
-												</tr> */}
-					{/* col 6 */}
-					{/* <tr className="file-delete">
-													<td>
-														<div className="listing-box">
-															<div className="images">
-																<img src="/images/home/house-8.jpg" alt="images" />
-															</div>
-															<div className="content">
-																<div className="title"><Link href="/property-details-v1" className="link">Casa Lomas de Machalí Machas</Link> </div>
-																<div className="text-date"><p className="fw-5"><span className="fw-4 text-variant-1">Posting date:</span> March 22, 2023</p></div>
-																<div className="text-1 fw-7">$5050,00</div>
-															</div>
-														</div>
-													</td>
-													<td>
-														<div className="status-wrap">
-															<Link href="#" className="btn-status"> Approved</Link>
-														</div>
-													</td>
-													<td>
-														<ul className="list-action">
-															<li><Link href="#" className="item"><i className="icon icon-edit" />Edit</Link></li>
-															<li><Link href="#" className="item"><i className="icon icon-sold" />Sold</Link></li>
-															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
-														</ul>
-													</td>
-												</tr> */}
-					{/* </tbody>
+
+
+											</tbody>
 										</table>
-									</div> */}
-					{/* <ul className="wd-navigation">
+									</div>
+									{/* <ul className="wd-navigation">
 										<li><Link href="#" className="nav-item active">1</Link></li>
 										<li><Link href="#" className="nav-item">2</Link></li>
 										<li><Link href="#" className="nav-item">3</Link></li>
 										<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
 									</ul> */}
-					{/* </div>
-							</div> */}
-					{/* <div className="widget-box-2 wd-chart">
+								</div>
+							</div>
+							{/* <div className="widget-box-2 wd-chart">
 								<h6 className="title">Page Inside</h6>
 								<div className="wd-filter-date">
 									<div className="left">
@@ -365,11 +243,11 @@ export default function Dashboard() {
 									</div>
 								</div>
 								<div className="chart-box">
-									{/* <DashboardChart /> */}
-					{/* </div>
+									<DashboardChart />
+								</div>
 							</div> */}
-					{/* </div> */}
-					{/* <div className="col-xl-3">
+						</div>
+						{/* <div className="col-xl-3">
 							<div className="widget-box-3 mess-box">
 								<h6>Messages</h6>
 								<span className="text-variant-1">No message</span>
@@ -450,7 +328,7 @@ export default function Dashboard() {
 								</div>
 							</div>
 						</div> */}
-					{/* </div> */}
+					</div>
 				</div>
 
 			</LayoutAdmin >
