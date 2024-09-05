@@ -26,7 +26,7 @@ export default function MyProperty() {
   }, []);
 
   const getData = async () => {
-    const res = await Axios.get(`/order/${user}`);
+    const res = await Axios.get(`/ordermerchant/${user}`);
 
     setOrder(res.data);
   };

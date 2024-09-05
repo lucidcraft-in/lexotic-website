@@ -145,7 +145,6 @@ export default function AddProperty() {
 		}
 	};
 
-	// console.log(product._id, "dataaaaaaaaaaaaaaa")
 	const handleCategoryChange = (e) => {
 		setCategoryId(e.target.value); // Set the categoryId from the selected option's value
 	};
@@ -172,28 +171,26 @@ export default function AddProperty() {
 							<div className="box-uploadfile text-center">
 								<label className="uploadfile">
 									<span className="icon icon-img-2" />
-									{photos.map((photo, index) => (
-										<>
-											<div className="btn-upload">
-												<Link href="#" className="tf-btn primary">Choose Image</Link>
-												<input type="file" className="ip-file"
-													name="url"
-													value={photo.url}
-													onChange={(e) => handlePhotoChange(index, e)} />
-												<p className="file-name fw-5">Or drop image here to upload</p>
+
+									<div className="btn-upload">
+										<Link href="#" className="tf-btn primary">Choose Image</Link>
+										<input type="file" className="ip-file"
+											name="url"
+											value={photos.url}
+										/>
+										<p className="file-name fw-5">Or drop image here to upload</p>
 
 
-											</div>
-											<div className="mb-4">
-												<input type="text" placeholder="file name"
-													name="title"
-													value={photo.title}
-													onChange={(e) => handlePhotoChange(index, e)} />
+									</div>
+									<div className="mb-4">
+										<input type="text" placeholder="file name"
+											name="title"
+											value={photos.title}
+											onChange={(e) => handlePhotoChange(index, e)} />
 
 
-											</div>
-										</>
-									))}
+									</div>
+
 
 									<button type="button" className="btn btn-link " onClick={addPhotoField}>
 										Add Another Photo

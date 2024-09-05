@@ -24,13 +24,13 @@ export default function MyProperty() {
 
 	const [order, setOrder] = useState([])
 
-	
+
 	useEffect(() => {
 		getData()
 	}, [])
 
 	const getData = async () => {
-		const res = await Axios.get(`/order/${user}`)
+		const res = await Axios.get(`/ordermerchant/${user}`)
 		setOrder(res.data)
 	}
 	console.log(order)

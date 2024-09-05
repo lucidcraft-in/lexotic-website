@@ -8,6 +8,16 @@ import { useEffect, useState } from "react"
 export default function MyProperty() {
 
 
+	let userid = null
+	let flag = null
+
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		// console.log(userId)
+		userid = userId
+		flag = isFlag
+	}
 
 	const [product, setProduct] = useState([])
 
@@ -18,7 +28,7 @@ export default function MyProperty() {
 
 	const getData = async () => {
 		try {
-			const res = await Axios.get(`getproducts`)
+			const res = await Axios.get(`getproductsByMerchant/${userid}`)
 			setProduct(res.data)
 
 		} catch (error) {
@@ -26,7 +36,7 @@ export default function MyProperty() {
 		}
 	}
 
-
+console.log(product)
 
 	return (
 		<>

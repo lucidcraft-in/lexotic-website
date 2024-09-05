@@ -15,7 +15,7 @@ export default function Dashboard() {
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
 
-	const [product, setProduct] = useState([])
+	const [countreport, setCountReport] = useState([])
 
 
 	let user = null
@@ -30,77 +30,53 @@ export default function Dashboard() {
 	}
 
 	useEffect(() => {
-		getProduct()
-		getOrder()
-		getReview()
+
+		getData()
 	}, [])
 
-	const getProduct = async () => {
-		try {
-			const res = await Axios.get(`getproducts`)
-			setProduct(res.data)
-
-		} catch (error) {
-			console.log('error')
-		}
-	}
-
-	const countproduct = product.length
-	console.log(countproduct)
 
 	const [order, setOrder] = useState([])
 
 
 
 
-	const getOrder = async () => {
-		const res = await Axios.get(`/order/${user}`)
-		setOrder(res.data)
-	}
 
-	const totalOrdercount = order.length
-	const pendingOrders = order.filter(order => order.orderStatus === 'Pending');
-
-	// Count the number of pending orders
-	const countPendingOrders = pendingOrders.length;
-
-	const [review, setReview] = useState([])
-
-	const getReview = async () => {
-		try {
-			const res = await Axios.get(`/productsreview/${user}`)
-			console.log("review data", res.data.reviews)
-			setReview(res.data.reviews)
-
-		} catch (error) {
-			console.log("some error occured", error)
-
-		}
-	}
-	const countreview = review.length
-	console.log(countreview)
 
 	const [totalOrders, setTotalOrders] = useState(0);
 	const [totalAmount, setTotalAmount] = useState(0);
 
-	const handleSearch = () => {
-		if (startDate && endDate) {
-			// Filter orders based on the selected dates
-			const filteredOrders = order.filter(order => {
-				const orderDate = new Date(order.orderDate);
-				return orderDate >= startDate && orderDate <= endDate;
-			});
-console.log(filteredOrders)
-			// Calculate total orders and total amount
-			const total = filteredOrders.length;
-			const amount = filteredOrders.reduce((sum, order) => sum + order.totalAmount, 0);
-
-			setTotalOrders(total);
-			setTotalAmount(amount);
-		} else {
-			alert('Please select both start and end dates.');
+	const handleSearch = async () => {
+		if (!startDate || !endDate || !user) {
+			alert('Please select both start and end dates and enter the merchant ID.');
+			return;
 		}
+
+		try {
+			// console.log(user)
+
+			const response = await Axios.get(
+				`orderReport/${user}`, // API endpoint
+				{
+					startDate,
+					 // Format as YYYY-MM-DD
+					endDate
+				}
+			);
+
+			setOrder(response.data.orders); // Update the orders list with the response
+		} catch (error) {
+			console.error('Error fetching orders:', error);
+			alert('Error fetching orders. Check console for more details.');
+		}
+
 	};
+
+
+	const getData = async () => {
+		const res = await Axios.get(`/reportcounts/${user}`)
+		console.log(res.data)
+		setCountReport(res.data)
+	}
 
 	return (
 		<>
@@ -116,7 +92,7 @@ console.log(filteredOrders)
 								<div className="title-count">your products</div>
 								<div className="d-flex align-items-end">
 									{/* <h6 className="number" data-speed={2000} data-to={17} ><CountetNumber count={17} /></h6> */}
-									<h6 className="fw-7 text-variant-2">{countproduct}</h6>
+									<h6 className="fw-7 text-variant-2">{countreport.productCount}</h6>
 								</div>
 							</div>
 						</div>
@@ -128,7 +104,7 @@ console.log(filteredOrders)
 								<div className="title-count">Pending orders</div>
 								<div className="d-flex align-items-end">
 									{/* <h6 className="number" data-speed={2000} data-to={0}><CountetNumber count={0} /></h6> */}
-									<h6 className="fw-7 text-variant-2">{countPendingOrders}</h6>
+									<h6 className="fw-7 text-variant-2">{countreport.pendingOrdersCount}</h6>
 
 								</div>
 							</div>
@@ -141,7 +117,7 @@ console.log(filteredOrders)
 								<div className="title-count">total orders</div>
 								<div className="d-flex align-items-end">
 									{/* <h6 className="number" data-speed={2000} data-to={1}><CountetNumber count={1} /></h6> */}
-									<h6 className="fw-7 text-variant-2">{totalOrdercount}</h6>
+									<h6 className="fw-7 text-variant-2">{countreport.countorder}</h6>
 
 								</div>
 							</div>
@@ -154,7 +130,7 @@ console.log(filteredOrders)
 								<div className="title-count">Reviews</div>
 								<div className="d-flex align-items-end">
 									{/* <h6 className="number" data-speed={2000} data-to={17}><CountetNumber count={17} /></h6> */}
-									<h6 className="fw-7 text-variant-2">{countreview}</h6>
+									<h6 className="fw-7 text-variant-2">{countreport.reviewCount}</h6>
 
 								</div>
 							</div>
@@ -198,6 +174,7 @@ console.log(filteredOrders)
 								<div className="wrap-table">
 									<div className="table-responsive">
 										<table>
+
 											<thead>
 												<tr>
 													<th>Total Order(count)</th>
@@ -205,15 +182,19 @@ console.log(filteredOrders)
 													{/* <th>Action</th> */}
 												</tr>
 											</thead>
-											<tbody>
-												<tr className="file-delete">
-													<td>{totalOrders}</td>
-													<td>{totalAmount}</td>
-													{/* <td></td> */}
-												</tr>
+
+											{order.map((order) => (
+												<tbody key={order._id}>
+													<tr className="file-delete">
+														<td>{order.totalAmount}</td>
+														<td>{new Date(order.orderDate).toLocaleDateString()}</td>
+														{/* <td></td> */}
+													</tr>
 
 
-											</tbody>
+												</tbody>
+											))}
+
 										</table>
 									</div>
 									{/* <ul className="wd-navigation">
