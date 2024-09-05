@@ -1,6 +1,6 @@
 
 'use client'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 
@@ -9,9 +9,77 @@ import DashboardChart from "@/components/elements/DashboardChart"
 import DeleteFile from "@/components/elements/DeleteFile"
 import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
+import Axios from "@/components/axios/axios"
+import { Chela_One } from "next/font/google"
 export default function Dashboard() {
 	const [startDate, setStartDate] = useState(new Date())
 	const [endDate, setEndDate] = useState(new Date())
+
+	const [product, setProduct] = useState([])
+
+
+	let user = null
+	let flag = null
+
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		// console.log(userId)
+		user = userId
+		flag = isFlag
+	}
+
+	useEffect(() => {
+		getProduct()
+		getOrder()
+		getReview()
+	}, [])
+
+	const getProduct = async () => {
+		try {
+			const res = await Axios.get(`getproducts`)
+			setProduct(res.data)
+
+		} catch (error) {
+			console.log('error')
+		}
+	}
+
+	const countproduct = product.length
+	console.log(countproduct)
+
+	const [order, setOrder] = useState([])
+
+
+
+
+	const getOrder = async () => {
+		const res = await Axios.get(`/order/${user}`)
+		setOrder(res.data)
+	}
+
+	const totalOrder = order.length
+	const pendingOrders = order.filter(order => order.orderStatus === 'Pending');
+
+	// Count the number of pending orders
+	const countPendingOrders = pendingOrders.length;
+
+	const [review, setReview] = useState([])
+
+	const getReview = async () => {
+		try {
+			const res = await Axios.get(`/productsreview/${user}`)
+			console.log("review data", res.data.reviews)
+			setReview(res.data.reviews)
+
+		} catch (error) {
+			console.log("some error occured", error)
+
+		}
+	}
+	const countreview = review.length
+	console.log(countreview)
+
 	return (
 		<>
 			<DeleteFile />
@@ -23,10 +91,10 @@ export default function Dashboard() {
 								<span className="icon icon-list-dashes" />
 							</div>
 							<div className="content-box">
-								<div className="title-count">your Listing</div>
+								<div className="title-count">your product</div>
 								<div className="d-flex align-items-end">
-									<h6 className="number" data-speed={2000} data-to={17} ><CountetNumber count={17} /></h6>
-									<span className="fw-7 text-variant-2">/17 remaining</span>
+									{/* <h6 className="number" data-speed={2000} data-to={17} ><CountetNumber count={17} /></h6> */}
+									<h6 className="fw-7 text-variant-2">{countproduct}</h6>
 								</div>
 							</div>
 						</div>
@@ -35,9 +103,11 @@ export default function Dashboard() {
 								<span className="icon icon-clock-countdown" />
 							</div>
 							<div className="content-box">
-								<div className="title-count">Pending</div>
+								<div className="title-count">Pending orders</div>
 								<div className="d-flex align-items-end">
-									<h6 className="number" data-speed={2000} data-to={0}><CountetNumber count={0} /></h6>
+									{/* <h6 className="number" data-speed={2000} data-to={0}><CountetNumber count={0} /></h6> */}
+									<h6 className="fw-7 text-variant-2">{countPendingOrders}</h6>
+
 								</div>
 							</div>
 						</div>
@@ -46,9 +116,11 @@ export default function Dashboard() {
 								<span className="icon icon-bookmark" />
 							</div>
 							<div className="content-box">
-								<div className="title-count">Favorite</div>
+								<div className="title-count">total orders</div>
 								<div className="d-flex align-items-end">
-									<h6 className="number" data-speed={2000} data-to={1}><CountetNumber count={1} /></h6>
+									{/* <h6 className="number" data-speed={2000} data-to={1}><CountetNumber count={1} /></h6> */}
+									<h6 className="fw-7 text-variant-2">{totalOrder}</h6>
+
 								</div>
 							</div>
 						</div>
@@ -59,12 +131,14 @@ export default function Dashboard() {
 							<div className="content-box">
 								<div className="title-count">Reviews</div>
 								<div className="d-flex align-items-end">
-									<h6 className="number" data-speed={2000} data-to={17}><CountetNumber count={17} /></h6>
+									{/* <h6 className="number" data-speed={2000} data-to={17}><CountetNumber count={17} /></h6> */}
+									<h6 className="fw-7 text-variant-2">{countreview}</h6>
+
 								</div>
 							</div>
 						</div>
 					</div>
-					<div className="wrapper-content row">
+					{/* <div className="wrapper-content row">
 						<div className="col-xl-9">
 							<div className="widget-box-2 wd-listing">
 								<h6 className="title">New Listing</h6>
@@ -127,7 +201,7 @@ export default function Dashboard() {
 													</td>
 												</tr>
 												{/* col 2 */}
-												<tr className="file-delete">
+					{/* <tr className="file-delete">
 													<td>
 														<div className="listing-box">
 															<div className="images">
@@ -152,9 +226,9 @@ export default function Dashboard() {
 															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
 														</ul>
 													</td>
-												</tr>
-												{/* col 3 */}
-												<tr className="file-delete">
+												</tr> */}
+					{/* col 3 */}
+					{/* <tr className="file-delete">
 													<td>
 														<div className="listing-box">
 															<div className="images">
@@ -179,9 +253,9 @@ export default function Dashboard() {
 															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
 														</ul>
 													</td>
-												</tr>
-												{/* col 4 */}
-												<tr className="file-delete">
+												</tr> */}
+					{/* col 4 */}
+					{/* <tr className="file-delete">
 													<td>
 														<div className="listing-box">
 															<div className="images">
@@ -206,9 +280,9 @@ export default function Dashboard() {
 															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
 														</ul>
 													</td>
-												</tr>
-												{/* col 5 */}
-												<tr className="file-delete">
+												</tr> */}
+					{/* col 5 */}
+					{/* <tr className="file-delete">
 													<td>
 														<div className="listing-box">
 															<div className="images">
@@ -233,9 +307,9 @@ export default function Dashboard() {
 															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
 														</ul>
 													</td>
-												</tr>
-												{/* col 6 */}
-												<tr className="file-delete">
+												</tr> */}
+					{/* col 6 */}
+					{/* <tr className="file-delete">
 													<td>
 														<div className="listing-box">
 															<div className="images">
@@ -260,19 +334,19 @@ export default function Dashboard() {
 															<li><a className="remove-file item"><i className="icon icon-trash" />Delete</a></li>
 														</ul>
 													</td>
-												</tr>
-											</tbody>
+												</tr> */}
+					{/* </tbody>
 										</table>
-									</div>
-									<ul className="wd-navigation">
+									</div> */}
+					{/* <ul className="wd-navigation">
 										<li><Link href="#" className="nav-item active">1</Link></li>
 										<li><Link href="#" className="nav-item">2</Link></li>
 										<li><Link href="#" className="nav-item">3</Link></li>
 										<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
-									</ul>
-								</div>
-							</div>
-							<div className="widget-box-2 wd-chart">
+									</ul> */}
+					{/* </div>
+							</div> */}
+					{/* <div className="widget-box-2 wd-chart">
 								<h6 className="title">Page Inside</h6>
 								<div className="wd-filter-date">
 									<div className="left">
@@ -291,11 +365,11 @@ export default function Dashboard() {
 									</div>
 								</div>
 								<div className="chart-box">
-									<DashboardChart />
-								</div>
-							</div>
-						</div>
-						<div className="col-xl-3">
+									{/* <DashboardChart /> */}
+					{/* </div>
+							</div> */}
+					{/* </div> */}
+					{/* <div className="col-xl-3">
 							<div className="widget-box-3 mess-box">
 								<h6>Messages</h6>
 								<span className="text-variant-1">No message</span>
@@ -375,8 +449,8 @@ export default function Dashboard() {
 									</ul>
 								</div>
 							</div>
-						</div>
-					</div>
+						</div> */}
+					{/* </div> */}
 				</div>
 
 			</LayoutAdmin >
