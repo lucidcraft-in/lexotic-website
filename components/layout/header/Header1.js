@@ -5,32 +5,31 @@ import MobileMenu from "../MobileMenu"
 export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogin, handleLogin, hcls, handleRegister }) {
 
 
-	let user = null
-	let flag = null
+  let user = null
+  let flag = null
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		flag = isFlag
-	}
+  const userInfo = sessionStorage.getItem("UserInfo")
+  if (userInfo) {
+    const { userId, username, token, isFlag } = JSON.parse(userInfo)
+    // console.log(userId)
+    user = userId
+    flag = isFlag
+  }
 
-	// console.log(user)
+  // console.log(user)
 
 
 
-	const handleLogout = () => {
-		sessionStorage.removeItem("UserInfo")
-		alert("Are you sure do you want to logout?")
-	}
+  const handleLogout = () => {
+    sessionStorage.removeItem("UserInfo")
+    alert("Are you sure do you want to logout?")
+  }
 
-	return (
+  return (
     <>
       <header
-        className={`main-header fixed-header ${hcls ? 'header-style-2' : ''} ${
-          scroll ? 'fixed-header is-fixed' : ''
-        }`}
+        className={`main-header fixed-header ${hcls ? 'header-style-2' : ''} ${scroll ? 'fixed-header is-fixed' : ''
+          }`}
       >
         {/* Header Lower */}
         <div className="header-lower">
@@ -74,20 +73,33 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
                 <div className="header-account">
                   <div className="register">
                     <ul className="d-flex">
-                      <li>
-                        <a onClick={handleLogin}>Login</a>
-                      </li>
-                      <li>/</li>
-                      <li>
-                        <a onClick={handleRegister}>Register</a>
-                      </li>
+
+                      {!user ? (
+                        <>
+                          <li>
+                            <a className="btn beating-button" onClick={handleLogin}>Login </a>
+                          </li>
+                          &nbsp; &nbsp;
+                          {/* <li>/</li> */}
+                          &nbsp; &nbsp;
+                          <li>
+                            <a className="btn beating-button" onClick={handleRegister}>Register</a>
+                          </li>
+                        </>
+
+                      ) : (
+                        <li>
+                          <a className="btn beating-button" onClick={handleLogout}>Logout</a>
+                        </li>
+
+                      )}
                     </ul>
                   </div>
-                  <div className="flat-bt-top">
+                  {/* <div className="flat-bt-top">
                     <Link className="tf-btn primary" href="/add-property">
                       Submit Property
                     </Link>
-                  </div>
+                  </div> */}
                 </div>
                 <div
                   className="mobile-nav-toggler mobile-button"
@@ -118,7 +130,7 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
               </Link>
             </div>
             <div className="bottom-canvas">
-              {/* {!user ? ( */}
+              
               <div className="login-box flex align-items-center">
                 <Link href="#modalLogin" data-bs-toggle="modal">
                   Login
@@ -128,17 +140,13 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
                   Register
                 </Link>
               </div>
-              {/* ) : ( */}
-              {/* <div className="login-box flex align-items-center">
-									<button onClick={handleLogout}>Logout</button>
-								</div>
-							)} */}
+            
               <MobileMenu />
-              <div className="button-mobi-sell">
+              {/* <div className="button-mobi-sell">
                 <Link className="tf-btn primary" href="/add-property">
                   Submit Property
                 </Link>
-              </div>
+              </div> */}
               <div className="mobi-icon-box">
                 <div className="box d-flex align-items-center">
                   <span className="icon icon-phone2" />

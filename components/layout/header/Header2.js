@@ -43,9 +43,9 @@ export default function Header2({
 											<li><a onClick={handleRegister}>Register</a></li>
 										</ul>
 									</div>
-									<div className="flat-bt-top">
+									{/* <div className="flat-bt-top">
 										<Link className="tf-btn primary" href="/add-property">Submit Property</Link>
-									</div>
+									</div> */}
 									<a className="btn-menu-nav" onClick={handleOffcanMenu}><span className="icon icon-categories" /></a>
 								</div>
 							</div>

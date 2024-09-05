@@ -1,5 +1,5 @@
-
 'use client'
+
 import Axios from "@/components/axios/axios"
 import DeleteFile from "@/components/elements/DeleteFile"
 import LayoutAdmin from "@/components/layout/LayoutAdmin"
@@ -7,25 +7,31 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 export default function MyProperty() {
 
+	const [order, setOrder] = useState([])
 
 
-	const [product, setProduct] = useState([])
+	let user = null
+	let flag = null
 
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		// console.log(userId)
+		user = userId
+		flag = isFlag
+	}
+
+	console.log(user)
 
 	useEffect(() => {
 		getData()
 	}, [])
 
 	const getData = async () => {
-		try {
-			const res = await Axios.get(`getproducts`)
-			setProduct(res.data)
-
-		} catch (error) {
-			console.log('error')
-		}
+		const res = await Axios.get(`/order/${user}`)
+		setOrder(res.data)
 	}
-
+	console.log(order)
 
 
 	return (
@@ -60,36 +66,47 @@ export default function MyProperty() {
 						</div>
 					</div> */}
 					<div className="widget-box-2 wd-listing">
-						<h6 className="title">My Product</h6>
+						<h6 className="title">My Order</h6>
 						<div className="wrap-table">
 							<div className="table-responsive">
 								<table>
 									<thead>
 										<tr>
-											<th>Product Name</th>
-											<th>Title</th>
-											<th>Description</th>
-											<th>Price</th>
-											<th>OfferPrice</th>
+											{/* <th>Product Name</th>
+											<th>Rental Start Date</th>
+											<th>Rental End Date</th>
+											<th>Price per Day</th>
+											<th>Number of Person</th>
+											<th>Total Item Price</th> */}
+											<th>Order Date</th>
+											<th>Order Status</th>
 											<th></th>
 										</tr>
 									</thead>
-									{product.map((pro) => (
+									{order?.map((item) => (
 										<tbody>
 											<tr className="file-delete">
-												<td>{pro?.name}</td>
-												<td>{pro?.title}</td>
-												<td>{pro?.description}</td>
-												<td>{pro?.price}</td>
-												<td>{pro?.offerPrice}</td>
-												<td>
-													<Link href={{pathname:"/edit-property",query: { _id: pro?._id }}}  > <button className="btn beating-button">Edit</button></Link>
 
+												<td>{new Date(item?.orderDate).toLocaleDateString()}</td>
+												<td>{item?.orderStatus}</td>
+												<td>
+													<Link
+														href={{
+															pathname: '/order',
+															query: { _id: item?._id },
+														}}
+													>
+														<button className="btn beating-button"> View more</button>
+													</Link>
 												</td>
 											</tr>
 
+
+
+
 										</tbody>
 									))}
+
 								</table>
 							</div>
 							<ul className="wd-navigation">

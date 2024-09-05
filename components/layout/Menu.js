@@ -208,7 +208,7 @@ return (
                   <Link href="/dashboard">Dashboard</Link>
                 </li>
                 <li className={`${checkCurrentMenuItem('/my-property')}`}>
-                  <Link href="/my-property">My Properties</Link>
+                  <Link href="/my-property">My Products</Link>
                 </li>
                 <li className={`${checkCurrentMenuItem('/my-order')}`}>
                   <Link href="/my-order">My Orders</Link>
@@ -217,7 +217,7 @@ return (
                   <Link href="/reviews">Reviews</Link>
                 </li>
                 <li className={`${checkCurrentMenuItem('/add-property')}`}>
-                  <Link href="/add-property">Add Property</Link>
+                  <Link href="/add-property">Add Product</Link>
                 </li>
               </>
             )}

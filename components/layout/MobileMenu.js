@@ -176,7 +176,7 @@ export default function MobileMenu() {
 							<Link href="/dashboard">Dashboard</Link>
 						</li>
 						<li className={`${checkCurrentMenuItem("/my-favorites")}`}>
-							<Link href="/my-favorites">My Properties</Link>
+							<Link href="/my-favorites">My Products</Link>
 						</li>
 						<li className={`${checkCurrentMenuItem("/my-invoices")}`}>
 							<Link href="/my-invoices">My Invoices</Link>
@@ -191,7 +191,7 @@ export default function MobileMenu() {
 							<Link href="/my-profile">My Profile</Link>
 						</li>
 						<li className={`${checkCurrentMenuItem("/add-property")}`}>
-							<Link href="/add-property">Add Property</Link>
+							<Link href="/add-property">Add Product</Link>
 						</li>
 						
 					</ul>

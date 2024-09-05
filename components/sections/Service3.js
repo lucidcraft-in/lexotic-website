@@ -47,7 +47,7 @@ export default function Service3() {
 									<h6 className="title">Sell a home</h6>
 									<p className="description">Showcasing your property's best features for a successful
 										sale.</p>
-									<Link href="#" className="tf-btn size-1">Submit Property</Link>
+									{/* <Link href="#" className="tf-btn size-1">Submit Property</Link> */}
 								</div>
 							</div>
 						</div>

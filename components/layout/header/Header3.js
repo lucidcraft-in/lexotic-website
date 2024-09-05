@@ -57,18 +57,18 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 										<p className="name">{name}<span className="icon icon-arr-down" /></p>
 									</a>
 									<div className={`dropdown-menu  ${isToggled ? "show" : ""}`} style={{ position: 'absolute', inset: '0px auto auto 0px', margin: 0, transform: 'translate(1494px, 62px)' }}>
-										<Link className="dropdown-item" href="/my-favorites">My Properties</Link>
+										<Link className="dropdown-item" href="/my-favorites">My Products</Link>
 										<Link className="dropdown-item" href="/my-invoices">My Invoices</Link>
 										<Link className="dropdown-item" href="/my-favorites">My Favorites</Link>
 										<Link className="dropdown-item" href="/reviews">Reviews</Link>
 										<Link className="dropdown-item" href="/my-profile">My Profile</Link>
-										<Link className="dropdown-item" href="/add-property">Add Property</Link>
+										<Link className="dropdown-item" href="/add-property">Add Product</Link>
 										<Link className="dropdown-item" href="/">Logout</Link>
 									</div>
 
-									<div className="flat-bt-top">
+									{/* <div className="flat-bt-top">
 										<Link className="tf-btn primary" href="/add-property">Submit Property</Link>
-									</div>
+									</div> */}
 								</div>
 								<div className="mobile-nav-toggler mobile-button" onClick={handleMobileMenu}><span /></div>
 							</div>
@@ -84,9 +84,9 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 						<div className="nav-logo"><Link href="/"><img src="/images/logo/logo@2x.png" alt="nav-logo" width={174} height={44} /></Link></div>
 						<div className="bottom-canvas">
 							<MobileMenu />
-							<div className="button-mobi-sell">
+							{/* <div className="button-mobi-sell">
 								<Link className="tf-btn primary" href="/add-property">Submit Property</Link>
-							</div>
+							</div> */}
 							<div className="mobi-icon-box">
 								<div className="box d-flex align-items-center">
 									<span className="icon icon-phone2" />

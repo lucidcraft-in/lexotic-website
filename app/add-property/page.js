@@ -158,12 +158,14 @@ export default function AddProperty() {
 
 			<LayoutAdmin>
 
-				<Link href={{pathname:"/edit-property",query: { _id: product?._id }}} ><button className="btn btn-info">Edit Property</button></Link>
+				{/* <div className="mb-3 d-flex justify-content-end">
+					<Link href={{ pathname: "/edit-property", query: { _id: product?._id } }} ><button className="btn btn-info ">Edit Product</button></Link>
 
+				</div> */}
 
 				<form onSubmit={handleSubmit}>
-					<div>
-						<h6 className="title">Create Product</h6>
+					<div >
+						<h6 className="title mb-3 d-flex justify-content-center">CREATE PRODUCT</h6>
 
 						<div className="widget-box-2">
 							<h6 className="title">Upload Media</h6>
@@ -705,7 +707,7 @@ export default function AddProperty() {
 							</fieldset>
 						</div>
 					</div> */}
-						<button className="tf-btn primary">Add Property</button>
+						<button className="tf-btn primary">Add Product</button>
 					</div >
 				</form>
 

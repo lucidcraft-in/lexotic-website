@@ -5,35 +5,34 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function Sidebar() {
-	const pathname = usePathname()
+  const pathname = usePathname()
 
-	let user = null
-	let flag = null
+  let user = null
+  let flag = null
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		flag = isFlag
-	}
+  const userInfo = sessionStorage.getItem("UserInfo")
+  if (userInfo) {
+    const { userId, username, token, isFlag } = JSON.parse(userInfo)
+    // console.log(userId)
+    user = userId
+    flag = isFlag
+  }
 
-	// console.log(user)
+  // console.log(user)
 
-	const handleLogout = () => {
-		sessionStorage.removeItem("UserInfo")
-		alert("Are you sure do you want to logout?")
-	}
+  const handleLogout = () => {
+    sessionStorage.removeItem("UserInfo")
+    alert("Are you sure do you want to logout?")
+  }
 
-	return (
+  return (
     <>
       {flag ? (
         <div className="sidebar-menu-dashboard">
           <ul className="box-menu-dashboard">
             <li
-              className={`nav-menu-item ${
-                pathname === '/my-property' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/my-property' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/my-orderuser">
                 <span className="icon icon-list-dashes" />
@@ -42,9 +41,8 @@ export default function Sidebar() {
             </li>
 
             <li
-              className={`nav-menu-item ${
-                pathname === '/my-profileuser' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/my-profileuser' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/my-profileuser">
                 <span className="icon icon-profile" /> My Profile
@@ -53,7 +51,6 @@ export default function Sidebar() {
 
             <li className={`nav-menu-item ${pathname === '/' ? 'active' : ''}`}>
               <Link className="nav-menu-link" href="/">
-                <span className="icon icon-sign-out" />{' '}
                 <button className="btn btn-info" onClick={handleLogout}>
                   Logout
                 </button>
@@ -65,58 +62,52 @@ export default function Sidebar() {
         <div className="sidebar-menu-dashboard">
           <ul className="box-menu-dashboard">
             <li
-              className={`nav-menu-item ${
-                pathname === '/dashboard' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/dashboard' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/dashboard">
                 <span className="icon icon-dashboard" /> Dashboards
               </Link>
             </li>
             <li
-              className={`nav-menu-item ${
-                pathname === '/my-profile' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/my-profile' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/my-profile">
                 <span className="icon icon-profile" /> My Profile
               </Link>
             </li>
             <li
-              className={`nav-menu-item ${
-                pathname === '/my-property' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/my-property' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/my-property">
                 <span className="icon icon-list-dashes" />
-                My Properties
+                My Product
               </Link>
             </li>
             <li
-              className={`nav-menu-item ${
-                pathname === '/my-order' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/my-order' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/my-order">
                 <span className="icon icon-file-text" /> My Orders
               </Link>
             </li>
             <li
-              className={`nav-menu-item ${
-                pathname === '/reviews' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/reviews' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/reviews">
                 <span className="icon icon-heart" />
                 Reviews
               </Link>
             </li>
-            
+
 
             <li
-              className={`nav-menu-item ${
-                pathname === '/add-property' ? 'active' : ''
-              }`}
+              className={`nav-menu-item ${pathname === '/add-property' ? 'active' : ''
+                }`}
             >
               <Link className="nav-menu-link" href="/add-property">
                 <svg
@@ -136,7 +127,9 @@ export default function Sidebar() {
             </li>
             <li className={`nav-menu-item ${pathname === '/' ? 'active' : ''}`}>
               <Link className="nav-menu-link" href="/">
-                <span className="icon icon-sign-out" /> Logout
+                <button className="btn btn-info" onClick={handleLogout}>
+                  Logout
+                </button>
               </Link>
             </li>
           </ul>

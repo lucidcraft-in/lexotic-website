@@ -65,7 +65,7 @@ export default function MyProperty() {
 						</div>
 					</div> */}
           <div className="widget-box-2 wd-listing">
-            <h6 className="title">My Order</h6>
+            <h6 className="title"> Order Details</h6>
             <div className="wrap-table">
               <div className="table-responsive">
                 <table>
@@ -81,28 +81,25 @@ export default function MyProperty() {
                       <th>Order Status</th>
                     </tr>
                   </thead>
-                  {order.map((item) => (
-                    <tbody>
-                      <tr className="file-delete">
-                        <td>{item?.productId}</td>
-                        <td>
-                          {new Date(item?.rentalStartDate).toLocaleDateString()}
-                        </td>
-                        <td>
-                          {new Date(item?.rentalEndDate).toLocaleDateString()}
-                        </td>
-                        <td>{item?.pricePerDay}</td>
-                        <td>{item?.quantity}</td>
-                        <td>{order?.totalItemPrice}</td>
-                      </tr>
-
-                      <tr>{new Date(order?.orderDate).toLocaleDateString()}</tr>
-                      <tr>{order?.status}</tr>
+                  {order.map((singleOrder) => (
+                    <tbody key={singleOrder._id}>
+                      {singleOrder.items.map((item) => (
+                        <tr className="file-delete" key={item._id}>
+                          <td>{item.productId}</td>
+                          <td>{new Date(item.rentalStartDate).toLocaleDateString()}</td>
+                          <td>{new Date(item.rentalEndDate).toLocaleDateString()}</td>
+                          <td>{item.pricePerDay}</td>
+                          <td>{item.quantity}</td>
+                          <td>{item.totalItemPrice}</td>
+                          <td>{new Date(singleOrder.orderDate).toLocaleDateString()}</td>
+                          <td>{singleOrder.orderStatus}</td>
+                        </tr>
+                      ))}
                     </tbody>
                   ))}
                 </table>
               </div>
-              <ul className="wd-navigation">
+              {/* <ul className="wd-navigation">
                 <li>
                   <Link href="#" className="nav-item active">
                     1
@@ -123,7 +120,7 @@ export default function MyProperty() {
                     <i className="icon icon-arr-r" />
                   </Link>
                 </li>
-              </ul>
+              </ul> */}
             </div>
           </div>
         </div>

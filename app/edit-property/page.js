@@ -199,7 +199,7 @@ export default function AddProperty({ searchParams }) {
 
 						<div className="widget-box-2">
 							<h6 className="title">Upload Media</h6>
-							<div className="box-uploadfile text-center">
+							{/* <div className="box-uploadfile text-center">
 								<label className="uploadfile">
 									<span className="icon icon-img-2" />
 									{photos.map((photo, index) => (
@@ -230,7 +230,7 @@ export default function AddProperty({ searchParams }) {
 									</button>
 
 								</label>
-							</div>
+							</div> */}
 						</div>
 						<div className="widget-box-2">
 							<h6 className="title">Information</h6>
