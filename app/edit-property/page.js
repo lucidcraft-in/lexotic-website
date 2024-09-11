@@ -5,6 +5,7 @@ import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
 import { useEffect, useState } from "react"
 import { toast } from "react-toastify"
+import imageCompression from "browser-image-compression"
 export default function AddProperty({ searchParams }) {
 
 	// console.log(searchParams._id)
@@ -39,6 +40,8 @@ export default function AddProperty({ searchParams }) {
 
 	const [amenities, setAmenities] = useState([{ name: '', image: '' }]);
 	const [loading, setLoading] = useState(false);
+	const [uploading, setUploading] = useState(false);
+
 
 	const id = searchParams._id
 	useEffect(() => {
@@ -73,6 +76,7 @@ export default function AddProperty({ searchParams }) {
 		}
 	};
 
+	let existingPhotos, existingAmenities
 
 	const fetchProductData = async (id) => {
 		try {
@@ -90,6 +94,8 @@ export default function AddProperty({ searchParams }) {
 			setSelectedMerchant(product.owner.name);
 			setAmenities(product.amenities);
 			setCategoryId(product.categoryId);
+			existingPhotos = product.photo
+			existingAmenities = product.amenities
 		} catch (error) {
 			console.error('Error fetching product data:', error);
 		}
@@ -151,12 +157,14 @@ export default function AddProperty({ searchParams }) {
 			offerPrice,
 			location,
 			photos,
+			photos: photos.length ? photos : existingPhotos,  // `existingPhotos` should be the previous photos fetched from DB
 			owner: {
 				merchantId,
 				name: selectedMerchant,
 			},
-			amenities,
-			categoryId: categoryId
+			// If new amenities are uploaded, use them, otherwise use old ones
+			amenities: amenities.length ? amenities : existingAmenities,  // `existingAmenities` are fetched from DB
+			categoryId: categoryId,
 		};
 
 		try {
@@ -183,6 +191,88 @@ export default function AddProperty({ searchParams }) {
 	};
 
 
+	console.log(photos)
+	const uploadFileHandler = async (e, val) => {
+		e.preventDefault()
+		const file = e.target.files[0];
+
+		// Log the original file to check size and other attributes
+		console.log("Original file:", file);
+
+		// Image compression options
+		const options = {
+			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+			maxWidthOrHeight: 800,
+			useWebWorker: true,
+		};
+
+		try {
+			// Compress the image
+			const compressedFile = await imageCompression(file, options);
+
+			// Log the compressed file to check size reduction
+			console.log("Compressed file:", compressedFile);
+
+			const newFile = new File(
+				[compressedFile],
+				file.type,
+				// { type: file.type }
+			)
+
+			const formData = new FormData();
+			formData.append('file', newFile);
+
+			formData.forEach((value, key) => {
+				console.log(`${key}:${value}`)
+			})
+			setUploading(true); // Start uploading state
+
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			};
+
+			// Make POST request to /upload endpoint
+			const data = await Axios.post('/upload', formData, config);
+
+
+
+			console.log("Upload successful, response data:", data.data);
+			let title = data.data.title
+			let url = data.data.url
+			console.log(title, url)
+			setUploading(false); // Stop uploading state
+
+
+
+			// Automatically set the image title as the file name (without extension)
+
+
+			if (val === 'photos') {
+				setPhotos(prevPhotos => [
+					...prevPhotos,
+					{
+						title, // Image name without extension
+						url    // URL returned from the upload API
+					}
+				]);
+			} else if (val === 'amenities') {
+				setAmenities(prevAmenities => [
+					...prevAmenities,
+					{
+						title, // Image name without extension
+						url    // URL returned from the upload API
+					}
+				]);
+			}
+
+
+		} catch (error) {
+			console.error("Error during file upload:", error);
+			setUploading(false); // Stop uploading state on error
+		}
+	};
 
 	return (
 		<>
@@ -231,6 +321,25 @@ export default function AddProperty({ searchParams }) {
 
 								</label>
 							</div> */}
+
+							<fieldset className="box box-fieldset">
+								<label htmlFor="upload">Upload Photo:</label>
+								<input
+									type="file"
+									className="form-control style-1"
+									onChange={(e) => uploadFileHandler(e, 'photos')}
+								/>
+							</fieldset>
+							{uploading ? <p>Uploading...</p> : null}
+
+							<h3>Uploaded Photos:</h3>
+							<ul>
+								{photos.map((photo, index) => (
+									<li key={index}>
+										<img src={photo.url} alt={`uploaded-${index}`} style={{ width: '200px' }} />
+									</li>
+								))}
+							</ul>
 						</div>
 						<div className="widget-box-2">
 							<h6 className="title">Information</h6>
@@ -310,29 +419,63 @@ export default function AddProperty({ searchParams }) {
 									</select>
 								</fieldset>
 							</div> */}
-								<fieldset className="box box-fieldset">
-									<label htmlFor="title">
-										Amenities:<span>*</span>
-									</label>
-									{amenities.map((amenity, index) => (
-										<div key={index} className="mt-2 mb-4">
-											<input type="text" className="form-control style-1 mb-2"
-												name="name"
-												value={amenity.name}
-												onChange={(e) => handleAmenityChange(index, e)}
-												placeholder="enter name" />
-											<input type="text" className="form-control style-1 "
-												name="image"
-												value={amenity.image}
-												onChange={(e) => handleAmenityChange(index, e)}
-												placeholder="Image" />
 
-										</div>
+
+								<div className="widget-box-2">
+									<h6 className="title">Upload Media</h6>
+									{/* <div className="box-uploadfile text-center">
+								<label className="uploadfile">
+									<span className="icon icon-img-2" />
+									{photos.map((photo, index) => (
+										<>
+											<div className="btn-upload">
+												<Link href="#" className="tf-btn primary">Choose Image</Link>
+												<input type="file" className="ip-file"
+													name="url"
+													value={photo.url}
+													onChange={(e) => handlePhotoChange(index, e)} />
+												<p className="file-name fw-5">Or drop image here to upload</p>
+
+
+											</div>
+											<div className="mb-4">
+												<input type="text" placeholder="file name"
+													name="title"
+													value={photo.title}
+													onChange={(e) => handlePhotoChange(index, e)} />
+
+
+											</div>
+										</>
 									))}
-									<button type="button" className="btn btn-link" onClick={addAmenityField}>
-										Add Another Amenity
+
+									<button type="button" className="btn btn-link " onClick={addPhotoField}>
+										Add Another Photo
 									</button>
-								</fieldset>
+
+								</label>
+							</div> */}
+
+									<fieldset className="box box-fieldset">
+										<label htmlFor="upload">Amenities:</label>
+										<input
+											type="file"
+											className="form-control style-1"
+											onChange={(e) => uploadFileHandler(e, 'amenities')}
+										/>
+									</fieldset>
+									{uploading ? <p>Uploading...</p> : null}
+
+									<h3>Uploaded Photos:</h3>
+									<ul>
+										{amenities.map((photo, index) => (
+											<li key={index}>
+												<img src={photo.url} alt={`uploaded-${index}`} style={{ width: '200px' }} />
+											</li>
+										))}
+									</ul>
+								</div>
+
 								<div className="box grid-2 gap-30">
 									<fieldset className="box-fieldset">
 										<label htmlFor="state">

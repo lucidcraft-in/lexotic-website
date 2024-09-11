@@ -102,12 +102,12 @@ console.log(product)
 									))}
 								</table>
 							</div>
-							<ul className="wd-navigation">
+							{/* <ul className="wd-navigation">
 								<li><Link href="#" className="nav-item active">1</Link></li>
 								<li><Link href="#" className="nav-item">2</Link></li>
 								<li><Link href="#" className="nav-item">3</Link></li>
 								<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
-							</ul>
+							</ul> */}
 						</div>
 					</div>
 				</div >

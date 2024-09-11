@@ -38,17 +38,20 @@ export default function SidebarList() {
 				<section className="flat-section-v6 flat-recommended flat-sidebar">
 					<div className="container">
 						<div className="box-title-listing">
-							<h5>Product List</h5>
+							<div className="d-flex align-items-center" >
+								<h5 className="mx-auto">Product List</h5>
+							</div>
+
 							<div className="box-filter-tab">
-								<ul className="nav-tab-filter" role="tablist">
+								{/* <ul className="nav-tab-filter" role="tablist">
 									<li className="nav-tab-item" onClick={() => handleTab(1)}>
 										<a className={isTab == 1 ? "nav-link-item active" : "nav-link-item"} data-bs-toggle="tab"><i className="icon icon-grid" /></a>
 									</li>
 									<li className="nav-tab-item" onClick={() => handleTab(2)}>
 										<a className={isTab == 2 ? "nav-link-item active" : "nav-link-item"} data-bs-toggle="tab"><i className="icon icon-list" /></a>
 									</li>
-								</ul>
-								<select className="nice-select">
+								</ul> */}
+								{/* <select className="nice-select">
 
 									<option data-value={1} className="option">10 Per Page</option>
 									<option data-value={2} className="option">11 Per Page</option>
@@ -59,7 +62,7 @@ export default function SidebarList() {
 									<option data-value="default" className="option selected">Sort by (Default)</option>
 									<option data-value="new" className="option">Newest</option>
 									<option data-value="old" className="option">Oldest</option>
-								</select>
+								</select> */}
 							</div>
 						</div>
 						<div className="row">

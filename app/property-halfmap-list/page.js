@@ -33,7 +33,7 @@ export default function PropertyHalfmapList() {
 	}
 
 
-	
+
 
 	const getData = async () => {
 		try {
@@ -46,50 +46,58 @@ export default function PropertyHalfmapList() {
 			setCart({ items: [] }); // Handle error by setting an empty cart
 		}
 	};
-	
+
 	// console.log(cart)
 
 	const handleCheckout = async (e) => {
-		e.preventDefault()
-		let totalAmount = 0
+		e.preventDefault();
+		console.log(cart);
 
-		if(!cart || !cart.item){
-			console.log("cart data is not available")
-			return
-		}
-		const items = cart.items.map(item => {
-			const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24);
-			const totalItemPrice = item.pricePerDay * item.quantity * days;
-			totalAmount += totalItemPrice;
-			return {
-				...item,
-				totalItemPrice
+		// Initialize totalAmount
+		let totalAmount = 0;
+
+		// Select the first cart in the array (adjust as needed)
+		const selectedCart = cart[0]; // or apply logic to choose the appropriate cart
+
+		// Ensure selectedCart and selectedCart.items are defined and is an array
+		if (selectedCart && Array.isArray(selectedCart.items)) {
+			const items = selectedCart.items.map(item => {
+				const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24);
+				const totalItemPrice = item.pricePerDay * item.quantity * days;
+				totalAmount += totalItemPrice;
+				return {
+					...item,
+					totalItemPrice
+				};
+			});
+
+			const data = {
+				userId: user,
+				items,
+				totalAmount,
+				orderDate: new Date().toISOString(),
+				merchantId:selectedCart.merchantId,
+				orderStatus: 'pending',
+				status: 'done',
+				createdAt: new Date().toISOString(),
+				updatedAt: new Date().toISOString() // Fixed typo
 			};
-		});
 
+			console.log(data);
 
-
-		const data = {
-			userId: user,
-			items,
-			totalAmount,
-			orderDate: new Date().toISOString(),
-			orderStatus: 'pending',
-			status: 'done',
-			createdAt: new Date().toISOString(),
-			updatedAt: new DataView().toISOString()
-
+			try {
+				const res = await Axios.post(`/order`, data);
+				console.log("Order created successfully", res.data);
+			} catch (error) {
+				console.log("Failed to create order", error);
+			}
+		} else {
+			console.error("Selected cart or selectedCart.items is not properly defined");
 		}
+	};
 
-		try {
-			const res = await Axios.post(`/order`, data)
-			console.log("order created successfully", res.data)
+	// Ensure you pass handleCheckout as a function
 
-		} catch (error) {
-			console.log("failed to create order", error)
-
-		}
-	}
 
 	const onRemove = async (cartId) => {
 		// console.log(cartId)
@@ -783,77 +791,93 @@ export default function PropertyHalfmapList() {
 
 
 									<div className="col-md-12">
-										{cart?.map((cart) => (
+										{cart.length > 0 ? (
+											cart.map((cart, index) => (
+												cart.items.length > 0 ? (
+													cart.items.map((item, index) => (
 
-											<div className="homeya-box list-style-1 list-style-2">
-												<Link href="/property-details-v1" className="images-group">
-													<div className="images-style">
-														<img src="/images/home/house-5.jpg" alt="img" />
-													</div>
-													<div className="top">
-														<ul className="d-flex">
-															<li className="flag-tag style-1">For Rent</li>
-														</ul>
-														<ul className="d-flex gap-4">
-															<li className="box-icon w-32">
-																<span className="icon icon-arrLeftRight" />
-															</li>
-															<li className="box-icon w-32">
-																<span className="icon icon-heart" />
-															</li>
-															<li className="box-icon w-32">
-																<span className="icon icon-eye" />
-															</li>
-														</ul>
-													</div>
 
-													<div className="bottom">
-														<span className="flag-tag style-2">apartment</span>
-													</div>
-												</Link>
-												<div className="content">
-													<div className="archive-top">
-														<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
-														<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
-														<ul className="meta-list">
-															<li className="item">
-																<i className="icon icon-bed" />
-																<span>4</span>
-															</li>
-															<li className="item">
-																<i className="icon icon-bathtub" />
-																<span>{cart.items[0]?.quantity}</span>
-															</li>
-															<li className="item">
-																<i className="icon icon-ruler" />
-																<span>600 SqFT</span>
-															</li>
-														</ul>
-													</div>
-													<div className="d-flex justify-content-between align-items-center archive-bottom">
-														<div className="d-flex gap-8 align-items-center">
-															<div className="avatar avt-40 round">
-																<img src="/images/avatar/avt-9.jpg" alt="avt" />
+														<div className="homeya-box list-style-1 list-style-2">
+															<Link href="/property-details-v1" className="images-group">
+																<div className="images-style">
+																	<img src="/images/home/house-5.jpg" alt="img" />
+																</div>
+																<div className="top">
+																	<ul className="d-flex">
+																		<li className="flag-tag style-1">For Rent</li>
+																	</ul>
+																	<ul className="d-flex gap-4">
+																		<li className="box-icon w-32">
+																			<span className="icon icon-arrLeftRight" />
+																		</li>
+																		<li className="box-icon w-32">
+																			<span className="icon icon-heart" />
+																		</li>
+																		<li className="box-icon w-32">
+																			<span className="icon icon-eye" />
+																		</li>
+																	</ul>
+																</div>
+
+																<div className="bottom">
+																	<span className="flag-tag style-2">apartment</span>
+																</div>
+															</Link>
+															<div className="content">
+																<div className="archive-top">
+																	<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
+																	<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+																	<ul className="meta-list">
+																		<li className="item">
+																			<i className="icon icon-bed" />
+																			<span>4</span>
+																		</li>
+																		<li className="item">
+																			<i className="icon icon-bathtub" />
+																			<span>{cart.items[0]?.quantity}</span>
+																		</li>
+																		<li className="item">
+																			<i className="icon icon-ruler" />
+																			<span>600 SqFT</span>
+																		</li>
+																	</ul>
+																</div>
+																<div className="d-flex justify-content-between align-items-center archive-bottom">
+																	<div className="d-flex gap-8 align-items-center">
+																		<div className="avatar avt-40 round">
+																			<img src="/images/avatar/avt-9.jpg" alt="avt" />
+																		</div>
+																		{/* <span>Annette Black</span> */}
+																		<span>Total Price : {cart?.totalRentalPrice}</span>
+																	</div>
+																	<div className="d-flex align-items-center">
+																		<div className="h7 fw-7">{cart.items[0].pricePerDay}</div>
+																		<span className="text-variant-1">/month</span>
+																	</div>
+																	{/* Remove Icon Button */}
+																	<button
+																		className="btn btn-danger"
+																		onClick={() => onRemove(cart._id)}
+																		aria-label="Remove item"
+																	>
+																		Remove
+																	</button>
+																</div>
 															</div>
-															{/* <span>Annette Black</span> */}
-															<span>Total Price : {cart?.totalRentalPrice}</span>
 														</div>
-														<div className="d-flex align-items-center">
-															<div className="h7 fw-7">{cart.items[0].pricePerDay}</div>
-															<span className="text-variant-1">/month</span>
-														</div>
-														{/* Remove Icon Button */}
-														<button
-															className="btn btn-danger"
-															onClick={() => onRemove(cart._id)}
-															aria-label="Remove item"
-														>
-															Remove
-														</button>
-													</div>
-												</div>
-											</div>
-										))}
+													))
+												)
+													: (
+														<p>No items in cart</p>
+
+													)
+											))
+										) : (
+											<p>No carts available</p>
+
+										)
+										}
+
 
 									</div>
 
