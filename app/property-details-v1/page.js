@@ -116,7 +116,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 		user = userId
 	}
 
-	const [cart,setCart]=useState([])
+	const [cart, setCart] = useState([])
 	const handleAddCart = async (e) => {
 		e.preventDefault()
 		// console.log(user)
@@ -142,12 +142,12 @@ export default function PropertyDetailsV1({ searchParams }) {
 			userId: user,
 			items,
 			totalRentalPrice,
-			merchantId:product.owner.merchantId,
+			merchantId: product.owner.merchantId,
 			createdAt,
 			updatedAt
 
 		}
-		
+
 		// console.log(data)
 
 		try {
@@ -159,7 +159,13 @@ export default function PropertyDetailsV1({ searchParams }) {
 		}
 	}
 
-const cartId=(cart._id)
+	const cartId = (cart._id)
+	console.log(product)
+
+	const dummyImage = '/images/2.jpg';
+
+	const photoUrls = (product?.photos || []).map(photo => photo.url);
+	console.log(photoUrls)
 	return (
 		<>
 
@@ -167,39 +173,48 @@ const cartId=(cart._id)
 				<div>
 					<section className="flat-location flat-slider-detail-v1">
 						<div className="swiper tf-sw-location">
+							{/* {product.map((pro) => ( */}
+
+
 							<Swiper {...swiperOptions} className="swiper-wrapper">
 								<SwiperSlide>
-									<Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-1.jpg" alt="img-property" />
-									</Link>
+									{/* <Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block"> */}
+									<img src={photoUrls} alt="img-property" />
+									{/* </Link> */}
 								</SwiperSlide>
+
+																
 								<SwiperSlide>
-									<Link href="/images/banner/banner-property-3.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-3.jpg" alt="img-property" />
-									</Link>
+									<img src={photoUrls} alt="img-property" />
 								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-1.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-3.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-3.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
+
+
+								{/* <SwiperSlide>
+								<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
+									<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
+								</Link>
+							</SwiperSlide>
+							<SwiperSlide>
+								<Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
+									<img src="/images/banner/banner-property-1.jpg" alt="img-property" />
+								</Link>
+							</SwiperSlide>
+							<SwiperSlide>
+								<Link href="/images/banner/banner-property-3.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
+									<img src="/images/banner/banner-property-3.jpg" alt="img-property" />
+								</Link>
+							</SwiperSlide> */}
+								{/* <SwiperSlide>
+								<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
+									<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
+								</Link>
+							</SwiperSlide> */}
 							</Swiper>
-							<div className="box-navigation">
+							{/* ))} */}
+
+
+
+							< div className="box-navigation">
 								<div className="navigation swiper-nav-next nav-next-location"><span className="icon icon-arr-l" /></div>
 								<div className="navigation swiper-nav-prev nav-prev-location"><span className="icon icon-arr-r" /></div>
 							</div>
@@ -857,7 +872,7 @@ const cartId=(cart._id)
 											<span>1-333-345-6868 themesflat@gmail.com</span>
 										</div> */}
 												</div>
-												<form  className="contact-form"  onSubmit={handleAddCart}>
+												<form className="contact-form" onSubmit={handleAddCart}>
 													<div className="ip-group">
 														<label htmlFor="fullname">Start Date</label>
 														<input type="date" placeholder="Jony Dane" className="form-control"
@@ -877,12 +892,14 @@ const cartId=(cart._id)
 											<label htmlFor="message">Your Message:</label>
 											<textarea id="comment-message" name="message" rows={4} tabIndex={4} placeholder="Message" aria-required="true" defaultValue={""} />
 										</div> */}
-										<button className="tf-btn primary w-100 mb-3" >Book Now</button>
+													<div className="d-grid gap-3">
+														<button className="btn btn-primary w-100 mb-3">Book Now</button>
 
-										<Link href={{pathname:"/property-halfmap-list",query:{_id:searchParams._id}}} cart={cart}>
-										<button className="tf-btn primary w-100" >Check out</button>
+														<Link href={{ pathname: "/property-halfmap-list", query: { _id: searchParams._id } }} cart={cart}>
+															<button className="btn btn-primary w-100 mb-3">Check out</button>
+														</Link>
+													</div>
 
-										</Link>
 
 												</form>
 											</div>

@@ -15,6 +15,13 @@ export default function Recommended1() {
   const [product, setProduct] = useState([]);
   const { id } = useParams;
 
+const photoUrl =product.map(pro=>
+
+  pro.photos[0].url
+
+)
+console.log(product)
+
   const handleCategorySelect = async (index, categoryId) => {
     setIsTab(index);
     setSelectedCategory(categoryId);
@@ -97,13 +104,16 @@ export default function Recommended1() {
                     <div className="col-xl-4 col-lg-6 col-md-6">
                       <div className="homeya-box">
                         <div className="archive-top">
-                          <Link
-                            href="/property-details-v1"
-                            className="images-group"
-                          >
-                            <div className="images-style">
-                              <img src="images/2.jpg" alt="property image" />
-                            </div>
+                         
+                         {/* {product?.photos?.map((pro)=>(
+                             <div className="images-style">
+                             <img src={pro.url}  height={'100px'} width={'100px'} alt="property image" />
+                           </div>
+                         ))} */}
+
+                             <div className="images-style">
+                             <img src={photoUrl}  height={'100px'} width={'100px'} alt="property image" />
+                           </div>
                             <div className="top">
                               <ul className="d-f lex gap-8">
                                 <li className="flag-tag success">Featured</li>
@@ -124,7 +134,7 @@ export default function Recommended1() {
                             <div className="bottom">
                               <span className="flag-tag style-2">Studio</span>
                             </div>
-                          </Link>
+                          {/* </Link> */}
                           <div className="content">
                             <div className="h7 text-capitalize fw-7">
                               <Link
