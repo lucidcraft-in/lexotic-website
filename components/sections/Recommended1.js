@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import Axios from '../axios/axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useParams } from 'next/navigation';
 
 export default function Recommended1() {

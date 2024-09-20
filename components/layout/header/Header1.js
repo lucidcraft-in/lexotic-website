@@ -1,22 +1,30 @@
 import Link from "next/link"
 import Menu from "../Menu"
 import MobileMenu from "../MobileMenu"
+import { useEffect, useState } from "react"
 
 export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogin, handleLogin, hcls, handleRegister }) {
 
+  const [userInfo, setUserInfo] = useState(null)
 
   let user = null
   let flag = null
+  let storageUserInfo
 
-  const userInfo = sessionStorage.getItem("UserInfo")
-  if (userInfo) {
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      storageUserInfo = sessionStorage.getItem('UserInfo')
+      setUserInfo(storageUserInfo)
+
+    }
+  }, [])
+
+  if (storageUserInfo) {
     const { userId, username, token, isFlag } = JSON.parse(userInfo)
-    // console.log(userId)
     user = userId
     flag = isFlag
   }
 
-  // console.log(user)
 
 
 
@@ -130,7 +138,7 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
               </Link>
             </div>
             <div className="bottom-canvas">
-              
+
               <div className="login-box flex align-items-center">
                 <Link href="#modalLogin" data-bs-toggle="modal">
                   Login
@@ -140,7 +148,7 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
                   Register
                 </Link>
               </div>
-            
+
               <MobileMenu />
               {/* <div className="button-mobi-sell">
                 <Link className="tf-btn primary" href="/add-property">
