@@ -9,9 +9,9 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 	const handleToggle = () => setToggled(!isToggled)
 
 
+
 	let user = null
 	let flag = null
-	let name = null
 
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
@@ -19,11 +19,10 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 		// console.log(userId)
 		user = userId
 		flag = isFlag
-		name = username
 	}
 
-	// console.log(user)
-	
+	console.log(user)
+
 	return (
 		<>
 

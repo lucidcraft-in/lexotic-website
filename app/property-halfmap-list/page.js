@@ -17,11 +17,9 @@ export default function PropertyHalfmapList() {
 		setIsTab(i)
 	}
 
-	const [userInfo, setUserInfo] = useState(null)
 
 	let user = null
 	let flag = null
-	let storageUserInfo
   
 	useEffect(() => {
 

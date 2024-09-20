@@ -6,37 +6,53 @@ import { useEffect, useState } from 'react'
 
 export default function Sidebar() {
   const pathname = usePathname()
-  const [userInfo, setUserInfo] = useState(null)
+  // const [userInfo, setUserInfo] = useState(null)
+
+
+  // let user = null
+  // let flag = null
+  // let storageUserInfo
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     storageUserInfo = sessionStorage.getItem('UserInfo')
+  //     setUserInfo(storageUserInfo)
+
+  //   }
+  // }, [])
+
+  // if (storageUserInfo) {
+  //   const { userId, username, token, isFlag } = JSON.parse(userInfo)
+  //   user = userId
+  //   flag = isFlag
+  // }
+
 
 
   let user = null
   let flag = null
-  let storageUserInfo
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      storageUserInfo = sessionStorage.getItem('UserInfo')
-      setUserInfo(storageUserInfo)
-
-    }
-  }, [])
-
-  if (storageUserInfo) {
+  const userInfo = sessionStorage.getItem("UserInfo")
+  if (userInfo) {
     const { userId, username, token, isFlag } = JSON.parse(userInfo)
+    // console.log(userId)
     user = userId
     flag = isFlag
   }
 
+  console.log(user)
+
 
   const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      const confirmLogout = window.confirm("Are you sure you want to log out?");
-      if (confirmLogout) {
+    // if (typeof window !== "undefined") {
+      // const confirmLogout = window.confirm("Are you sure you want to log out?");
+      // if (confirmLogout) {
         sessionStorage.removeItem("UserInfo")
+        alert("are you sure do you want to logout")
 
-      }
+      // }
     }
-  }
+  
 
   return (
     <>

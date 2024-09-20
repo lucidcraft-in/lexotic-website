@@ -8,28 +8,42 @@ export default function Menu() {
   const pathname = usePathname()
   const [currentMenuItem, setCurrentMenuItem] = useState("")
 
-  const [userInfo, setUserInfo] = useState(null)
+  // const [userInfo, setUserInfo] = useState(null)
 
 
-  let user = null;
-  let isUser = null;
-  let sessionUserInfo
+  // let user = null;
+  // let isUser = null;
+  // let sessionUserInfo
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      sessionUserInfo = sessionStorage.getItem('UserInfo');
-      setUserInfo(userInfo)
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     sessionUserInfo = sessionStorage.getItem('UserInfo');
+  //     setUserInfo(userInfo)
      
-    }
-  }, [])
+  //   }
+  // }, [])
 
-  if (sessionUserInfo) {
-    const { userId, username, token, isFlag } = JSON.parse(userInfo);
-    // console.log(userId);
-    user = userId;
-    isUser = isFlag;
-  }
+  // if (sessionUserInfo) {
+  //   const { userId, username, token, isFlag } = JSON.parse(userInfo);
+  //   // console.log(userId);
+  //   user = userId;
+  //   isUser = isFlag;
+  // }
 
+
+  
+	let user = null
+	let isUser = null
+
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		// console.log(userId)
+		user = userId
+		isUser = isFlag
+	}
+
+	console.log(user)
 
 
   // console.log(isUser);
