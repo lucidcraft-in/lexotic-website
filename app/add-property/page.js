@@ -18,19 +18,19 @@ export default function AddProperty() {
         latitude: '',
         longitude: '',
         placeName: '',
-        address: ''
+        address: '',
     });
-
     const [uploading, setUploading] = useState(false);
     const [photos, setPhotos] = useState([]);
     const [merchants, setMerchants] = useState([]);
     const [merchantId, setMerchantId] = useState('');
     const [selectedMerchant, setSelectedMerchant] = useState('');
-
     const [amenities, setAmenities] = useState([]);
     const [, setLoading] = useState(false);
+    const [_, setProduct] = useState([])
 
     useEffect(() => {
+
         getData().then(_ => {
         })
     }, [])
@@ -42,38 +42,45 @@ export default function AddProperty() {
     }, []);
 
     const getData = async () => {
+
         try {
             const res = await Axios.get(`getcategory`)
-            console.log(res)
+            console.log('getcategory Result: ', res)
             setCategories(res.data)
-            
+
         } catch (error) {
-            console.error(error)
+            console.error('getcategory Error: ', error)
         }
     }
 
     const fetchMerchants = async () => {
+
         try {
             const response = await Axios.get(`getmerchants`);
             setMerchants(response.data);
+            console.log('getmerchants Result:', response.data);
+
         } catch (error) {
-            console.error('Error fetching merchants:', error);
+            console.error('getmerchants Error:', error);
         }
     };
 
     const handleMerchantChange = (e) => {
-        const selectedOption = e.target.options[e.target.selectedIndex];
-        setMerchantId(selectedOption.value); // Set the merchantId from the selected option's value
-        setSelectedMerchant(selectedOption.text); // Set the merchant's name
 
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        setMerchantId(selectedOption.value);
+        setSelectedMerchant(selectedOption.text);
     };
 
     const handleLocationChange = (e) => {
+
+        console.log(e.target.name, e.target.value)
         const {name, value} = e.target;
         setLocation({...location, [name]: value});
     };
-    const [_, setProduct] = useState([])
+
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         setLoading(true);
 
@@ -85,16 +92,27 @@ export default function AddProperty() {
 
         try {
             const ownerData = {
-                merchantId,
-                name: selectedMerchant, // The name of the selected merchant
+                merchantId: merchantId,
+                name: selectedMerchant,
             };
-            console.log(photos)
+            console.log('Photos: ', photos)
 
             const res = await Axios.post(`/addproducts`, {
-                name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities
+                name: name,
+                title: title,
+                description: description,
+                price: price,
+                offerPrice: offerPrice,
+                location: location,
+                categoryId: categoryId,
+                photos: photos,
+                owner: ownerData,
+                amenities: amenities,
             })
-            console.log(res.data)
+            console.log('addproducts Result: ', res.data)
+
             if (res.status === 201) {
+
                 setLoading(false);
                 setProduct(res.data)
 
@@ -113,16 +131,20 @@ export default function AddProperty() {
     };
 
     const handleCategoryChange = (e) => {
+
         setCategoryId(e.target.value); // Set the categoryId from the selected option's value
     };
 
 
     const uploadFileHandler = async (e, val) => {
+
         e.preventDefault()
+
         const file = e.target.files[0];
         console.log("Original file:", file);
 
         const options = {
+
             maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
             maxWidthOrHeight: 800,
             useWebWorker: true,
@@ -140,9 +162,10 @@ export default function AddProperty() {
             formData.append('file', newFile);
 
             formData.forEach((value, key) => {
-                console.log(`${key}:${value}`)
+
+                console.log(`Form Data: ${key}:${value}`)
             })
-            setUploading(true); // Start uploading state
+            setUploading(true);
 
             const config = {
                 headers: {
@@ -150,39 +173,37 @@ export default function AddProperty() {
                 },
             };
 
-            // Make POST request to /upload endpoint
             const data = await Axios.post('/upload', formData, config);
-            console.log("Upload successful, response data:", data.data);
+            console.log("Upload Result:", data.data);
 
             let title = data.data.title
             let url = data.data.url
-            console.log(title, url)
+            console.log('Title & Url: ', title, url)
             setUploading(false); // Stop uploading state
 
-            // Automatically set the image title as the file name (without extension)
             if (val === 'photos') {
                 setPhotos(prevPhotos => [
                     ...prevPhotos,
                     {
-                        title, // Image name without extension
-                        url    // URL returned from the upload API
+                        title,
+                        url,
                     }
                 ]);
             } else if (val === 'amenities') {
                 setAmenities(prevAmenities => [
                     ...prevAmenities,
                     {
-                        title, // Image name without extension
-                        url    // URL returned from the upload API
+                        title,
+                        url,
                     }
                 ]);
             }
         } catch (error) {
-            console.error("Error during file upload:", error);
-            setUploading(false); // Stop uploading state on error
+            console.error("upload Error: ", error);
+            setUploading(false);
         }
     };
-    console.log(photos)
+    console.log('Photos: ', photos)
 
     return (
         <>
