@@ -18,21 +18,25 @@ export default function PropertyHalfmapList() {
 		setIsTab(i)
 	}
 
+	const [userInfo, setUserInfo] = useState(null)
+
 	let user = null
-
+	let flag = null
+	let storageUserInfo
+  
 	useEffect(() => {
-
-		getData()
-	}, [user])
-
-	const [cart, setCart] = useState([])
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
+	  if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+  
+	  }
+	}, [])
+  
+	if (storageUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	  user = userId
+	  flag = isFlag
 	}
-
 
 	const [paymentMethod, setPaymentMethod] = useState('');
 	const [showModal, setShowModal] = useState(false);

@@ -18,16 +18,27 @@ export default function Dashboard() {
 	const [countreport, setCountReport] = useState([])
 
 
+	const [userInfo, setUserInfo] = useState(null)
+
+
 	let user = null
 	let flag = null
+	let storageUserInfo
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			storageUserInfo = sessionStorage.getItem('UserInfo')
+			setUserInfo(storageUserInfo)
+
+		}
+	}, [])
+
+	if (storageUserInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
 		user = userId
 		flag = isFlag
 	}
+
 
 	useEffect(() => {
 
@@ -58,7 +69,7 @@ export default function Dashboard() {
 				`orderReport/${user}`, // API endpoint
 				{
 					startDate,
-					 // Format as YYYY-MM-DD
+					// Format as YYYY-MM-DD
 					endDate
 				}
 			);

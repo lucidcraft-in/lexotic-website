@@ -108,12 +108,25 @@ export default function PropertyDetailsV1({ searchParams }) {
 		setProduct(res.data)
 	}
 
-	const userInfo = sessionStorage.getItem("UserInfo")
+
+	const [userInfo, setUserInfo] = useState(null)
+
 	let user = null
-	if (userInfo) {
-		const { userId, username, token } = JSON.parse(userInfo)
-		// console.log(userId)
+	let flag = null
+	let storageUserInfo
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			storageUserInfo = sessionStorage.getItem('UserInfo')
+			setUserInfo(storageUserInfo)
+
+		}
+	}, [])
+
+	if (storageUserInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
 		user = userId
+		flag = isFlag
 	}
 
 	const [cart, setCart] = useState([])
@@ -183,7 +196,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 									{/* </Link> */}
 								</SwiperSlide>
 
-																
+
 								<SwiperSlide>
 									<img src={photoUrls} alt="img-property" />
 								</SwiperSlide>

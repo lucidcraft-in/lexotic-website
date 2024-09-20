@@ -6,15 +6,24 @@ import Link from "next/link"
 import { useEffect, useState } from "react";
 export default function MyProfile() {
 
+	const [userInfo, setUserInfo] = useState(null)
+
 	let user = null
 	let flag = null
-
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		flag = isFlag
+	let storageUserInfo
+  
+	useEffect(() => {
+	  if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+  
+	  }
+	}, [])
+  
+	if (storageUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	  user = userId
+	  flag = isFlag
 	}
 
 	const [name, setName] = useState('');

@@ -21,18 +21,25 @@ export default function MyProfile() {
 	const [currency, setCurrency] = useState('')
 
 
+	const [userInfo, setUserInfo] = useState(null)
+
 	let userid = null
 	let flag = null
-
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		userid = userId
-		flag = isFlag
+	let storageUserInfo
+  
+	useEffect(() => {
+	  if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+  
+	  }
+	}, [])
+  
+	if (storageUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	  userid = userId
+	  flag = isFlag
 	}
-
-	// console.log(userid)
 
 	useEffect(() => {
 		getData()

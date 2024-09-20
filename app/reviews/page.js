@@ -7,12 +7,26 @@ export default function Reviews() {
 
 
 	const [review, setReview] = useState([])
-	let user = null
-	const userData = sessionStorage.getItem("UserInfo")
-	if (userData) {
-		const { userId } = JSON.parse(userData)
-		user = userId
 
+	
+	const [userInfo, setUserInfo] = useState(null)
+
+	let user = null
+	let flag = null
+	let storageUserInfo
+  
+	useEffect(() => {
+	  if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+  
+	  }
+	}, [])
+  
+	if (storageUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	  user = userId
+	  flag = isFlag
 	}
 
 	useEffect(() => {
