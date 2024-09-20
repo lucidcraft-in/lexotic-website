@@ -172,7 +172,7 @@ Temporary Items
 /coverage
 
 # next.js
-/.next/
+#/.next/
 /out/
 
 # production
@@ -434,3 +434,5 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/nextjs,node,intellij,webstorm,windows,linux,macos
+
+!/.next/
