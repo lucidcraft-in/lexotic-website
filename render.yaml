@@ -1,0 +1,8 @@
+services:
+- type: web
+  name: lexotic-website
+  runtime: node
+  plan: starter
+  buildCommand: npm install
+  startCommand: npm run dev
+  autoDeploy: false
