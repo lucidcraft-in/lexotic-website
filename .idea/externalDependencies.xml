@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="ExternalDependencies">
+        <plugin id="String Manipulation"/>
+        <plugin id="intellij.indexing.shared"/>
+        <plugin id="com.intellij.grazie.pro"/>
+        <plugin id="Git4Idea"/>
+        <plugin id="com.intellij.completion.ml.ranking"/>
+        <plugin id="com.intellij.searcheverywhere.ml"/>
+        <plugin id="com.intellij.stats.completion"/>
+        <plugin id="org.jetbrains.plugins.github"/>
+        <plugin id="org.jetbrains.plugins.yaml"/>
+        <plugin id="com.intellij.tasks"/>
+        <plugin id="com.intellij.tasks.timeTracking"/>
+        <plugin id="JavaScript"/>
+        <plugin id="JavaScriptDebugger"/>
+        <plugin id="JSIntentionPowerPack"/>
+        <plugin id="org.jetbrains.completion.full.line"/>
+        <plugin id="intellij.nextjs"/>
+        <plugin id="com.jetbrains.restClient"/>
+        <plugin id="com.intellij.modules.json"/>
+        <plugin id="com.intellij.jsonpath"/>
+        <plugin id="org.jetbrains.plugins.sass"/>
+        <plugin id="com.intellij.modules.json"/>
+        <plugin id="com.intellij.modules.css" />
+        <plugin id="org.intellij.plugins.markdown"/>
+    </component>
+</project>
