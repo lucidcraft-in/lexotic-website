@@ -68,9 +68,11 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
       const { token, userId, isFlag } = res.data;
 
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
 
+      }
       // Store user or merchant data in session storage
-      sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
 
       toast.success("Success", { autoClose: 3000 });
       setLoading(false);
