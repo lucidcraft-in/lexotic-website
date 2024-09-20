@@ -11,6 +11,7 @@ import { useEffect, useState } from "react"
 // import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faTrash } from "@fortawesome/fontawesome-free"
+
 export default function PropertyHalfmapList() {
 	const [isTab, setIsTab] = useState(2)
 	const handleTab = (i) => {
