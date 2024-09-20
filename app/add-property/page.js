@@ -190,6 +190,7 @@ export default function AddProperty() {
 				console.log(`${key}:${value}`)
 			})
 			setUploading(true); // Start uploading state
+
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',

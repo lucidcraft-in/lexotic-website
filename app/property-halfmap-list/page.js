@@ -7,7 +7,6 @@ import TabNav from "@/components/elements/TabNav"
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
 import { useEffect, useState } from "react"
-import { Card, Button, Table, Modal, Form } from 'react-bootstrap';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -25,27 +24,20 @@ export default function PropertyHalfmapList() {
 	let storageUserInfo
   
 	useEffect(() => {
-	  if (typeof window !== "undefined") {
-		storageUserInfo = sessionStorage.getItem('UserInfo')
-		setUserInfo(storageUserInfo)
-  
-	  }
-	}, [])
-  
-	if (storageUserInfo) {
-	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
-	  user = userId
-	  flag = isFlag
+
+		getData()
+	}, [user])
+
+	const [cart, setCart] = useState([])
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token } = JSON.parse(userInfo)
+		// console.log(userId)
+		user = userId
 	}
 
-	const [paymentMethod, setPaymentMethod] = useState('');
-	const [showModal, setShowModal] = useState(false);
 
-	const handlePaymentSubmit = (e) => {
-		e.preventDefault();
-		console.log('Selected Payment Method:', paymentMethod);
-		// Further processing based on selected payment method
-	};
+
 
 	const getData = async () => {
 		try {
@@ -59,7 +51,7 @@ export default function PropertyHalfmapList() {
 		}
 	};
 
-	console.log(cart)
+	// console.log(cart)
 
 	const handleCheckout = async (e) => {
 		e.preventDefault();
@@ -88,7 +80,7 @@ export default function PropertyHalfmapList() {
 				items,
 				totalAmount,
 				orderDate: new Date().toISOString(),
-				merchantId: selectedCart.merchantId,
+				merchantId:selectedCart.merchantId,
 				orderStatus: 'pending',
 				status: 'done',
 				createdAt: new Date().toISOString(),
@@ -118,63 +110,134 @@ export default function PropertyHalfmapList() {
 		getData()
 	}
 
-	let photoUrl;
-	const convenienceFeePercentage = 0.05; // 5% convenience fee
-	const taxPercentage = 0.1; // 10% tax
-	// Initialize total amounts
-	let totalProductPrice = 0;
-
-	const cartItems = cart.map((cartItem, cartIndex) => {
-		return cartItem.items.map(item => {
-			const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24);
-			const totalItemPrice = item.pricePerDay * item.quantity * days;
-			totalProductPrice += totalItemPrice;
-
-			// Access properties from item.productId
-			const product = item.productId;
-			const photo = product.photos[0] || {}; // Access the first photo or default to an empty object
-			 photoUrl = photo.url || '/path/to/default-image.jpg'; // Provide a default image if no photo
-			const photoTitle = photo.title || 'No Title'; // Provide a default title if no photo
-
-			return (
-				<tr key={item._id}>
-					<td>{cartIndex + 1}</td>
-					<td>{product._id}</td> {/* Or use another property like product.name if available */}
-					<td>{new Date(item.rentalStartDate).toLocaleDateString()}</td>
-					<td>{new Date(item.rentalEndDate).toLocaleDateString()}</td>
-					<td>${item.pricePerDay.toFixed(2)}</td>
-					<td>{item.quantity}</td>
-					<td>${totalItemPrice.toFixed(2)}</td>
-					<td>
-						<img src={photoUrl} alt={photoTitle} style={{ width: '50px', height: '50px' }} /> {/* Display photo */}
-					</td>
-				</tr>
-			);
-		});
-	});
-
-	console.log(photoUrl)
-
-	// Calculate convenience fee and tax
-	const convenienceFee = totalProductPrice * convenienceFeePercentage;
-	const tax = totalProductPrice * taxPercentage;
-	const finalTotal = totalProductPrice + convenienceFee + tax;
-
-
-
-
 
 	return (
 		<>
 
 			<Layout headerStyle={1}>
 				<section className="wrapper-layout-3">
+					{/* <div className="wrap-sidebar">
+						<div className="flat-tab flat-tab-form widget-filter-search">
+							<div className="h7 title fw-7">Search</div>
+							<ul className="nav-tab-form" role="tablist">
+								<TabNav />
+							</ul>
+							<div className="tab-content">
+								<div className="tab-pane fade active show" role="tabpanel">
+									<div className="form-sl">
+										<form method="post">
+											<div className="wd-filter-select">
+												<div className="inner-group inner-filter">
+													<div className="form-style">
+														<label className="title-select">Keyword</label>
+														<input type="text" className="form-control" placeholder="Search Keyword." name="s" title="Search for" required />
+													</div>
+													<div className="form-style">
+														<label className="title-select">Location</label>
+														<div className="group-ip ip-icon">
+															<input type="text" className="form-control" placeholder="Search Location" name="s" title="Search for" required />
+															<Link href="#" className="icon-right icon-location" />
+														</div>
+													</div>
+													<div className="form-style">
+														<label className="title-select">Type</label>
+														<div className="group-select">
+															<select className="nice-select">
 
+																<li data-value className="option selected">All</li>
+																<option data-value="villa" className="option">Villa</option>
+																<option data-value="studio" className="option">Studio</option>
+																<option data-value="office" className="option">Office</option>
+															</select>
+														</div>
+													</div>
+													<div className="form-style box-select">
+														<label className="title-select">Rooms</label>
+														<select className="nice-select">
 
+															<option data-value={2} className="option">1</option>
+															<option data-value={2} className="option selected">2</option>
+															<option data-value={3} className="option">3</option>
+															<option data-value={4} className="option">4</option>
+															<option data-value={5} className="option">5</option>
+															<option data-value={6} className="option">6</option>
+															<option data-value={7} className="option">7</option>
+															<option data-value={8} className="option">8</option>
+															<option data-value={9} className="option">9</option>
+															<option data-value={10} className="option">10</option>
+														</select>
+													</div>
+													<div className="form-style box-select">
+														<label className="title-select">Bathrooms</label>
+														<select className="nice-select">
 
+															<option data-value="all" className="option">All</option>
+															<option data-value={1} className="option">1</option>
+															<option data-value={2} className="option">2</option>
+															<option data-value={3} className="option">3</option>
+															<option data-value={4} className="option selected">4</option>
+															<option data-value={5} className="option">5</option>
+															<option data-value={6} className="option">6</option>
+															<option data-value={7} className="option">7</option>
+															<option data-value={8} className="option">8</option>
+															<option data-value={9} className="option">9</option>
+															<option data-value={10} className="option">10</option>
+														</select>
+													</div>
+													<div className="form-style box-select">
+														<label className="title-select">Bedrooms</label>
+														<select className="nice-select">
+
+															<option data-value={1} className="option">All</option>
+															<option data-value={1} className="option">1</option>
+															<option data-value={2} className="option">2</option>
+															<option data-value={3} className="option">3</option>
+															<option data-value={4} className="option selected">4</option>
+															<option data-value={5} className="option">5</option>
+															<option data-value={6} className="option">6</option>
+															<option data-value={7} className="option">7</option>
+															<option data-value={8} className="option">8</option>
+															<option data-value={9} className="option">9</option>
+															<option data-value={10} className="option">10</option>
+														</select>
+													</div>
+													<div className="form-style widget-price">
+														<RangeSlider />
+													</div>
+													<div className="form-style widget-price wd-price-2">
+														<RangeSlider />
+													</div>
+													<SidebarFilter />
+													<div className="form-btn-fixed">
+														<button type="submit" className="tf-btn primary" href="#">Find Properties</button>
+													</div>
+												</div>
+											</div>
+										</form>
+									</div>
+								</div>
+							</div >
+						</div >
+					</div > */}
 					<div className="wrap-inner">
 						<div className="box-title-listing style-1">
+							<h5>Cart List</h5>
+							<div className="box-filter-tab">
+								<ul className="nav-tab-filter" role="tablist">
+									<li className="nav-tab-item" onClick={() => handleTab(1)}>
+										<a className={isTab == 1 ? "nav-link-item active" : "nav-link-item"} data-bs-toggle="tab"><i className="icon icon-grid" /></a>
+									</li>
+									<li className="nav-tab-item" onClick={() => handleTab(2)}>
+										<a className={isTab == 2 ? "nav-link-item active" : "nav-link-item"} data-bs-toggle="tab"><i className="icon icon-list" /></a>
+									</li>
+								</ul>
+								<select className="nice-select">
 
+									<option data-value="default" className="option selected">Sort by (Default)</option>
+									<option data-value="new" className="option">Newest</option>
+									<option data-value="old" className="option">Oldest</option>
+								</select>
+							</div>
 						</div>
 						<div className="tab-content">
 							<div className={isTab == 1 ? "tab-pane fade show active" : "tab-pane fade"} id="gridLayout" role="tabpanel">
@@ -741,7 +804,7 @@ export default function PropertyHalfmapList() {
 														<div className="homeya-box list-style-1 list-style-2">
 															<Link href="/property-details-v1" className="images-group">
 																<div className="images-style">
-																	<img src={photoUrl} alt="img" />
+																	<img src="/images/home/house-5.jpg" alt="img" />
 																</div>
 																<div className="top">
 																	<ul className="d-flex">
@@ -822,221 +885,15 @@ export default function PropertyHalfmapList() {
 
 									</div>
 
-									{/* <div className="d-flex justify-content-center ">
+									<div className="d-flex justify-content-center ">
 										<button type="submit" className="btn btn-primary " onClick={handleCheckout}> Check Out</button>
-									</div> */}
+									</div>
 
 
 
 
 								</div>
 							</div>
-						</div>
-					</div >
-
-
-
-
-
-
-
-
-
-
-
-					{/* ///////////////////////// */}
-
-					<div className="wrap-sidebar">
-						{/* <div className="flat-tab flat-tab-form widget-filter-search">
-							<div className="h7 title fw-7">Search</div>
-							<ul className="nav-tab-form" role="tablist">
-								<TabNav />
-							</ul>
-							<div className="tab-content">
-								<div className="tab-pane fade active show" role="tabpanel">
-									<div className="form-sl">
-										<form method="post">
-											<div className="wd-filter-select">
-												<div className="inner-group inner-filter">
-													<div className="form-style">
-														<label className="title-select">Keyword</label>
-														<input type="text" className="form-control" placeholder="Search Keyword." name="s" title="Search for" required />
-													</div>
-													<div className="form-style">
-														<label className="title-select">Location</label>
-														<div className="group-ip ip-icon">
-															<input type="text" className="form-control" placeholder="Search Location" name="s" title="Search for" required />
-															<Link href="#" className="icon-right icon-location" />
-														</div>
-													</div>
-													<div className="form-style">
-														<label className="title-select">Type</label>
-														<div className="group-select">
-															<select className="nice-select">
-
-																<li data-value className="option selected">All</li>
-																<option data-value="villa" className="option">Villa</option>
-																<option data-value="studio" className="option">Studio</option>
-																<option data-value="office" className="option">Office</option>
-															</select>
-														</div>
-													</div>
-													<div className="form-style box-select">
-														<label className="title-select">Rooms</label>
-														<select className="nice-select">
-
-															<option data-value={2} className="option">1</option>
-															<option data-value={2} className="option selected">2</option>
-															<option data-value={3} className="option">3</option>
-															<option data-value={4} className="option">4</option>
-															<option data-value={5} className="option">5</option>
-															<option data-value={6} className="option">6</option>
-															<option data-value={7} className="option">7</option>
-															<option data-value={8} className="option">8</option>
-															<option data-value={9} className="option">9</option>
-															<option data-value={10} className="option">10</option>
-														</select>
-													</div>
-													<div className="form-style box-select">
-														<label className="title-select">Bathrooms</label>
-														<select className="nice-select">
-
-															<option data-value="all" className="option">All</option>
-															<option data-value={1} className="option">1</option>
-															<option data-value={2} className="option">2</option>
-															<option data-value={3} className="option">3</option>
-															<option data-value={4} className="option selected">4</option>
-															<option data-value={5} className="option">5</option>
-															<option data-value={6} className="option">6</option>
-															<option data-value={7} className="option">7</option>
-															<option data-value={8} className="option">8</option>
-															<option data-value={9} className="option">9</option>
-															<option data-value={10} className="option">10</option>
-														</select>
-													</div>
-													<div className="form-style box-select">
-														<label className="title-select">Bedrooms</label>
-														<select className="nice-select">
-
-															<option data-value={1} className="option">All</option>
-															<option data-value={1} className="option">1</option>
-															<option data-value={2} className="option">2</option>
-															<option data-value={3} className="option">3</option>
-															<option data-value={4} className="option selected">4</option>
-															<option data-value={5} className="option">5</option>
-															<option data-value={6} className="option">6</option>
-															<option data-value={7} className="option">7</option>
-															<option data-value={8} className="option">8</option>
-															<option data-value={9} className="option">9</option>
-															<option data-value={10} className="option">10</option>
-														</select>
-													</div>
-													<div className="form-style widget-price">
-														<RangeSlider />
-													</div>
-													<div className="form-style widget-price wd-price-2">
-														<RangeSlider />
-													</div>
-													<SidebarFilter />
-													<div className="form-btn-fixed">
-														<button type="submit" className="tf-btn primary" href="#">Find Properties</button>
-													</div>
-												</div>
-											</div>
-										</form>
-									</div>
-								</div>
-							</div >
-						</div > */}
-
-
-						<div className="container mt-4">
-							<Card className="mb-3">
-								<Card.Header>
-									<h4>Cart Summary</h4>
-								</Card.Header>
-
-								<Card.Body>
-									<div className="table-responsive">
-										<Table striped bordered hover>
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Product ID</th>
-													<th>From</th>
-													<th>To</th>
-													<th>Price Per Day</th>
-													<th>Quantity</th>
-													<th>Total Item Price</th>
-												</tr>
-											</thead>
-											<tbody>
-												{cartItems}
-											</tbody>
-										</Table>
-
-
-									</div>
-								</Card.Body>
-
-								<Card.Footer>
-									<div className="d-flex justify-content-between">
-										<span>Total Product Price:</span>
-										<span>${totalProductPrice.toFixed(2)}</span>
-									</div>
-									<div className="d-flex justify-content-between">
-										<span>Convenience Fee (5%):</span>
-										<span>${convenienceFee.toFixed(2)}</span>
-									</div>
-									<div className="d-flex justify-content-between">
-										<span>Tax (10%):</span>
-										<span>${tax.toFixed(2)}</span>
-									</div>
-									<hr />
-									<div className="d-flex justify-content-between font-weight-bold">
-										<span>Total Amount:</span>
-										<span>${finalTotal.toFixed(2)}</span>
-									</div>
-
-									<br />
-									<br />
-									<br />
-
-
-									<div className="payment-section mt-4">
-										<h5>Select Payment Method</h5>
-										<Form onSubmit={handlePaymentSubmit}>
-											<Form.Check
-												type="radio"
-												label="Cash on Delivery (COD)"
-												value="COD"
-												name="paymentMethod"
-												onChange={(e) => setPaymentMethod(e.target.value)}
-												className="mb-2"
-											/>
-											<Form.Check
-												type="radio"
-												label="Online Payment"
-												value="Online"
-												name="paymentMethod"
-												onChange={(e) => setPaymentMethod(e.target.value)}
-												className="mb-2"
-											/>
-											{/* <Button type="submit" variant="success" className="mt-3">
-												Proceed with {paymentMethod || 'Payment'}
-											</Button> */}
-										</Form>
-									</div>
-
-
-
-									<Button className="mt-3 w-100"  onClick={handleCheckout}>
-										Checkout
-									</Button>
-
-
-								</Card.Footer>
-							</Card>
 						</div>
 					</div >
 					{/* <div className="wrap-map">

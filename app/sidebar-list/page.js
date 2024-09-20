@@ -783,8 +783,7 @@ export default function SidebarList() {
 													<div className="homeya-box list-style-1 list-style-2">
 														<Link href="/property-details-v1" className="images-group">
 															<div className="images-style">
-
-																<img src={pro?.photos[0]?.url} alt="img" />
+																<img src="/images/home/house-9.jpg" alt="img" />
 															</div>
 															<div className="top">
 																<ul className="d-flex gap-4 flex-wrap">
