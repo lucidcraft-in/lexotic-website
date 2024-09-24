@@ -94,7 +94,7 @@ export default function SidebarList() {
 																<div className="row p-3">
 																	<div className="col-md-6">
 																		<div className="form-style">
-																			<label className="title-select">Start Date</label>
+																			<label className="title-select">Check In</label>
 																			<div className="group-ip ip-icon">
 																				<input type="date" className="form-control" required />
 																			</div>
@@ -102,7 +102,7 @@ export default function SidebarList() {
 																	</div>
 																	<div className="col-md-6">
 																		<div className="form-style">
-																			<label className="title-select">End Date</label>
+																			<label className="title-select">Check Out</label>
 																			<div className="group-ip ip-icon">
 																				<input type="date" className="form-control" required />
 																			</div>

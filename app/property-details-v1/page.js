@@ -902,12 +902,12 @@ export default function PropertyDetailsV1({ searchParams }) {
 												</div>
 												<form className="contact-form" onSubmit={handleAddCart}>
 													<div className="ip-group">
-														<label htmlFor="fullname">Start Date</label>
+														<label htmlFor="fullname">Check In</label>
 														<input type="date" placeholder="Jony Dane" className="form-control"
 															onChange={(e) => setStartDate(e.target.value)} />
 													</div>
 													<div className="ip-group">
-														<label htmlFor="phone">End Date:</label>
+														<label htmlFor="phone">Check Out:</label>
 														<input type="date" placeholder="ex 0123456789" className="form-control"
 															onChange={(e) => setEndDate(e.target.value)} />
 													</div>
