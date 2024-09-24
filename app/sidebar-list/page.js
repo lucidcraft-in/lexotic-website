@@ -90,6 +90,27 @@ export default function SidebarList() {
 																		<Link href="#" className="icon-right icon-location" />
 																	</div>
 																</div>
+
+																<div className="row p-3">
+																	<div className="col-md-6">
+																		<div className="form-style">
+																			<label className="title-select">Start Date</label>
+																			<div className="group-ip ip-icon">
+																				<input type="date" className="form-control" required />
+																			</div>
+																		</div>
+																	</div>
+																	<div className="col-md-6">
+																		<div className="form-style">
+																			<label className="title-select">End Date</label>
+																			<div className="group-ip ip-icon">
+																				<input type="date" className="form-control" required />
+																			</div>
+																		</div>
+																	</div>
+																</div>
+
+
 																<div className="form-style">
 																	<label className="title-select">Type</label>
 																	<div className="group-select">
@@ -783,7 +804,7 @@ export default function SidebarList() {
 													<div className="homeya-box list-style-1 list-style-2">
 														<Link href="/property-details-v1" className="images-group">
 															<div className="images-style">
-																<img src="/images/home/house-9.jpg" alt="img" />
+																<img src={pro?.photos[0]?.url} alt="img" />
 															</div>
 															<div className="top">
 																<ul className="d-flex gap-4 flex-wrap">
@@ -821,6 +842,13 @@ export default function SidebarList() {
 																	<li className="item">
 																		<i className="icon icon-ruler" />
 																		<span>600 SqFT</span>
+																	</li>
+																	<li>
+																		<Link href={{ pathname: "/property-details-v1", query: { _id: pro._id } }} >
+																			<button className="btn btn-primary w-100 mb-3">Book Now</button>
+
+																			{/* <button className="btn btn-primary w-100 mb-3">Check out</button> */}
+																		</Link>
 																	</li>
 																</ul>
 															</div>

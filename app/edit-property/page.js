@@ -23,6 +23,7 @@ export default function AddProperty({ searchParams }) {
 	const [name, setName] = useState('');
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
+	const [quantity, setQuantity] = useState('');
 	const [price, setPrice] = useState('');
 	const [offerPrice, setOfferPrice] = useState('');
 	const [categoryId, setCategoryId] = useState('');
@@ -367,6 +368,13 @@ export default function AddProperty({ searchParams }) {
 									<textarea className="textarea-tinymce" name="area"
 										value={description}
 										onChange={(e) => setDescription(e.target.value)} />
+								</fieldset>
+								<fieldset className="box box-fieldset">
+									<label htmlFor="desc">Quantity:</label>
+									<input
+									type="number"
+										// value={description}
+										onChange={(e) => setQuantity(e.target.value)} />
 								</fieldset>
 								<fieldset className="box box-fieldset">
 									<label htmlFor="title">

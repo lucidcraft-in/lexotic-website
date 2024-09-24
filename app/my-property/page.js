@@ -40,7 +40,6 @@ export default function MyProperty() {
 		flag = isFlag
 	}
 
-	console.log(user)
 
 
 	const [product, setProduct] = useState([])
@@ -103,6 +102,7 @@ console.log(product)
 											<th>Product Name</th>
 											<th>Title</th>
 											<th>Description</th>
+											<th>Quantity</th>
 											<th>Price</th>
 											<th>OfferPrice</th>
 											<th></th>
@@ -114,6 +114,7 @@ console.log(product)
 												<td>{pro?.name}</td>
 												<td>{pro?.title}</td>
 												<td>{pro?.description}</td>
+												<td>{pro?.quantity}</td>
 												<td>{pro?.price}</td>
 												<td>{pro?.offerPrice}</td>
 												<td>

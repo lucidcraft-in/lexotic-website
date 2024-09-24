@@ -6,6 +6,28 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { useParams } from 'next/navigation';
 
+
+// import 'swiper/css/pagination';
+import { Swiper,SwiperSlide } from 'swiper/react';
+import { Navigate } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+
+
+let user = null
+let flag = null
+
+const userInfo = sessionStorage.getItem("UserInfo")
+if (userInfo) {
+  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+  // console.log(userId)
+  user = userId
+  flag = isFlag
+}
+
+console.log(user)
+
+
 export default function Recommended1() {
   const [isTab, setIsTab] = useState(1);
   const [isVisible, setIsVisible] = useState(true);
@@ -15,6 +37,11 @@ export default function Recommended1() {
   const [product, setProduct] = useState([]);
   const { id } = useParams;
 
+  const photoUrls = (product?.photos || []).map(photo => {
+    console.log(photo?.url); // Log each URL to check for correctness
+    return photo?.url;
+  });
+  console.log(photoUrls)
   const handleCategorySelect = async (index, categoryId) => {
     setIsTab(index);
     setSelectedCategory(categoryId);
@@ -102,7 +129,26 @@ export default function Recommended1() {
                             className="images-group"
                           >
                             <div className="images-style">
-                              <img src="images/2.jpg" alt="property image" />
+                              {/* Carousel for product photos */}
+                              {pro.photos && pro.photos.length > 0 ? (
+                                <Swiper spaceBetween={10} 
+                                slidesPerView={1} loop={true} 
+                                // pagination={false}
+                                >
+                                  {pro.photos.map((photo, idx) => (
+                                    <SwiperSlide key={idx}>
+                                      <img
+                                        src={photo.url}
+                                        alt={photo.title}
+                                        style={{ width: '100%', height: 'auto' }}
+                                      />
+                                    </SwiperSlide>
+                                  ))}
+                                </Swiper>
+                              ) : (
+                                <p>No photos available</p>
+                              )}
+                              {/* <img src={photoUrls} alt="property image" /> */}
                             </div>
                             <div className="top">
                               <ul className="d-f lex gap-8">

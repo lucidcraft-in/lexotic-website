@@ -19,6 +19,7 @@ export default function AddProperty() {
 	const [title, setTitle] = useState('');
 	const [phototitle, setPhotoTitle] = useState('');
 	const [description, setDescription] = useState('');
+	const [quantity, setQuantity] = useState('');
 	const [price, setPrice] = useState('');
 	const [offerPrice, setOfferPrice] = useState('');
 	const [categoryId, setCategoryId] = useState('');
@@ -124,7 +125,7 @@ export default function AddProperty() {
 			console.log(photos)
 
 			const res = await Axios.post(`/addproducts`, {
-				name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities
+				name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities,quantity
 			})
 			console.log(res.data)
 			if (res.status === 201) {
@@ -307,6 +308,13 @@ export default function AddProperty() {
 									<textarea className="textarea-tinymce" name="area"
 										value={description}
 										onChange={(e) => setDescription(e.target.value)} />
+								</fieldset>
+								<fieldset className="box box-fieldset">
+									<label htmlFor="desc">Quantity:</label>
+									<input
+									type="number"
+										// value={description}
+										onChange={(e) => setQuantity(e.target.value)} />
 								</fieldset>
 								<fieldset className="box box-fieldset">
 									<label htmlFor="title">

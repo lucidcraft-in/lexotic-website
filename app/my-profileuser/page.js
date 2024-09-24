@@ -4,10 +4,11 @@ import Axios from "@/components/axios/axios"
 import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import imageCompression from "browser-image-compression"
 export default function MyProfile() {
 
 
-	const [user, setUser] = useState([])
+	const [userr, setUserr] = useState([])
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [place, setPlace] = useState('')
@@ -53,7 +54,6 @@ export default function MyProfile() {
 		flag = isFlag
 	}
 
-	console.log(user)
 
 
 	useEffect(() => {
@@ -65,7 +65,8 @@ export default function MyProfile() {
 	const getData = async () => {
 		const res = await Axios.get(`/user/${userid}`)
 		const userData = res.data
-		setUser(res.data)
+		console.log(userData)
+		setUserr(res.data)
 		setName(userData?.name)
 		setCountry(userData?.country)
 		setEmail(userData?.email)
@@ -76,11 +77,13 @@ export default function MyProfile() {
 		setCurrency(userData.currency)
 		setPost(userData?.post)
 		setPin(userData?.pin)
+		setPhotos(userData?.image)
 
 
 	}
 
 	const handleUpdate = async () => {
+		const profilePhoto = photos || userr.image
 		const data = {
 			name,
 			email,
@@ -90,8 +93,10 @@ export default function MyProfile() {
 			phone,
 			username,
 			country,
-			currency
+			currency,
+			image:profilePhoto
 		}
+
 		try {
 			const res = await Axios.put(`/updateuser/${userid}`, data)
 			console.log("successfully updated")
@@ -102,6 +107,54 @@ export default function MyProfile() {
 	}
 
 	// console.log(userid,"hhhhhhhhhhh")
+	const [photos, setPhotos] = useState([]);
+
+	const uploadFileHandler = async (e, val) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+	
+		if (!file) {
+			console.error("No file selected");
+			return;
+		}
+	
+		// Log file info
+		console.log("Selected file:", file);
+	
+		const options = {
+			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+			maxWidthOrHeight: 800,
+			useWebWorker: true,
+		};
+	
+		try {
+			const compressedFile = await imageCompression(file, options);
+	
+			const newFile = new File([compressedFile], file.name, { type: file.type });
+	
+			const formData = new FormData();
+			formData.append('file', newFile);
+	
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			};
+	
+			const response = await Axios.post('/upload', formData, config);
+			console.log("Upload successful, response data:", response.data);
+	
+			// if (val === 'photos') {
+				setPhotos(response.data.url);
+			// }
+	
+		} catch (error) {
+			console.error("Error during file upload:", error);
+		}
+	};
+	
+	
+	console.log(photos)
 
 	return (
 		<>
@@ -119,12 +172,15 @@ export default function MyProfile() {
 						<h6 className="title">Profile Photo</h6>
 						<div className="box-agent-avt">
 							<div className="avatar">
-								<img src="/images/avatar/account.jpg" alt="avatar" loading="lazy" width={128} height={128} />
+								<img src={photos} alt="avatar" loading="lazy" width={128} height={128} />
 							</div>
 							<div className="content uploadfile">
 								<p>Upload a new avatar</p>
 								<div className="box-ip">
-									<input type="file" className="ip-file" />
+									<input type="file" className="ip-file"
+									onChange={(e)=>uploadFileHandler(e)}
+									// accept="image/jpeg,image/png"
+									 />
 								</div>
 								<p>JPEG 100x100</p>
 							</div>

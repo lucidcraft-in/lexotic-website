@@ -15,15 +15,15 @@ export default function MyProperty() {
 	// let user = null
 	// let flag = null
 	// let storageUserInfo
-  
+
 	// useEffect(() => {
 	//   if (typeof window !== "undefined") {
 	// 	storageUserInfo = sessionStorage.getItem('UserInfo')
 	// 	setUserInfo(storageUserInfo)
-  
+
 	//   }
 	// }, [])
-  
+
 	// if (storageUserInfo) {
 	//   const { userId, username, token, isFlag } = JSON.parse(userInfo)
 	//   user = userId
@@ -87,7 +87,7 @@ export default function MyProperty() {
 						</div>
 					</div> */}
 					<div className="widget-box-2 wd-listing">
-						<h6 className="title">My Order</h6>
+						<h5 className="title text-center">My Order</h5>
 						<div className="wrap-table">
 							<div className="table-responsive">
 								<table>
@@ -101,24 +101,27 @@ export default function MyProperty() {
 											<th>Total Item Price</th> */}
 											<th>Order Date</th>
 											<th>Order Status</th>
-											{/* <th>view more</th> */}
+											<th>For more Details</th>
 										</tr>
 									</thead>
 									{order?.map((item) => (
 										<tbody>
-											<tr className="file-delete">
 
-												<td>{new Date(item?.orderDate).toLocaleDateString()}</td>
-												<td>{item?.orderStatus}</td>
-											</tr>
-											<Link
-												href={{
-													pathname: '/order',
-													query: { _id: item?._id },
-												}}
-											>
-												<tr>View more</tr>
-											</Link>
+											<td>{new Date(item?.orderDate).toLocaleDateString()}</td>
+											<td>{item?.orderStatus}</td>
+											<td >
+												<Link
+													style={{ 'color': 'blue' }}
+													href={{
+														pathname: '/order',
+														query: { _id: item?._id },
+													}}
+												>
+													View more
+												</Link>
+											</td>
+
+
 
 
 
@@ -127,12 +130,12 @@ export default function MyProperty() {
 
 								</table>
 							</div>
-							<ul className="wd-navigation">
+							{/* <ul className="wd-navigation">
 								<li><Link href="#" className="nav-item active">1</Link></li>
 								<li><Link href="#" className="nav-item">2</Link></li>
 								<li><Link href="#" className="nav-item">3</Link></li>
 								<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
-							</ul>
+							</ul> */}
 						</div>
 					</div>
 				</div >

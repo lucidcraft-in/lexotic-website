@@ -7,6 +7,7 @@ import TabNav from "@/components/elements/TabNav"
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import { Card, Button, Table, Modal, Form } from 'react-bootstrap';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -20,7 +21,7 @@ export default function PropertyHalfmapList() {
 
 	let user = null
 	let flag = null
-  
+
 	useEffect(() => {
 
 		getData()
@@ -34,8 +35,14 @@ export default function PropertyHalfmapList() {
 		user = userId
 	}
 
+	const [paymentMethod, setPaymentMethod] = useState('');
+	const [showModal, setShowModal] = useState(false);
 
-
+	const handlePaymentSubmit = (e) => {
+		e.preventDefault();
+		console.log('Selected Payment Method:', paymentMethod);
+		// Further processing based on selected payment method
+	};
 
 	const getData = async () => {
 		try {
@@ -78,7 +85,7 @@ export default function PropertyHalfmapList() {
 				items,
 				totalAmount,
 				orderDate: new Date().toISOString(),
-				merchantId:selectedCart.merchantId,
+				merchantId: selectedCart.merchantId,
 				orderStatus: 'pending',
 				status: 'done',
 				createdAt: new Date().toISOString(),
@@ -90,9 +97,12 @@ export default function PropertyHalfmapList() {
 			try {
 				const res = await Axios.post(`/order`, data);
 				console.log("Order created successfully", res.data);
+				
 			} catch (error) {
 				console.log("Failed to create order", error);
 			}
+
+
 		} else {
 			console.error("Selected cart or selectedCart.items is not properly defined");
 		}
@@ -107,6 +117,47 @@ export default function PropertyHalfmapList() {
 		console.log("deleted successfully", del)
 		getData()
 	}
+
+
+	let photoUrl;
+	const convenienceFeePercentage = 0.05; // 5% convenience fee
+	const taxPercentage = 0.1; // 10% tax
+	// Initialize total amounts
+	let totalProductPrice = 0;
+	const cartItems = cart.map((cartItem, cartIndex) => {
+		return cartItem.items.map(item => {
+			const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24);
+			const totalItemPrice = item.pricePerDay * item.quantity * days;
+			totalProductPrice += totalItemPrice;
+			// Access properties from item.productId
+			const product = item.productId;
+			const photo = product.photos[0] || {}; //
+			// Access the first photo or default to an empty object
+			photoUrl = photo.url || '/path/to/default-image.jpg'; // Provide a default image if no photo
+			const photoTitle = photo.title || 'No Title'; // Provide a default title if no photo
+
+			return (
+				<tr key={item._id}>
+					<td>{cartIndex + 1}</td>
+					<td>{product._id}</td> {/* Or use another property like product.name if available */}
+					<td>{new Date(item.rentalStartDate).toLocaleDateString()}</td>
+					<td>{new Date(item.rentalEndDate).toLocaleDateString()}</td>
+					<td>${item.pricePerDay.toFixed(2)}</td>
+					<td>{item.quantity}</td>
+					<td>${totalItemPrice.toFixed(2)}</td>
+					<td>
+						<img src={photoUrl} alt={photoTitle} style={{ width: '50px', height: '50px' }} /> {/* Display photo */}
+					</td>
+				</tr>
+			);
+		});
+	});
+
+	console.log(photoUrl)
+	// Calculate convenience fee and tax
+	const convenienceFee = totalProductPrice * convenienceFeePercentage;
+	const tax = totalProductPrice * taxPercentage;
+	const finalTotal = totalProductPrice + convenienceFee + tax;
 
 
 	return (
@@ -883,9 +934,9 @@ export default function PropertyHalfmapList() {
 
 									</div>
 
-									<div className="d-flex justify-content-center ">
+									{/* <div className="d-flex justify-content-center ">
 										<button type="submit" className="btn btn-primary " onClick={handleCheckout}> Check Out</button>
-									</div>
+									</div> */}
 
 
 
@@ -893,7 +944,101 @@ export default function PropertyHalfmapList() {
 								</div>
 							</div>
 						</div>
+
+
 					</div >
+
+					<div className="wrap-sidebar">
+						<div className="container mt-4">
+							<Card className="mb-3">
+								<Card.Header>
+									<h4>Cart Summary</h4>
+								</Card.Header>
+
+								<Card.Body>
+									<div className="table-responsive">
+										<Table striped bordered hover>
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Product ID</th>
+													<th>From</th>
+													<th>To</th>
+													<th>Price Per Day</th>
+													<th>Quantity</th>
+													<th>Total Item Price</th>
+												</tr>
+											</thead>
+											<tbody>
+												{cartItems}
+											</tbody>
+										</Table>
+
+
+									</div>
+								</Card.Body>
+
+								<Card.Footer>
+									<div className="d-flex justify-content-between">
+										<span>Total Product Price:</span>
+										<span>${totalProductPrice.toFixed(2)}</span>
+									</div>
+									<div className="d-flex justify-content-between">
+										<span>Convenience Fee (5%):</span>
+										<span>${convenienceFee.toFixed(2)}</span>
+									</div>
+									<div className="d-flex justify-content-between">
+										<span>Tax (10%):</span>
+										<span>${tax.toFixed(2)}</span>
+									</div>
+									<hr />
+									<div className="d-flex justify-content-between font-weight-bold">
+										<span>Total Amount:</span>
+										<span>${finalTotal.toFixed(2)}</span>
+									</div>
+
+									<br />
+									<br />
+									<br />
+
+
+									<div className="payment-section mt-4">
+										<h5>Select Payment Method</h5>
+										<Form onSubmit={handlePaymentSubmit}>
+											<Form.Check
+												type="radio"
+												label="Cash on Delivery (COD)"
+												value="COD"
+												name="paymentMethod"
+												onChange={(e) => setPaymentMethod(e.target.value)}
+												className="mb-2"
+											/>
+											<Form.Check
+												type="radio"
+												label="Online Payment"
+												value="Online"
+												name="paymentMethod"
+												onChange={(e) => setPaymentMethod(e.target.value)}
+												className="mb-2"
+											/>
+											{/* <Button type="submit" variant="success" className="mt-3">
+												Proceed with {paymentMethod || 'Payment'}
+											</Button> */}
+										</Form>
+									</div>
+
+
+
+									<Button className="mt-3 w-100" onClick={handleCheckout}>
+										Checkout
+									</Button>
+
+
+
+								</Card.Footer>
+							</Card>
+						</div>
+					</div>
 					{/* <div className="wrap-map">
 						<PropertyMap />
 					</div> */}

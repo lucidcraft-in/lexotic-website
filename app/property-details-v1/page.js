@@ -95,7 +95,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 
 	const [startDate, setStartDate] = useState("")
 	const [endDate, setEndDate] = useState("")
-	const [persons, setpersons] = useState("")
+	const [persons, setPersons] = useState("")
 	// const router = useRouter()
 
 	useEffect(() => {
@@ -108,6 +108,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 		setProduct(res.data)
 	}
 
+	console.log(product)
 
 	// const [userInfo, setUserInfo] = useState(null)
 
@@ -144,7 +145,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 	console.log(user)
 
 
-	const [cart,setCart]=useState([])
+	const [cart, setCart] = useState([])
 	const handleAddCart = async (e) => {
 		e.preventDefault()
 		// console.log(user)
@@ -170,12 +171,12 @@ export default function PropertyDetailsV1({ searchParams }) {
 			userId: user,
 			items,
 			totalRentalPrice,
-			merchantId:product.owner.merchantId,
+			merchantId: product.owner.merchantId,
 			createdAt,
 			updatedAt
 
 		}
-		
+
 		// console.log(data)
 
 		try {
@@ -187,7 +188,11 @@ export default function PropertyDetailsV1({ searchParams }) {
 		}
 	}
 
-const cartId=(cart._id)
+	const cartId = (cart._id)
+
+	const dummyImage = '/images/2.jpg';
+	const photoUrls = (product?.photos || []).map(photo => photo.url);
+	console.log(photoUrls)
 	return (
 		<>
 
@@ -197,6 +202,16 @@ const cartId=(cart._id)
 						<div className="swiper tf-sw-location">
 							<Swiper {...swiperOptions} className="swiper-wrapper">
 								<SwiperSlide>
+									{/* <Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block"> */}
+									<img src={photoUrls} alt="img-property" />
+									{/* </Link> */}
+								</SwiperSlide>
+
+
+								<SwiperSlide>
+									<img src={photoUrls} alt="img-property" />
+								</SwiperSlide>
+								{/* <SwiperSlide>
 									<Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
 										<img src="/images/banner/banner-property-1.jpg" alt="img-property" />
 									</Link>
@@ -225,7 +240,7 @@ const cartId=(cart._id)
 									<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
 										<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
 									</Link>
-								</SwiperSlide>
+								</SwiperSlide> */}
 							</Swiper>
 							<div className="box-navigation">
 								<div className="navigation swiper-nav-next nav-next-location"><span className="icon icon-arr-l" /></div>
@@ -885,7 +900,7 @@ const cartId=(cart._id)
 											<span>1-333-345-6868 themesflat@gmail.com</span>
 										</div> */}
 												</div>
-												<form  className="contact-form"  onSubmit={handleAddCart}>
+												<form className="contact-form" onSubmit={handleAddCart}>
 													<div className="ip-group">
 														<label htmlFor="fullname">Start Date</label>
 														<input type="date" placeholder="Jony Dane" className="form-control"
@@ -896,21 +911,79 @@ const cartId=(cart._id)
 														<input type="date" placeholder="ex 0123456789" className="form-control"
 															onChange={(e) => setEndDate(e.target.value)} />
 													</div>
-													<div className="ip-group">
-														<label htmlFor="email">Numer of person</label>
+													{/* <div className="ip-group">
+														<label htmlFor="email">Number of person</label>
 														<input type="number" placeholder="number..." className="form-control" min={1}
-															onChange={(e) => setpersons(e.target.value)} />
+															onChange={(e) => setpersons(e.target.value)}
+															max={product.quantity}
+														/>
+													</div> */}
+													<div className="ip-group">
+														<label htmlFor="email">Number of Persons</label>
+														<div className="d-flex align-items-center">
+															<button
+																className="btn btn-outline-secondary me-2"
+																onClick={() => setPersons(prev => Math.max(prev - 1, 1))} // Decrement, but not below 1
+																disabled={persons <= 1} // Disable if persons is 1
+															>
+																-
+															</button>
+															<input
+																type="number"
+																placeholder="number..."
+																className="form-control"
+																min={1}
+																max={product.quantity} // Set the maximum limit dynamically based on product quantity
+																value={persons} // Controlled input
+																onChange={(e) => setPersons(Math.min(e.target.value, product.quantity))} // Set limit on input change
+															/>
+															<button
+																className="btn btn-outline-secondary ms-2"
+																onClick={() => setPersons(prev => Math.min(prev + 1, product.quantity))} // Increment, but not above product.quantity
+																disabled={persons >= product.quantity} // Disable if persons is at max quantity
+															>
+																+
+															</button>
+														</div>
 													</div>
+
+
 													{/* <div className="ip-group">
 											<label htmlFor="message">Your Message:</label>
 											<textarea id="comment-message" name="message" rows={4} tabIndex={4} placeholder="Message" aria-required="true" defaultValue={""} />
 										</div> */}
-										<button className="tf-btn primary w-100 mb-3" >Book Now</button>
+													<div className="d-grid gap-3">
+														{userInfo ? (
+															<>
+																<button
+																	className="btn btn-primary w-100 mb-3"
+																	onClick={() => {
+																		const confirmBooking = window.confirm("Are you sure you want to book?");
+																		if (confirmBooking) {
+																			// Redirect to the checkout page upon confirmation
+																			window.location.href = `/property-halfmap-list?_id=${searchParams._id}`;
+																		} else {
+																			// Refresh the page if the user cancels
+																			window.location.reload();
+																		}
+																	}}
+																>
+																	Book Now
+																</button>
+															</>
+														) : (
+															<>
+																<button
+																	className="p-2 btn btn-secondary"
+																	onClick={() => alert("Please log in to book!")}
+																>
+																	Book Now
+																</button>
+															</>
+														)}
+													</div>
 
-										<Link href={{pathname:"/property-halfmap-list",query:{_id:searchParams._id}}} cart={cart}>
-										<button className="tf-btn primary w-100" >Check out</button>
 
-										</Link>
 
 												</form>
 											</div>

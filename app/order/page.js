@@ -5,7 +5,7 @@ import DeleteFile from '@/components/elements/DeleteFile';
 import LayoutAdmin from '@/components/layout/LayoutAdmin';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-export default function MyProperty() {
+export default function MyProperty({ searchParams }) {
   const [order, setOrder] = useState([]);
 
   // const [userInfo, setUserInfo] = useState(null)
@@ -46,9 +46,10 @@ export default function MyProperty() {
   useEffect(() => {
     getData();
   }, []);
-
+  console.log(searchParams._id)
+  const orderid = searchParams._id
   const getData = async () => {
-    const res = await Axios.get(`/ordermerchant/${user}`);
+    const res = await Axios.get(`/orders/${orderid}`);
 
     setOrder(res.data);
   };
@@ -103,22 +104,33 @@ export default function MyProperty() {
                       <th>Order Status</th>
                     </tr>
                   </thead>
-                  {order.map((singleOrder) => (
-                    <tbody key={singleOrder._id}>
-                      {singleOrder.items.map((item) => (
-                        <tr className="file-delete" key={item._id}>
-                          <td>{item.productId}</td>
-                          <td>{new Date(item.rentalStartDate).toLocaleDateString()}</td>
-                          <td>{new Date(item.rentalEndDate).toLocaleDateString()}</td>
-                          <td>{item.pricePerDay}</td>
-                          <td>{item.quantity}</td>
-                          <td>{item.totalItemPrice}</td>
-                          <td>{new Date(singleOrder.orderDate).toLocaleDateString()}</td>
-                          <td>{singleOrder.orderStatus}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  ))}
+                  <tbody>
+                    {order.items && order.items.map((item) => (
+                      <tr className="file-delete" key={item._id}>
+                        {/* Displaying Product Name */}
+                        <td>{item.productId.name}</td>
+
+                        {/* Rental Start and End Dates */}
+                        <td>{new Date(item.rentalStartDate).toLocaleDateString()}</td>
+                        <td>{new Date(item.rentalEndDate).toLocaleDateString()}</td>
+
+                        {/* Price per Day */}
+                        <td>{item.pricePerDay}</td>
+
+                        {/* Quantity (Number of Persons) */}
+                        <td>{item.quantity}</td>
+
+                        {/* Total Item Price */}
+                        <td>{item.totalItemPrice}</td>
+
+                        {/* Order Date */}
+                        <td>{new Date(order.orderDate).toLocaleDateString()}</td>
+
+                        {/* Order Status */}
+                        <td>{order.orderStatus}</td>
+                      </tr>
+                    ))}
+                  </tbody>
                 </table>
               </div>
               {/* <ul className="wd-navigation">

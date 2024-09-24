@@ -7,13 +7,28 @@ export default function MobileMenu() {
 	const pathname = usePathname()
 	const [currentMenuItem, setCurrentMenuItem] = useState("")
 
+
+
+	let user = null
+	let isUser = null
+
+	const userInfo = sessionStorage.getItem("UserInfo")
+	if (userInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		// console.log(userId)
+		user = userId
+		isUser = isFlag
+	}
+
+	console.log(user)
+
 	useEffect(() => {
 		setCurrentMenuItem(pathname)
 	}, [pathname])
 
 	const checkCurrentMenuItem = (path) => currentMenuItem === path ? "current" : ""
 	const checkParentActive = (paths) => paths.some(path => currentMenuItem.startsWith(path)) ? "current" : ""
-	
+
 	const [isAccordion, setIsAccordion] = useState(1)
 
 	const handleAccordion = (key) => {
@@ -23,16 +38,16 @@ export default function MobileMenu() {
 		<>
 			<div className="menu-outer">
 				<div className="navbar-collapse collapse clearfix" id="navbarSupportedContent">
-				<ul className="navigation clearfix">
-				<li className={`dropdown2 home ${isAccordion  == 1 ? "open" : ""} ${checkParentActive([
-					"/home-02",
-					"/home-03",
-					"/home-04",
-					"/home-05",
-					"/home-06",
-				])}`}>
-					<Link href="#">Home</Link>
-					<ul style={{ display: `${isAccordion  == 1 ? "block" : "none"}` }}>
+					<ul className="navigation clearfix">
+						<li className={`dropdown2 home ${isAccordion == 1 ? "open" : ""} ${checkParentActive([
+							"/home-02",
+							"/home-03",
+							"/home-04",
+							"/home-05",
+							"/home-06",
+						])}`}>
+							<Link href="/">Home</Link>
+							{/* <ul style={{ display: `${isAccordion  == 1 ? "block" : "none"}` }}>
 						<li className={`${checkCurrentMenuItem("/")}`}>
 							<Link href="/">Homepage 01</Link>
 						</li>
@@ -51,11 +66,11 @@ export default function MobileMenu() {
 						<li className={`${checkCurrentMenuItem("/home-06")}`}>
 							<Link href="/home-06">Homepage 06</Link>
 						</li>
-					</ul>
-					<div className="dropdown2-btn" onClick={() => handleAccordion (1)}/>
+					</ul> */}
+							{/* <div className="dropdown2-btn" onClick={() => handleAccordion (1)}/> */}
 
-				</li>
-				<li className={`dropdown2 ${isAccordion  == 2 ? "open" : ""} ${checkParentActive([
+						</li>
+						{/* <li className={`dropdown2 ${isAccordion  == 2 ? "open" : ""} ${checkParentActive([
 					"/property-halfmap-grid",
 					"/property-halfmap-list",
 					"/topmap-grid",
@@ -63,7 +78,7 @@ export default function MobileMenu() {
 					"/sidebar-grid",
 					"/sidebar-list",
 				])}`}>
-					<Link href="#">Listing</Link>
+
 
 					<ul style={{ display: `${isAccordion  == 2 ? "block" : "none"}` }}>
 						<li className={`${checkCurrentMenuItem("/property-halfmap-grid")}`}>
@@ -86,15 +101,17 @@ export default function MobileMenu() {
 						</li>
 					</ul>
 					<div className="dropdown2-btn" onClick={() => handleAccordion (2)}/>
-				</li>
-				<li className={`dropdown2 ${isAccordion  == 3 ? "open" : ""} ${checkParentActive([
-					"/property-details-v1",
-					"/property-details-v2",
-					"/property-details-v3",
-					"/property-details-v4",
-				])}`}>
-					<Link href="#">Properties</Link>
-					<ul style={{ display: `${isAccordion  == 3 ? "block" : "none"}` }}>
+				</li> */}
+
+
+						<li className={`dropdown2 ${isAccordion == 3 ? "open" : ""} ${checkParentActive([
+							"/property-details-v1",
+							"/property-details-v2",
+							"/property-details-v3",
+							"/property-details-v4",
+						])}`}>
+							<Link href="/sidebar-list">Properties</Link>
+							{/* <ul style={{ display: `${isAccordion  == 3 ? "block" : "none"}` }}>
 						<li className={`${checkCurrentMenuItem("/property-details-v1")}`}>
 							<Link href="/property-details-v1">Property Details 1</Link>
 						</li>
@@ -107,97 +124,112 @@ export default function MobileMenu() {
 						<li className={`${checkCurrentMenuItem("/property-details-v4")}`}>
 							<Link href="/property-details-v4">Property Details 4</Link>
 						</li>
-					</ul>
-					<div className="dropdown2-btn" onClick={() => handleAccordion (3)}/>
-				</li>
-				<li className={`dropdown2 ${isAccordion  == 4 ? "open" : ""} ${checkParentActive([
-					"/about-us",
-					"/our-service",
-					"/pricing",
-					"/contact",
-					"/faq",
-					"/privacy-policy",
-				])}`}>
-					<Link href="#">Pages</Link>
-					<ul style={{ display: `${isAccordion  == 4 ? "block" : "none"}` }}>
-						<li className={`${checkCurrentMenuItem("/about-us")}`}>
-							<Link href="/about-us">About Us</Link>
+					</ul> */}
+							{/* <div className="dropdown2-btn" onClick={() => handleAccordion (3)}/> */}
 						</li>
-						<li className={`${checkCurrentMenuItem("/our-service")}`}>
-							<Link href="/our-service">Our Services</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/pricing")}`}>
-							<Link href="/pricing">Pricing</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/contact")}`}>
-							<Link href="/contact">Contact Us</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/faq")}`}>
-							<Link href="/faq">FAQs</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/privacy-policy")}`}>
-							<Link href="/privacy-policy">Privacy Policy</Link>
-						</li>
-					</ul>
-					<div className="dropdown2-btn" onClick={() => handleAccordion (4)}/>
-				</li>
-				<li className={`dropdown2 ${isAccordion  == 5 ? "open" : ""} ${checkParentActive([
-					"/blog",
-					"/blog-grid",
-					"/blog-detail",
-				])}`}>
-					<Link href="#">Blog</Link>
-					<ul style={{ display: `${isAccordion  == 5 ? "block" : "none"}` }}>
-						<li className={`${checkCurrentMenuItem("/blog",)}`}>
-							<Link href="/blog">Blog Default</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/blog-grid",)}`}>
-							<Link href="/blog-grid">Blog Grid</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/blog-detail",)}`}>
-							<Link href="/blog-detail">Blog Post Details</Link>
-						</li>
-					</ul>
-					<div className="dropdown2-btn" onClick={() => handleAccordion (5)}/>
 
-				</li>
-				<li className={`dropdown2 ${isAccordion  == 6 ? "open" : ""} ${checkParentActive([
-					"/dashboard",
-					"/my-favorites",
-					"/my-invoices",
-					"/my-favorites",
-					"/reviews",
-					"/my-profile",
-					"/add-property",
-				])}`}>
-					<Link href="#">Dashboard</Link>
-					<ul style={{ display: `${isAccordion  == 6 ? "block" : "none"}` }}>
-						<li className={`${checkCurrentMenuItem("/dashboard")}`}>
-							<Link href="/dashboard">Dashboard</Link>
+
+						<li
+							className={`dropdown2 ${checkParentActive([
+								'/about-us',
+								'/our-service',
+								'/pricing',
+								'/contact',
+								'/faq',
+								'/privacy-policy',
+							])}`}
+						>
+							<Link href="#">More</Link>
+							<ul>
+								<li className={`${checkCurrentMenuItem('/about-us')}`}>
+									<Link href="/about-us">About Us</Link>
+								</li>
+								<li className={`${checkCurrentMenuItem('/our-service')}`}>
+									<Link href="/our-service">Our Services</Link>
+								</li>
+								<li className={`${checkCurrentMenuItem('/pricing')}`}>
+									<Link href="/pricing">Pricing</Link>
+								</li>
+								<li className={`${checkCurrentMenuItem('/contact')}`}>
+									<Link href="/contact">Contact Us</Link>
+								</li>
+								<li className={`${checkCurrentMenuItem('/faq')}`}>
+									<Link href="/faq">FAQs</Link>
+								</li>
+								<li className={`${checkCurrentMenuItem('/privacy-policy')}`}>
+									<Link href="/privacy-policy">Privacy Policy</Link>
+								</li>
+							</ul>
 						</li>
-						<li className={`${checkCurrentMenuItem("/my-favorites")}`}>
-							<Link href="/my-favorites">My Products</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/my-invoices")}`}>
-							<Link href="/my-invoices">My Invoices</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/my-favorites")}`}>
-							<Link href="/my-favorites">My Favorites</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/reviews")}`}>
-							<Link href="/reviews">Reviews</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/my-profile")}`}>
-							<Link href="/my-profile">My Profile</Link>
-						</li>
-						<li className={`${checkCurrentMenuItem("/add-property")}`}>
-							<Link href="/add-property">Add Product</Link>
-						</li>
-						
+						{/* <li
+          className={`dropdown2 ${checkParentActive([
+            '/blog',
+            '/blog-grid',
+            '/blog-detail',
+          ])}`}
+        >
+          <Link href="#">Blog</Link>
+          <ul>
+            <li className={`${checkCurrentMenuItem('/blog')}`}>
+              <Link href="/blog">Blog Default</Link>
+            </li>
+            <li className={`${checkCurrentMenuItem('/blog-grid')}`}>
+              <Link href="/blog-grid">Blog Grid</Link>
+            </li>
+            <li className={`${checkCurrentMenuItem('/blog-detail')}`}>
+              <Link href="/blog-detail">Blog Post Details</Link>
+            </li>
+          </ul>
+        </li> */}
+						{userInfo && (
+							<li
+								className={`dropdown2 ${checkParentActive([
+									'/dashboard',
+									'/my-favorites',
+									'/my-invoices',
+									'/my-favorites',
+									'/reviews',
+									'/my-profile',
+									'/add-property',
+								])}`}
+							>
+								<Link href="#">Dashboard</Link>
+								<ul>
+									{isUser === true ? (
+										<>
+											<li className={`${checkCurrentMenuItem('/my-profileuser')}`}>
+												<Link href="/my-profileuser">My Profile</Link>
+											</li>
+											<li className={`${checkCurrentMenuItem('/my-orderuser')}`}>
+												<Link href="/my-orderuser">My Orders</Link>
+											</li>
+										</>
+									) : (
+										<>
+											<li className={`${checkCurrentMenuItem('/my-profile')}`}>
+												<Link href="/my-profile">My Profile</Link>
+											</li>
+											<li className={`${checkCurrentMenuItem('/dashboard')}`}>
+												<Link href="/dashboard">Dashboard</Link>
+											</li>
+											<li className={`${checkCurrentMenuItem('/my-property')}`}>
+												<Link href="/my-property">My Products</Link>
+											</li>
+											<li className={`${checkCurrentMenuItem('/my-order')}`}>
+												<Link href="/my-order">My Orders</Link>
+											</li>
+											<li className={`${checkCurrentMenuItem('/reviews')}`}>
+												<Link href="/reviews">Reviews</Link>
+											</li>
+											<li className={`${checkCurrentMenuItem('/add-property')}`}>
+												<Link href="/add-property">Add Product</Link>
+											</li>
+										</>
+									)}
+								</ul>
+							</li>
+						)}
 					</ul>
-					<div className="dropdown2-btn" onClick={() => handleAccordion (6)}/>
-				</li>
-			</ul>
 				</div>
 			</div>
 		</>

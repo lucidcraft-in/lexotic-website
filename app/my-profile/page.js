@@ -4,6 +4,8 @@ import Axios from "@/components/axios/axios";
 import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
 import { useEffect, useState } from "react";
+import imageCompression from "browser-image-compression";
+import { toast } from "react-toastify";
 export default function MyProfile() {
 
 	// const [userInfo, setUserInfo] = useState(null)
@@ -11,15 +13,15 @@ export default function MyProfile() {
 	// let user = null
 	// let flag = null
 	// let storageUserInfo
-  
+
 	// useEffect(() => {
 	//   if (typeof window !== "undefined") {
 	// 	storageUserInfo = sessionStorage.getItem('UserInfo')
 	// 	setUserInfo(storageUserInfo)
-  
+
 	//   }
 	// }, [])
-  
+
 	// if (storageUserInfo) {
 	//   const { userId, username, token, isFlag } = JSON.parse(userInfo)
 	//   user = userId
@@ -55,7 +57,10 @@ export default function MyProfile() {
 	const [branch, setBranch] = useState('');
 	const [currency, setCurrency] = useState('');
 	const [status, setStatus] = useState('created');
-    const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [photos, setPhotos] = useState([]);
+	const [userr, setUserr] = useState([])
+
 
 
 	const [merchant, setMerchant] = useState([])
@@ -69,6 +74,7 @@ export default function MyProfile() {
 		const res = await Axios.get(`/merchants/${user}`)
 		console.log(res.data)
 		const merchant = res.data
+		setUserr(merchant)
 		setName(merchant.name)
 		setDescription(merchant.description)
 		setImage(merchant.image)
@@ -83,6 +89,8 @@ export default function MyProfile() {
 		setBranch(merchant.branch)
 		setCurrency(merchant.currency)
 		setStatus(merchant.status)
+		setPhotos(merchant?.image)
+
 
 
 		if (res.status === 201) {
@@ -92,32 +100,80 @@ export default function MyProfile() {
 
 	// console.log(merchant)
 
+	const uploadFileHandler = async (e, val) => {
+		e.preventDefault();
+		const file = e.target.files[0];
+	
+		if (!file) {
+			console.error("No file selected");
+			return;
+		}
+	
+		// Log file info
+		console.log("Selected file:", file);
+	
+		const options = {
+			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+			maxWidthOrHeight: 800,
+			useWebWorker: true,
+		};
+	
+		try {
+			const compressedFile = await imageCompression(file, options);
+	
+			const newFile = new File([compressedFile], file.name, { type: file.type });
+	
+			const formData = new FormData();
+			formData.append('file', newFile);
+	
+			const config = {
+				headers: {
+					'Content-Type': 'multipart/form-data',
+				},
+			};
+	
+			const response = await Axios.post('/upload', formData, config);
+			console.log("Upload successful, response data:", response.data);
+	
+			// if (val === 'photos') {
+				setPhotos(response.data.url);
+			// }
+	
+		} catch (error) {
+			console.error("Error during file upload:", error);
+		}
+	};
+
 	const handleSubmit = async (e) => {
-        e.preventDefault()
-        const data = {
-            name, description,image, email, username,
-            phone, altNumber: altphone, location,
-            accountNumber: acc, ifsc, branch, currency, status
-        }
-        try {
-            setLoading(true)
-            const res = await Axios.put(`/updatemerchants/${user}`, data)
-            if (res.status === 201) {
-                console.log(res.data)
-                setLoading(false)
+		e.preventDefault()
+		const profilePhoto = photos || userr.image
+
+		const data = {
+			name, description, email, username,
+			phone, altNumber: altphone, location,
+			accountNumber: acc, ifsc, branch, currency, status,
+			image: profilePhoto
+
+		}
+		try {
+			setLoading(true)
+			const res = await Axios.put(`/updatemerchants/${user}`, data)
+			if (res.status === 201) {
+				console.log(res.data)
+				setLoading(false)
 				console.log("successfully updated")
-                toast.success(res.json)
-                // navigate('/merchant')
-            } else {
-                toast.warning('error occured')
-            }
+				toast.success(res.json)
+				// navigate('/merchant')
+			} else {
+				toast.warning('error occured')
+			}
 
-        } catch (error) {
-            setLoading(false)
-            toast.error('failed to update')
-        }
+		} catch (error) {
+			setLoading(false)
+			toast.error('failed to update')
+		}
 
-    }
+	}
 
 
 	return (
@@ -137,14 +193,14 @@ export default function MyProfile() {
 						<h6 className="title">Photo Upload</h6>
 						<div className="box-agent-avt">
 							<div className="avatar">
-								<img src="/images/avatar/account.jpg" alt="avatar" loading="lazy" width={128} height={128} />
+								<img src={photos} alt="avatar" loading="lazy" width={128} height={128} />
 							</div>
 							<div className="content uploadfile">
 								<p>Upload a new avatar</p>
 								<div className="box-ip">
 									<input type="file" className="ip-file"
-									value={image} 
-									onChange={(e)=>setImage(e.target.value)}/>
+										onChange={(e) => uploadFileHandler(e)}
+									/>
 								</div>
 								<p>JPEG 100x100</p>
 							</div>
@@ -229,7 +285,7 @@ export default function MyProfile() {
 					<div className="box grid-4 gap-30 box-info-2">
 						<div className="box-fieldset">
 							<label htmlFor="job">Status:<span>*</span></label>
-							<input type="text" value={status}  className="form-control style-1" />
+							<input type="text" value={status} className="form-control style-1" />
 						</div>
 
 					</div>
@@ -247,7 +303,7 @@ export default function MyProfile() {
 						<input type="text" defaultValue="#" className="form-control style-1" />
 					</div> */}
 					<div className="box">
-						<button  className="tf-btn primary" onClick={handleSubmit}>Save &amp; Update</button>
+						<button className="tf-btn primary" onClick={handleSubmit}>Save &amp; Update</button>
 					</div>
 					{/* <h6 className="title">Change password</h6>
 					<div className="box grid-3 gap-30">

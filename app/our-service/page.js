@@ -1,302 +1,1222 @@
 'use client'
-import { Autoplay, Navigation, Pagination } from "swiper/modules"
-import { Swiper, SwiperSlide } from "swiper/react"
-
-const swiperOptions = {
-	modules: [Autoplay, Pagination, Navigation],
-	slidesPerView: 1,
-	spaceBetween: 30,
-	navigation: {
-		clickable: true,
-		nextEl: ".nav-prev-testimonial",
-		prevEl: ".nav-next-testimonial",
-	},
-	pagination: {
-		el: ".sw-pagination-testimonial",
-		clickable: true,
-	},
-	breakpoints: {
-		768: {
-			slidesPerView: 2,
-			spaceBetween: 20,
-		},
-		991: {
-			slidesPerView: 2,
-			spaceBetween: 20,
-		},
-
-		1550: {
-			slidesPerView: 2,
-			spaceBetween: 30,
-		},
-	},
-}
+import Axios from "@/components/axios/axios"
+import RangeSlider from "@/components/elements/RangeSlider"
+import SidebarFilter from "@/components/elements/SidebarFilter"
+import TabNav from "@/components/elements/TabNav"
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
-import { useState } from "react"
-export default function OurService() {
-	const [isAccordion, setIsAccordion] = useState(1)
-
-	const handleAccordion = (key) => {
-		setIsAccordion(prevState => prevState === key ? null : key)
+import { useEffect, useState } from "react"
+export default function SidebarList() {
+	const [isTab, setIsTab] = useState(2)
+	const handleTab = (i) => {
+		setIsTab(i)
 	}
+
+
+	const [product, setProduct] = useState([])
+
+
+	useEffect(() => {
+		getData()
+	}, [])
+
+	const getData = async () => {
+		try {
+			const res = await Axios.get(`getproducts`)
+			// console.log(res)
+			setProduct(res.data)
+
+		} catch (error) {
+			console.log('error')
+		}
+	}
+
 	return (
 		<>
 
-			<Layout headerStyle={1} footerStyle={1} breadcrumbTitle="Our Services">
-				<div>
-					<section className="flat-section flat-service-v3">
-						<div className="container">
-							<div className="box-title text-center">
-								<div className="text-subtitle text-primary">Our Services</div>
-								<h4 className="mt-4">What We Do?</h4>
+			<Layout headerStyle={1} footerStyle={1}>
+				<section className="flat-section-v6 flat-recommended flat-sidebar">
+					<div className="container">
+						<div className="box-title-listing">
+							<div className="d-flex align-items-center" >
+								{/* <h5 className="mx-auto">Product List</h5> */}
 							</div>
-							<div className="row">
-								<div className="box col-lg-4 col-md-6">
-									<div className="box-service style-2">
-										<div className="icon-box">
-											<span className="icon icon-buy-home" />
-										</div>
-										<div className="content">
-											<h6 className="title">Buy A New Home</h6>
-											<p className="description">Explore diverse properties and expert guidance for a seamless buying experience.</p>
-											<Link href="#" className="tf-btn size-1">Find A Home</Link>
-										</div>
-									</div>
-								</div>
-								<div className="box col-lg-4 col-md-6">
-									<div className="box-service style-2 active">
-										<div className="icon-box">
-											<span className="icon icon-rent-home" />
-										</div>
-										<div className="content">
-											<h6 className="title">Rent a home</h6>
-											<p className="description">Explore a diverse variety of listings tailored precisely to suit your unique lifestyle needs.</p>
-											<Link href="#" className="tf-btn size-1">Find A Rental</Link>
-										</div>
-									</div>
-								</div>
-								<div className="box col-lg-4 col-md-6">
-									<div className="box-service style-2">
-										<div className="icon-box">
-											<span className="icon icon-sale-home" />
-										</div>
-										<div className="content">
-											<h6 className="title">Sell a home</h6>
-											<p className="description">Showcasing your property's best features for a successful sale.</p>
-											{/* <Link href="#" className="tf-btn size-1">Submit Property</Link> */}
-										</div>
-									</div>
-								</div>
+
+							<div className="box-filter-tab">
+								{/* <ul className="nav-tab-filter" role="tablist">
+									<li className="nav-tab-item" onClick={() => handleTab(1)}>
+										<a className={isTab == 1 ? "nav-link-item active" : "nav-link-item"} data-bs-toggle="tab"><i className="icon icon-grid" /></a>
+									</li>
+									<li className="nav-tab-item" onClick={() => handleTab(2)}>
+										<a className={isTab == 2 ? "nav-link-item active" : "nav-link-item"} data-bs-toggle="tab"><i className="icon icon-list" /></a>
+									</li>
+								</ul> */}
+								{/* <select className="nice-select">
+
+									<option data-value={1} className="option">10 Per Page</option>
+									<option data-value={2} className="option">11 Per Page</option>
+									<option data-value={3} className="option selected">12 Per Page</option>
+								</select>
+								<select className="nice-select">
+
+									<option data-value="default" className="option selected">Sort by (Default)</option>
+									<option data-value="new" className="option">Newest</option>
+									<option data-value="old" className="option">Oldest</option>
+								</select> */}
 							</div>
 						</div>
-					</section>
-					{/* End Service */}
-					{/* Testimonial */}
-					<section className="flat-section-v3 bg-surface flat-testimonial">
-						<div className="cus-layout-1">
-							<div className="row align-items-center">
-								<div className="col-lg-3">
-									<div className="box-title">
-										<div className="text-subtitle text-primary">Top Properties</div>
-										<h4 className="mt-4">What’s people say’s</h4>
+						<div className="row">
+							<div className="col-xl-4 col-lg-5">
+								<div className="widget-sidebar fixed-sidebar">
+									<div className="flat-tab flat-tab-form widget-filter-search widget-box bg-surface">
+										<div className="h7 title fw-7">Search</div>
+										<ul className="nav-tab-form" role="tablist">
+											<TabNav />
+										</ul>
+										<div className="tab-content">
+											<div className="tab-pane fade active show" role="tabpanel">
+												<div className="form-sl">
+													<form method="post">
+														<div className="wd-filter-select">
+															<div className="inner-group inner-filter">
+																<div className="form-style">
+																	<label className="title-select">Keyword</label>
+																	<input type="text" className="form-control" placeholder="Search Keyword." name="s" title="Search for" required />
+																</div>
+																<div className="form-style">
+																	<label className="title-select">Location</label>
+																	<div className="group-ip ip-icon">
+																		<input type="text" className="form-control" placeholder="Search Location" name="s" title="Search for" required />
+																		<Link href="#" className="icon-right icon-location" />
+																	</div>
+																</div>
+																<div className="form-style">
+																	<label className="title-select">Type</label>
+																	<div className="group-select">
+																		<select className="nice-select">
+
+																			<option data-value className="option selected">All</option>
+																			<option data-value="villa" className="option">Villa</option>
+																			<option data-value="studio" className="option">Studio</option>
+																			<option data-value="office" className="option">Office</option>
+																		</select>
+																	</div>
+																</div>
+																<div className="form-style box-select">
+																	<label className="title-select">Rooms</label>
+																	<select className="nice-select">
+
+																		<option data-value={2} className="option">1</option>
+																		<option data-value={2} className="option selected">2</option>
+																		<option data-value={3} className="option">3</option>
+																		<option data-value={4} className="option">4</option>
+																		<option data-value={5} className="option">5</option>
+																		<option data-value={6} className="option">6</option>
+																		<option data-value={7} className="option">7</option>
+																		<option data-value={8} className="option">8</option>
+																		<option data-value={9} className="option">9</option>
+																		<option data-value={10} className="option">10</option>
+																	</select>
+																</div>
+																<div className="form-style box-select">
+																	<label className="title-select">Bathrooms</label>
+																	<select className="nice-select">
+
+																		<option data-value="all" className="option">All</option>
+																		<option data-value={1} className="option">1</option>
+																		<option data-value={2} className="option">2</option>
+																		<option data-value={3} className="option">3</option>
+																		<option data-value={4} className="option selected">4</option>
+																		<option data-value={5} className="option">5</option>
+																		<option data-value={6} className="option">6</option>
+																		<option data-value={7} className="option">7</option>
+																		<option data-value={8} className="option">8</option>
+																		<option data-value={9} className="option">9</option>
+																		<option data-value={10} className="option">10</option>
+																	</select>
+																</div>
+																<div className="form-style box-select">
+																	<label className="title-select">Bedrooms</label>
+																	<select className="nice-select">
+
+																		<option data-value={1} className="option">All</option>
+																		<option data-value={1} className="option">1</option>
+																		<option data-value={2} className="option">2</option>
+																		<option data-value={3} className="option">3</option>
+																		<option data-value={4} className="option selected">4</option>
+																		<option data-value={5} className="option">5</option>
+																		<option data-value={6} className="option">6</option>
+																		<option data-value={7} className="option">7</option>
+																		<option data-value={8} className="option">8</option>
+																		<option data-value={9} className="option">9</option>
+																		<option data-value={10} className="option">10</option>
+																	</select>
+																</div>
+																<div className="form-style widget-price">
+																	<RangeSlider />
+																</div>
+																<div className="form-style widget-price wd-price-2">
+																	<RangeSlider />
+																</div>
+																<SidebarFilter />
+																<div className="form-style">
+																	<button type="submit" className="tf-btn primary" href="#">Find Properties</button>
+																</div>
+															</div>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div >
+									{/* <div className="widget-box bg-surface box-latest-property">
+										<div className="h7 fw-7 title">Latest Propeties</div>
+										<ul>
+											<li className="latest-property-item">
+												<Link href="/property-details-v1" className="images-style">
+													<img src="/images/home/house-sm-3.jpg" alt="img" />
+												</Link>
+												<div className="content">
+													<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Casa Lomas de Mach...</Link></div>
+													<ul className="meta-list">
+														<li className="item">
+															<span>Bed:</span>
+															<span className="fw-7">4</span>
+														</li>
+														<li className="item">
+															<span>Bath:</span>
+															<span className="fw-7">2</span>
+														</li>
+														<li className="item">
+															<span className="fw-7">600 SqFT</span>
+														</li>
+													</ul>
+													<div className="d-flex align-items-center">
+														<div className="h7 fw-7">$5050,00</div>
+														<span className="text-variant-1">/SqFT</span>
+													</div>
+												</div>
+											</li>
+											<li className="latest-property-item">
+												<Link href="/property-details-v1" className="images-style">
+													<img src="/images/home/house-sm-9.jpg" alt="img" />
+												</Link>
+												<div className="content">
+													<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven...</Link></div>
+													<ul className="meta-list">
+														<li className="item">
+															<span>Bed:</span>
+															<span className="fw-7">4</span>
+														</li>
+														<li className="item">
+															<span>Bath:</span>
+															<span className="fw-7">2</span>
+														</li>
+														<li className="item">
+															<span className="fw-7">600 SqFT</span>
+														</li>
+													</ul>
+													<div className="d-flex align-items-center">
+														<div className="h7 fw-7">$5050,00</div>
+														<span className="text-variant-1">/SqFT</span>
+													</div>
+												</div>
+											</li>
+											<li className="latest-property-item">
+												<Link href="/property-details-v1" className="images-style">
+													<img src="/images/home/house-sm-1.jpg" alt="img" />
+												</Link>
+												<div className="content">
+													<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Sunset Heights Estate</Link></div>
+													<ul className="meta-list">
+														<li className="item">
+															<span>Bed:</span>
+															<span className="fw-7">4</span>
+														</li>
+														<li className="item">
+															<span>Bath:</span>
+															<span className="fw-7">2</span>
+														</li>
+														<li className="item">
+															<span className="fw-7">600 SqFT</span>
+														</li>
+													</ul>
+													<div className="d-flex align-items-center">
+														<div className="h7 fw-7">$5050,00</div>
+														<span className="text-variant-1">/SqFT</span>
+													</div>
+												</div>
+											</li>
+											<li className="latest-property-item">
+												<Link href="/property-details-v1" className="images-style">
+													<img src="/images/home/house-sm-4.jpg" alt="img" />
+												</Link>
+												<div className="content">
+													<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">de Machalí Machas...</Link></div>
+													<ul className="meta-list">
+														<li className="item">
+															<span>Bed:</span>
+															<span className="fw-7">4</span>
+														</li>
+														<li className="item">
+															<span>Bath:</span>
+															<span className="fw-7">2</span>
+														</li>
+														<li className="item">
+															<span className="fw-7">600 SqFT</span>
+														</li>
+													</ul>
+													<div className="d-flex align-items-center">
+														<div className="h7 fw-7">$5050,00</div>
+														<span className="text-variant-1">/SqFT</span>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</div> */}
+								</div >
+							</div >
+							<div className="col-xl-8 col-lg-7">
+								<div className="tab-content">
+									<div className={isTab == 1 ? "tab-pane fade show active" : "tab-pane fade"} id="gridLayout" role="tabpanel">
+										<div className="row">
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-1.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Studio</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link"> Casa Lomas de Machalí Machas</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>33 Maple Street, San Francisco, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>3</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-6.jpg" alt="avt" />
+															</div>
+															<span>Arlene McCoy</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$7250,00</h6>
+															<span className="text-variant-1">/SqFT</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-2.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Apartment</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Villa del Mar Retreat, Malibu</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>72 Sunset Avenue, Los Angeles, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-7.jpg" alt="avt" />
+															</div>
+															<span>Annette Black</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$250,00</h6>
+															<span className="text-variant-1">/month</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-3.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Villa</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Rancho Vista Verde, Santa Barbara</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>33 Maple Street, San Francisco, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-5.jpg" alt="avt" />
+															</div>
+															<span>Ralph Edwards</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$5050,00</h6>
+															<span className="text-variant-1">/SqFT</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-4.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">House</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Sunset Heights Estate, Beverly Hills</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>1040 Ocean, Santa Monica, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>3</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-8.jpg" alt="avt" />
+															</div>
+															<span>Jacob Jones</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$250,00</h6>
+															<span className="text-variant-1">/month</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-5.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Office</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Coastal Serenity Cottage</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>21 Hillside Drive, Beverly Hills, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-9.jpg" alt="avt" />
+															</div>
+															<span>Kathryn Murphy</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$7250,00</h6>
+															<span className="text-variant-1">/SqFT</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-6.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Studio</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>8 Broadway, Brooklyn, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-6.jpg" alt="avt" />
+															</div>
+															<span>Floyd Miles</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$250,00</h6>
+															<span className="text-variant-1">/SqFT</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-11.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Apartment</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Sunset Heights Estate, Beverly Hills</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>1040 Ocean, Santa Monica, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>3</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-8.jpg" alt="avt" />
+															</div>
+															<span>Jacob Jones</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$250,00</h6>
+															<span className="text-variant-1">/month</span>
+														</div>
+													</div>
+												</div>
+											</div>
+											<div className="col-md-6">
+												<div className="homeya-box">
+													<div className="archive-top">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+																<img src="/images/home/house-12.jpg" alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-8">
+																	<li className="flag-tag success">Featured</li>
+																	<li className="flag-tag style-1">For Sale</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">Villa</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Coastal Serenity Cottage</Link></div>
+															<div className="desc"><i className="fs-16 icon icon-mapPin" /><p>21 Hillside Drive, Beverly Hills, California</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+													</div>
+													<div className="archive-bottom d-flex justify-content-between align-items-center">
+														<div className="d-flex gap-8 align-items-center">
+															<div className="avatar avt-40 round">
+																<img src="/images/avatar/avt-12.jpg" alt="avt" />
+															</div>
+															<span>Kathryn Murphy</span>
+														</div>
+														<div className="d-flex align-items-center">
+															<h6>$2050,00</h6>
+															<span className="text-variant-1">/SqFT</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<ul className="wd-navigation">
+											<li><Link href="#" className="nav-item active">1</Link></li>
+											<li><Link href="#" className="nav-item">2</Link></li>
+											<li><Link href="#" className="nav-item">3</Link></li>
+											<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
+										</ul>
 									</div>
-									<p className="text-variant-1 p-16">Our seasoned team excels in real estate with years of successful market navigation, offering informed decisions and optimal results.</p>
-									<div className="box-navigation">
-										<div className="navigation swiper-nav-next nav-next-testimonial"><span className="icon icon-arr-l" /></div>
-										<div className="navigation swiper-nav-prev nav-prev-testimonial"><span className="icon icon-arr-r" /></div>
-									</div>
-								</div>
-								<div className="col-lg-9">
-									<div className="swiper tf-sw-testimonial">
-										<Swiper {...swiperOptions} className="swiper-wrapper">
-											<SwiperSlide>
-												<div className="box-tes-item">
-													<ul className="list-star">
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-													</ul>
-													<p className="note body-1">
-														"I truly appreciate the professionalism and in-depth knowledge of the brokerage team. They not only helped me find the perfect home but also assisted with legal and financial aspects, making me feel confident and secure in my decision."
-													</p>
-													<div className="box-avt d-flex align-items-center gap-12">
-														<div className="avatar avt-60 round">
-															<img src="/images/avatar/avt-7.jpg" alt="avatar" />
-														</div>
-														<div className="info">
-															<div className="h7 fw-7">Liam Anderson</div>
-															<p className="text-variant-1 mt-4">CEO Digital</p>
-														</div>
-													</div>
-												</div>
-											</SwiperSlide>
-											<SwiperSlide>
-												<div className="box-tes-item">
-													<ul className="list-star">
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-													</ul>
-													<p className="note body-1">
-														"My experience with property management services has exceeded expectations. They efficiently manage properties with a professional and attentive approach in every situation. I feel reassured that any issue will be resolved promptly and effectively."
-													</p>
-													<div className="box-avt d-flex align-items-center gap-12">
-														<div className="avatar avt-60 round">
-															<img src="/images/avatar/avt-5.jpg" alt="avatar" />
-														</div>
-														<div className="info">
-															<div className="h7 fw-7">Adam Will</div>
-															<p className="text-variant-1 mt-4">CEO Agency</p>
-														</div>
-													</div>
-												</div>
-											</SwiperSlide>
-											<SwiperSlide>
-												<div className="box-tes-item">
-													<ul className="list-star">
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-													</ul>
-													<p className="note body-1">
-														"My experience with property management services has exceeded expectations. They efficiently manage properties with a professional and attentive approach in every situation. I feel reassured that any issue will be resolved promptly and effectively."
-													</p>
-													<div className="box-avt d-flex align-items-center gap-12">
-														<div className="avatar avt-60 round">
-															<img src="/images/avatar/avt-5.jpg" alt="avatar" />
-														</div>
-														<div className="info">
-															<div className="h7 fw-7">Adam Will</div>
-															<p className="text-variant-1 mt-4">CEO Agency</p>
+									<div className={isTab == 2 ? "tab-pane fade show active" : "tab-pane fade"} id="listLayout" role="tabpanel">
+										<div className="row">
+											{product?.map((pro) => (
+												<div className="col-md-12">
+													<div className="homeya-box list-style-1 list-style-2">
+														<Link href="/property-details-v1" className="images-group">
+															<div className="images-style">
+
+																<img src={pro?.photos[0]?.url} alt="img" />
+															</div>
+															<div className="top">
+																<ul className="d-flex gap-4 flex-wrap">
+																	<li className="flag-tag style-1">For Rent</li>
+																</ul>
+																<ul className="d-flex gap-4">
+																	<li className="box-icon w-32">
+																		<span className="icon icon-arrLeftRight" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-heart" />
+																	</li>
+																	<li className="box-icon w-32">
+																		<span className="icon icon-eye" />
+																	</li>
+																</ul>
+															</div>
+															<div className="bottom">
+																<span className="flag-tag style-2">{pro.title}</span>
+															</div>
+														</Link>
+														<div className="content">
+															<div className="archive-top">
+																<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">{pro.name}</Link></div>
+																<div className="desc"><i className="icon icon-mapPin" /><p>{pro?.location?.address}</p> </div>
+																<ul className="meta-list">
+																	<li className="item">
+																		<i className="icon icon-bed" />
+																		<span>4</span>
+																	</li>
+																	<li className="item">
+																		<i className="icon icon-bathtub" />
+																		<span>2</span>
+																	</li>
+																	<li className="item">
+																		<i className="icon icon-ruler" />
+																		<span>600 SqFT</span>
+																	</li>
+																</ul>
+															</div>
+															<div className="d-flex justify-content-between align-items-center archive-bottom">
+																<div className="d-flex gap-8 align-items-center">
+																	<div className="avatar avt-40 round">
+																		<img src="/images/avatar/avt-8.jpg" alt="avt" />
+																	</div>
+																	<span>{pro.owner.name}</span>
+																</div>
+																<div className="d-flex align-items-center">
+																	<div className="h7 fw-7">{pro.price}</div>
+																	<span className="text-variant-1">/SqFT</span>
+																</div>
+															</div>
 														</div>
 													</div>
 												</div>
-											</SwiperSlide>
-											<SwiperSlide>
-												<div className="box-tes-item">
-													<ul className="list-star">
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-														<li className="icon icon-star" />
-													</ul>
-													<p className="note body-1">
-														"I truly appreciate the professionalism and in-depth knowledge of the brokerage team. They not only helped me find the perfect home but also assisted with legal and financial aspects, making me feel confident and secure in my decision."
-													</p>
-													<div className="box-avt d-flex align-items-center gap-12">
-														<div className="avatar avt-60 round">
-															<img src="/images/avatar/avt-7.jpg" alt="avatar" />
+											))}
+
+											{/* <div className="col-md-12">
+												<div className="homeya-box list-style-1 list-style-2">
+													<Link href="/property-details-v1" className="images-group">
+														<div className="images-style">
+															<img src="/images/home/house-10.jpg" alt="img" />
 														</div>
-														<div className="info">
-															<div className="h7 fw-7">Liam Anderson</div>
-															<p className="text-variant-1 mt-4">CEO Digital</p>
+														<div className="top">
+															<ul className="d-flex">
+																<li className="flag-tag style-1">For Rent</li>
+															</ul>
+															<ul className="d-flex gap-4">
+																<li className="box-icon w-32">
+																	<span className="icon icon-arrLeftRight" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-heart" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-eye" />
+																</li>
+															</ul>
+														</div>
+														<div className="bottom">
+															<span className="flag-tag style-2">House</span>
+														</div>
+													</Link>
+													<div className="content">
+														<div className="archive-top">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe </Link></div>
+															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+														<div className="d-flex justify-content-between align-items-center archive-bottom">
+															<div className="d-flex gap-8 align-items-center">
+																<div className="avatar avt-40 round">
+																	<img src="/images/avatar/avt-10.jpg" alt="avt" />
+																</div>
+																<span>Floyd Miles</span>
+															</div>
+															<div className="d-flex align-items-center">
+																<div className="h7 fw-7">$250,00</div>
+																<span className="text-variant-1">/month</span>
+															</div>
 														</div>
 													</div>
 												</div>
-											</SwiperSlide>
-										</Swiper>
-									</div>
-								</div>
-							</div>
-						</div>
-					</section>
-					{/* End Testimonial */}
-					{/* faq */}
-					<section className="flat-section">
-						<div className="container">
-							<div className="box-title text-center">
-								<div className="text-subtitle text-primary">Faqs</div>
-								<h4 className="mt-4">Quick answers to questions</h4>
-							</div>
-							<div className="row justify-content-center">
-								<div className="col-lg-8">
-									<div className="tf-faq">
-										<ul className="box-faq" id="wrapper-faq">
-											<li className="faq-item"onClick={() => handleAccordion (1)}>
-												<a className={`${isAccordion == 1 ? "faq-header":"faq-header collapsed"}`}>
-													Why should I use your services?
-												</a>
-												<div id="accordion-faq-one" className={`${isAccordion == 1 ? "collapse show":"collapse"}`} data-bs-parent="#wrapper-faq">
-													<p className="faq-body">
-														Once your account is set up and you've familiarized yourself with the platform, you are ready to start using our services. Whether it's accessing specific features, making transactions, or utilizing our tools, you'll find everything you need at your fingertips.
-													</p>
+											</div>
+											<div className="col-md-12">
+												<div className="homeya-box list-style-1 list-style-2">
+													<Link href="/property-details-v1" className="images-group">
+														<div className="images-style">
+															<img src="/images/home/house-6.jpg" alt="img" />
+														</div>
+														<div className="top">
+															<ul className="d-flex">
+																<li className="flag-tag style-1">For Sale</li>
+															</ul>
+															<ul className="d-flex gap-4">
+																<li className="box-icon w-32">
+																	<span className="icon icon-arrLeftRight" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-heart" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-eye" />
+																</li>
+															</ul>
+														</div>
+														<div className="bottom">
+															<span className="flag-tag style-2">House</span>
+														</div>
+													</Link>
+													<div className="content">
+														<div className="archive-top">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Sunset Heights Estate, Beverly Hills</Link></div>
+															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+														<div className="d-flex justify-content-between align-items-center archive-bottom">
+															<div className="d-flex gap-8 align-items-center">
+																<div className="avatar avt-40 round">
+																	<img src="/images/avatar/avt-5.jpg" alt="avt" />
+																</div>
+																<span>Ralph Edwards</span>
+															</div>
+															<div className="d-flex align-items-center">
+																<div className="h7 fw-7">$5050,00</div>
+																<span className="text-variant-1">/SqFT</span>
+															</div>
+														</div>
+													</div>
 												</div>
-											</li>
-											<li className="faq-item"onClick={() => handleAccordion (2)}>
-												<a className={`${isAccordion == 2 ? "faq-header":"faq-header collapsed"}`}>
-													How do I get started with your services?
-												</a>
-												<div id="accordion-faq-two" className={`${isAccordion == 2 ? "collapse show":"collapse"}`} data-bs-parent="#wrapper-faq">
-													<p className="faq-body">
-														Once your account is set up and you've familiarized yourself with the platform, you are ready to start using our services. Whether it's accessing specific features, making transactions, or utilizing our tools, you'll find everything you need at your fingertips.
-													</p>
+											</div>
+											<div className="col-md-12">
+												<div className="homeya-box list-style-1 list-style-2">
+													<Link href="/property-details-v1" className="images-group">
+														<div className="images-style">
+															<img src="/images/home/house-5.jpg" alt="img" />
+														</div>
+														<div className="top">
+															<ul className="d-flex">
+																<li className="flag-tag style-1">For Rent</li>
+															</ul>
+															<ul className="d-flex gap-4">
+																<li className="box-icon w-32">
+																	<span className="icon icon-arrLeftRight" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-heart" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-eye" />
+																</li>
+															</ul>
+														</div>
+														<div className="bottom">
+															<span className="flag-tag style-2">apartment</span>
+														</div>
+													</Link>
+													<div className="content">
+														<div className="archive-top">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
+															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+														<div className="d-flex justify-content-between align-items-center archive-bottom">
+															<div className="d-flex gap-8 align-items-center">
+																<div className="avatar avt-40 round">
+																	<img src="/images/avatar/avt-9.jpg" alt="avt" />
+																</div>
+																<span>Annette Black</span>
+															</div>
+															<div className="d-flex align-items-center">
+																<div className="h7 fw-7">$250,00</div>
+																<span className="text-variant-1">/month</span>
+															</div>
+														</div>
+													</div>
 												</div>
-											</li>
-											<li className="faq-item"onClick={() => handleAccordion (3)}>
-												<a className={`${isAccordion == 3 ? "faq-header":"faq-header collapsed"}`}>
-													How secure are your services?
-												</a>
-												<div id="accordion-faq-three" className={`${isAccordion == 3 ? "collapse show":"collapse"}`} data-bs-parent="#wrapper-faq">
-													<p className="faq-body">
-														Once your account is set up and you've familiarized yourself with the platform, you are ready to start using our services. Whether it's accessing specific features, making transactions, or utilizing our tools, you'll find everything you need at your fingertips.
-													</p>
+											</div>
+											<div className="col-md-12">
+												<div className="homeya-box list-style-1 list-style-2">
+													<Link href="/property-details-v1" className="images-group">
+														<div className="images-style">
+															<img src="/images/home/house-1.jpg" alt="img" />
+														</div>
+														<div className="top">
+															<ul className="d-flex">
+																<li className="flag-tag style-1">For Rent</li>
+															</ul>
+															<ul className="d-flex gap-4">
+																<li className="box-icon w-32">
+																	<span className="icon icon-arrLeftRight" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-heart" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-eye" />
+																</li>
+															</ul>
+														</div>
+														<div className="bottom">
+															<span className="flag-tag style-2">apartment</span>
+														</div>
+													</Link>
+													<div className="content">
+														<div className="archive-top">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Casa Lomas de Machalí Machas</Link></div>
+															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+														<div className="d-flex justify-content-between align-items-center archive-bottom">
+															<div className="d-flex gap-8 align-items-center">
+																<div className="avatar avt-40 round">
+																	<img src="/images/avatar/avt-8.jpg" alt="avt" />
+																</div>
+																<span>Jacob Jones</span>
+															</div>
+															<div className="d-flex align-items-center">
+																<div className="h7 fw-7">$5050,00</div>
+																<span className="text-variant-1">/SqFT</span>
+															</div>
+														</div>
+													</div>
 												</div>
-											</li>
-											<li className="faq-item"onClick={() => handleAccordion (4)}>
-												<a className={`${isAccordion == 4 ? "faq-header":"faq-header collapsed"}`}>
-													Is there customer support available?
-												</a>
-												<div id="accordion-faq-four" className={`${isAccordion == 4 ? "collapse show":"collapse"}`} data-bs-parent="#wrapper-faq">
-													<p className="faq-body">
-														Once your account is set up and you've familiarized yourself with the platform, you are ready to start using our services. Whether it's accessing specific features, making transactions, or utilizing our tools, you'll find everything you need at your fingertips.
-													</p>
+											</div>
+											<div className="col-md-12">
+												<div className="homeya-box list-style-1 list-style-2">
+													<Link href="/property-details-v1" className="images-group">
+														<div className="images-style">
+															<img src="/images/home/house-13.jpg" alt="img" />
+														</div>
+														<div className="top">
+															<ul className="d-flex">
+																<li className="flag-tag style-1">For Rent</li>
+															</ul>
+															<ul className="d-flex gap-4">
+																<li className="box-icon w-32">
+																	<span className="icon icon-arrLeftRight" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-heart" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-eye" />
+																</li>
+															</ul>
+														</div>
+														<div className="bottom">
+															<span className="flag-tag style-2">apartment</span>
+														</div>
+													</Link>
+													<div className="content">
+														<div className="archive-top">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
+															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+														<div className="d-flex justify-content-between align-items-center archive-bottom">
+															<div className="d-flex gap-8 align-items-center">
+																<div className="avatar avt-40 round">
+																	<img src="/images/avatar/avt-9.jpg" alt="avt" />
+																</div>
+																<span>Annette Black</span>
+															</div>
+															<div className="d-flex align-items-center">
+																<div className="h7 fw-7">$250,00</div>
+																<span className="text-variant-1">/month</span>
+															</div>
+														</div>
+													</div>
 												</div>
-											</li>
-											<li className="faq-item"onClick={() => handleAccordion (5)}>
-												<a className={`${isAccordion == 5 ? "faq-header":"faq-header collapsed"}`}>
-													How can I update my account information?
-												</a>
-												<div id="accordion-faq-five" className={`${isAccordion == 5 ? "collapse show":"collapse"}`} data-bs-parent="#wrapper-faq">
-													<p className="faq-body">
-														Once your account is set up and you've familiarized yourself with the platform, you are ready to start using our services. Whether it's accessing specific features, making transactions, or utilizing our tools, you'll find everything you need at your fingertips.
-													</p>
+											</div>
+											<div className="col-md-12">
+												<div className="homeya-box list-style-1 list-style-2">
+													<Link href="/property-details-v1" className="images-group">
+														<div className="images-style">
+															<img src="/images/home/house-4.jpg" alt="img" />
+														</div>
+														<div className="top">
+															<ul className="d-flex">
+																<li className="flag-tag style-1">For Rent</li>
+															</ul>
+															<ul className="d-flex gap-4">
+																<li className="box-icon w-32">
+																	<span className="icon icon-arrLeftRight" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-heart" />
+																</li>
+																<li className="box-icon w-32">
+																	<span className="icon icon-eye" />
+																</li>
+															</ul>
+														</div>
+														<div className="bottom">
+															<span className="flag-tag style-2">House</span>
+														</div>
+													</Link>
+													<div className="content">
+														<div className="archive-top">
+															<div className="h7 text-capitalize fw-7"><Link href="/property-details-v1" className="link">Lakeview Haven, Lake Tahoe</Link></div>
+															<div className="desc"><i className="icon icon-mapPin" /><p>145 Brooklyn Ave, Califonia, New York</p> </div>
+															<ul className="meta-list">
+																<li className="item">
+																	<i className="icon icon-bed" />
+																	<span>4</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-bathtub" />
+																	<span>2</span>
+																</li>
+																<li className="item">
+																	<i className="icon icon-ruler" />
+																	<span>600 SqFT</span>
+																</li>
+															</ul>
+														</div>
+														<div className="d-flex justify-content-between align-items-center archive-bottom">
+															<div className="d-flex gap-8 align-items-center">
+																<div className="avatar avt-40 round">
+																	<img src="/images/avatar/avt-9.jpg" alt="avt" />
+																</div>
+																<span>Kathryn Murphy</span>
+															</div>
+															<div className="d-flex align-items-center">
+																<div className="h7 fw-7">$250,00</div>
+																<span className="text-variant-1">/month</span>
+															</div>
+														</div>
+													</div>
 												</div>
-											</li>
+											</div> */}
+										</div>
+										<ul className="justify-content-center wd-navigation">
+											<li><Link href="#" className="nav-item active">1</Link></li>
+											<li><Link href="#" className="nav-item">2</Link></li>
+											<li><Link href="#" className="nav-item">3</Link></li>
+											<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
 										</ul>
 									</div>
 								</div>
 							</div>
-						</div>
-					</section>
-					{/* faq */}
-					{/* banner */}
-					<section className="flat-section pt-0 flat-banner">
-						<div className="container">
-							<div className="wrap-banner bg-surface">
-								<div className="box-left">
-									<div className="box-title">
-										<div className="text-subtitle text-primary">Become Partners</div>
-										<h4 className="mt-4">List your Properties on Homeya, join Us Now!</h4>
-									</div>
-									<Link href="#" className="tf-btn primary size-1">Become A Hosting</Link>
-								</div>
-								<div className="box-right">
-									<img src="/images/banner/banner.png" alt="image" />
-								</div>
-							</div>
-						</div>
-					</section>
-				</div>
+						</div >
+					</div >
+				</section >
 
-			</Layout>
+			</Layout >
 		</>
 	)
 }

@@ -34,7 +34,7 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
       const { token, userId, isFlag } = res.data;
 
 
-        sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
+      sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
 
       // Store user or merchant data in session storage
 
@@ -54,29 +54,30 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
     setLoading(true);
 
     try {
-
-
-
-
-      // User login
+      // Make the API call first
       const res = await Axios.post(`/loginmerchant`, {
-        username, password: pass
+        username,
+        password: pass
       });
 
+      const { token, userId, isFlag, status } = res.data; // Get status from response
 
-      const { token, userId, isFlag } = res.data;
-
-     
+      // Now check the status after the response
+      if (status === 'approved') {
+        // Store user or merchant data in session storage
         sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
 
-    
-      // Store user or merchant data in session storage
+        toast.success("Login successful", { autoClose: 3000 });
+      } else {
+        // If the status is not approved, show the error
+        toast.error("Your account is not approved yet. Please contact the admin.", { autoClose: 3000 });
+        alert("Your account is not approved yet. Please contact the admin.");
+      }
 
-      toast.success("Success", { autoClose: 3000 });
       setLoading(false);
 
     } catch (error) {
-      toast.error("Error", { autoClose: 3000 });
+      toast.error("Login failed. Please try again.", { autoClose: 3000 });
       setLoading(false);
     }
   };
