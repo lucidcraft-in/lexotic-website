@@ -193,87 +193,148 @@ export default function AddProperty({ searchParams }) {
 
 
 	console.log(photos)
+	// const uploadFileHandler = async (e, val) => {
+	// 	e.preventDefault()
+	// 	const file = e.target.files[0];
+
+	// 	// Log the original file to check size and other attributes
+	// 	console.log("Original file:", file);
+
+	// 	// Image compression options
+	// 	const options = {
+	// 		maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+	// 		maxWidthOrHeight: 800,
+	// 		useWebWorker: true,
+	// 	};
+
+	// 	try {
+	// 		// Compress the image
+	// 		const compressedFile = await imageCompression(file, options);
+
+	// 		// Log the compressed file to check size reduction
+	// 		console.log("Compressed file:", compressedFile);
+
+	// 		const newFile = new File(
+	// 			[compressedFile],
+	// 			file.type,
+	// 			// { type: file.type }
+	// 		)
+
+	// 		const formData = new FormData();
+	// 		formData.append('file', newFile);
+
+	// 		formData.forEach((value, key) => {
+	// 			console.log(`${key}:${value}`)
+	// 		})
+	// 		setUploading(true); // Start uploading state
+
+	// 		const config = {
+	// 			headers: {
+	// 				'Content-Type': 'multipart/form-data',
+	// 			},
+	// 		};
+
+	// 		// Make POST request to /upload endpoint
+	// 		const data = await Axios.post('/upload', formData, config);
+
+
+
+	// 		console.log("Upload successful, response data:", data.data);
+	// 		let title = data.data.title
+	// 		let url = data.data.url
+	// 		console.log(title, url)
+	// 		setUploading(false); // Stop uploading state
+
+
+
+	// 		// Automatically set the image title as the file name (without extension)
+
+
+	// 		if (val === 'photos') {
+	// 			setPhotos(prevPhotos => [
+	// 				...prevPhotos,
+	// 				{
+	// 					title, // Image name without extension
+	// 					url    // URL returned from the upload API
+	// 				}
+	// 			]);
+	// 		} else if (val === 'amenities') {
+	// 			setAmenities(prevAmenities => [
+	// 				...prevAmenities,
+	// 				{
+	// 					title, // Image name without extension
+	// 					url    // URL returned from the upload API
+	// 				}
+	// 			]);
+	// 		}
+
+
+	// 	} catch (error) {
+	// 		console.error("Error during file upload:", error);
+	// 		setUploading(false); // Stop uploading state on error
+	// 	}
+	// };
+
+
 	const uploadFileHandler = async (e, val) => {
-		e.preventDefault()
-		const file = e.target.files[0];
+		e.preventDefault();
+		const files = e.target.files;
 
-		// Log the original file to check size and other attributes
-		console.log("Original file:", file);
-
-		// Image compression options
+		// Compress and upload multiple files
 		const options = {
 			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
 			maxWidthOrHeight: 800,
 			useWebWorker: true,
 		};
 
+		let uploadedPhotos = [];
+
 		try {
-			// Compress the image
-			const compressedFile = await imageCompression(file, options);
+			for (let i = 0; i < files.length; i++) {
+				const file = files[i];
 
-			// Log the compressed file to check size reduction
-			console.log("Compressed file:", compressedFile);
+				// Compress each image
+				const compressedFile = await imageCompression(file, options);
+				const newFile = new File([compressedFile], file.name, { type: file.type });
 
-			const newFile = new File(
-				[compressedFile],
-				file.type,
-				// { type: file.type }
-			)
+				const formData = new FormData();
+				formData.append('file', newFile);
 
-			const formData = new FormData();
-			formData.append('file', newFile);
+				const config = {
+					headers: {
+						'Content-Type': 'multipart/form-data',
+					},
+				};
 
-			formData.forEach((value, key) => {
-				console.log(`${key}:${value}`)
-			})
-			setUploading(true); // Start uploading state
+				// Upload each file
+				const { data } = await Axios.post('/upload', formData, config);
 
-			const config = {
-				headers: {
-					'Content-Type': 'multipart/form-data',
-				},
-			};
-
-			// Make POST request to /upload endpoint
-			const data = await Axios.post('/upload', formData, config);
-
-
-
-			console.log("Upload successful, response data:", data.data);
-			let title = data.data.title
-			let url = data.data.url
-			console.log(title, url)
-			setUploading(false); // Stop uploading state
-
-
-
-			// Automatically set the image title as the file name (without extension)
-
-
-			if (val === 'photos') {
-				setPhotos(prevPhotos => [
-					...prevPhotos,
-					{
-						title, // Image name without extension
-						url    // URL returned from the upload API
-					}
-				]);
-			} else if (val === 'amenities') {
-				setAmenities(prevAmenities => [
-					...prevAmenities,
-					{
-						title, // Image name without extension
-						url    // URL returned from the upload API
-					}
-				]);
+				// Collect the uploaded file data (title and URL)
+				uploadedPhotos.push({
+					title: data.title,
+					url: data.url,
+				});
 			}
 
-
+			// Update the state with the new uploaded photos
+			if (val === 'photos') {
+				setPhotos((prevPhotos) => [...prevPhotos, ...uploadedPhotos]);
+			} else if (val === 'amenities') {
+				setAmenities((prevAmenities) => [...prevAmenities, ...uploadedPhotos]);
+			}
 		} catch (error) {
-			console.error("Error during file upload:", error);
-			setUploading(false); // Stop uploading state on error
+			console.error('Error during file upload:', error);
 		}
 	};
+
+	const removePhotoHandler = (index, val) => {
+		if (val === 'photos') {
+			setPhotos((prevPhotos) => prevPhotos.filter((_, i) => i !== index));
+		} else if (val === 'amenities') {
+			setAmenities((prevAmenities) => prevAmenities.filter((_, i) => i !== index));
+		}
+	};
+
 
 	return (
 		<>
@@ -323,7 +384,7 @@ export default function AddProperty({ searchParams }) {
 								</label>
 							</div> */}
 
-							<fieldset className="box box-fieldset">
+							{/* <fieldset className="box box-fieldset">
 								<label htmlFor="upload">Upload Photo:</label>
 								<input
 									type="file"
@@ -340,7 +401,39 @@ export default function AddProperty({ searchParams }) {
 										<img src={photo.url} alt={`uploaded-${index}`} style={{ width: '200px' }} />
 									</li>
 								))}
+							</ul> */}
+							<ul style={{ display: 'flex', flexWrap: 'wrap', listStyleType: 'none', padding: 0 }}>
+								{photos.map((photo, index) => (
+									<li key={index} style={{ margin: '10px', textAlign: 'center' }}>
+										<img src={photo.url} alt={`uploaded-${index}`}
+											style={{ width: '200px', height: 'auto', display: 'block' }} />
+										<button
+											style={{
+												marginTop: '5px',
+												padding: '5px 10px',
+												backgroundColor: '#ff4d4f',
+												color: 'white',
+												border: 'none',
+												borderRadius: '5px',
+												cursor: 'pointer',
+											}}
+											onClick={() => removePhotoHandler(index, 'photos')}>Remove</button>
+									</li>
+								))}
 							</ul>
+
+							<h6>Upload Multiple Photos:</h6>
+							<fieldset className="box box-fieldset">
+								<label htmlFor="upload">Upload Photo(s):</label>
+								<input
+									type="file"
+									multiple // Enable multiple file uploads
+									className="form-control style-1"
+									onChange={(e) => uploadFileHandler(e, 'photos')}
+								/>
+							</fieldset>
+
+
 						</div>
 						<div className="widget-box-2">
 							<h6 className="title">Information</h6>
@@ -372,7 +465,7 @@ export default function AddProperty({ searchParams }) {
 								<fieldset className="box box-fieldset">
 									<label htmlFor="desc">Quantity:</label>
 									<input
-									type="number"
+										type="number"
 										// value={description}
 										onChange={(e) => setQuantity(e.target.value)} />
 								</fieldset>
@@ -464,15 +557,15 @@ export default function AddProperty({ searchParams }) {
 								</label>
 							</div> */}
 
-									<fieldset className="box box-fieldset">
+									{/* <fieldset className="box box-fieldset">
 										<label htmlFor="upload">Amenities:</label>
 										<input
 											type="file"
 											className="form-control style-1"
 											onChange={(e) => uploadFileHandler(e, 'amenities')}
 										/>
-									</fieldset>
-									{uploading ? <p>Uploading...</p> : null}
+									</fieldset> */}
+									{/* {uploading ? <p>Uploading...</p> : null}
 
 									<h3>Uploaded Photos:</h3>
 									<ul>
@@ -481,7 +574,46 @@ export default function AddProperty({ searchParams }) {
 												<img src={photo.url} alt={`uploaded-${index}`} style={{ width: '200px' }} />
 											</li>
 										))}
+									</ul> */}
+
+									<h3>Uploaded Amenities:</h3>
+									<ul style={{ display: 'flex', flexWrap: 'wrap', listStyleType: 'none', padding: 0 }}>
+										{amenities.map((photo, index) => (
+											<li key={index} style={{ margin: '10px', textAlign: 'center' }}>
+												<img
+													src={photo.url}
+													alt={`uploaded-amenities-${index}`}
+													style={{ width: '200px', height: 'auto', display: 'block' }}
+												/>
+												<button
+													onClick={() => removePhotoHandler(index, 'amenities')}
+													style={{
+														marginTop: '5px',
+														padding: '5px 10px',
+														backgroundColor: '#ff4d4f',
+														color: 'white',
+														border: 'none',
+														borderRadius: '5px',
+														cursor: 'pointer',
+													}}
+												>
+													Remove
+												</button>
+											</li>
+										))}
 									</ul>
+
+
+									<h6>Upload Multiple Amenities Photos:</h6>
+									<fieldset className="box box-fieldset">
+										<label htmlFor="upload">Upload Amenities:</label>
+										<input
+											type="file"
+											multiple // Enable multiple file uploads
+											className="form-control style-1"
+											onChange={(e) => uploadFileHandler(e, 'amenities')}
+										/>
+									</fieldset>
 								</div>
 
 								<div className="box grid-2 gap-30">

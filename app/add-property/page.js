@@ -157,85 +157,149 @@ export default function AddProperty() {
 	};
 
 
+	// const uploadFileHandler = async (e, val) => {
+	// 	e.preventDefault()
+	// 	const file = e.target.files[0];
+
+	// 	// Log the original file to check size and other attributes
+	// 	console.log("Original file:", file);
+
+	// 	// Image compression options
+	// 	const options = {
+	// 		maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+	// 		maxWidthOrHeight: 800,
+	// 		useWebWorker: true,
+	// 	};
+
+	// 	try {
+	// 		// Compress the image
+	// 		const compressedFile = await imageCompression(file, options);
+
+	// 		// Log the compressed file to check size reduction
+	// 		console.log("Compressed file:", compressedFile);
+
+	// 		const newFile = new File(
+	// 			[compressedFile],
+	// 			file.type,
+	// 			// { type: file.type }
+	// 		)
+
+	// 		const formData = new FormData();
+	// 		formData.append('file', newFile);
+
+	// 		formData.forEach((value, key) => {
+	// 			console.log(`${key}:${value}`)
+	// 		})
+	// 		setUploading(true); // Start uploading state
+
+	// 		const config = {
+	// 			headers: {
+	// 				'Content-Type': 'multipart/form-data',
+	// 			},
+	// 		};
+
+	// 		// Make POST request to /upload endpoint
+	// 		const data = await Axios.post('/upload', formData, config);
+
+
+
+	// 		console.log("Upload successful, response data:", data.data);
+	// 		let title = data.data.title
+	// 		let url = data.data.url
+	// 		console.log(title, url)
+	// 		setUploading(false); // Stop uploading state
+
+
+
+	// 		// Automatically set the image title as the file name (without extension)
+
+	// 		if (val === 'photos') {
+	// 			setPhotos(prevPhotos => [
+	// 				...prevPhotos,
+	// 				{
+	// 					title, // Image name without extension
+	// 					url    // URL returned from the upload API
+	// 				}
+	// 			]);
+	// 		} else if (val === 'amenities') {
+	// 			setAmenities(prevAmenities => [
+	// 				...prevAmenities,
+	// 				{
+	// 					title, // Image name without extension
+	// 					url    // URL returned from the upload API
+	// 				}
+	// 			]);
+	// 		}
+	// 	} catch (error) {
+	// 		console.error("Error during file upload:", error);
+	// 		setUploading(false); // Stop uploading state on error
+	// 	}
+	// };
+
+
 	const uploadFileHandler = async (e, val) => {
-		e.preventDefault()
-		const file = e.target.files[0];
-
-		// Log the original file to check size and other attributes
-		console.log("Original file:", file);
-
-		// Image compression options
+		e.preventDefault();
+		const files = Array.from(e.target.files); // Convert FileList to Array
+	  
+		// Log the selected files to check size and other attributes
+		console.log("Selected files:", files);
+	  
 		const options = {
-			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
-			maxWidthOrHeight: 800,
-			useWebWorker: true,
+		  maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+		  maxWidthOrHeight: 800,
+		  useWebWorker: true,
 		};
-
+	  
+		setUploading(true); // Start uploading state
 		try {
-			// Compress the image
-			const compressedFile = await imageCompression(file, options);
-
-			// Log the compressed file to check size reduction
-			console.log("Compressed file:", compressedFile);
-
-			const newFile = new File(
-				[compressedFile],
-				file.type,
-				// { type: file.type }
-			)
-
-			const formData = new FormData();
-			formData.append('file', newFile);
-
-			formData.forEach((value, key) => {
-				console.log(`${key}:${value}`)
-			})
-			setUploading(true); // Start uploading state
-
-			const config = {
+		  const uploadedFiles = await Promise.all(
+			files.map(async (file) => {
+			  // Compress each image
+			  const compressedFile = await imageCompression(file, options);
+	  
+			  // Log the compressed file to check size reduction
+			  console.log("Compressed file:", compressedFile);
+	  
+			  const newFile = new File([compressedFile], file.name, { type: file.type });
+	  
+			  const formData = new FormData();
+			  formData.append('file', newFile);
+	  
+			  formData.forEach((value, key) => {
+				console.log(`${key}:${value}`);
+			  });
+	  
+			  const config = {
 				headers: {
-					'Content-Type': 'multipart/form-data',
+				  'Content-Type': 'multipart/form-data',
 				},
-			};
-
-			// Make POST request to /upload endpoint
-			const data = await Axios.post('/upload', formData, config);
-
-
-
-			console.log("Upload successful, response data:", data.data);
-			let title = data.data.title
-			let url = data.data.url
-			console.log(title, url)
-			setUploading(false); // Stop uploading state
-
-
-
-			// Automatically set the image title as the file name (without extension)
-
-			if (val === 'photos') {
-				setPhotos(prevPhotos => [
-					...prevPhotos,
-					{
-						title, // Image name without extension
-						url    // URL returned from the upload API
-					}
-				]);
-			} else if (val === 'amenities') {
-				setAmenities(prevAmenities => [
-					...prevAmenities,
-					{
-						title, // Image name without extension
-						url    // URL returned from the upload API
-					}
-				]);
-			}
+			  };
+	  
+			  // Make POST request to /upload endpoint
+			  const { data } = await Axios.post('/upload', formData, config);
+			  console.log("Upload successful, response data:", data);
+	  
+			  // Return the uploaded file's title and url
+			  return {
+				title: data.title,
+				url: data.url,
+			  };
+			})
+		  );
+	  
+		  // Add uploaded files to the correct state based on 'val'
+		  if (val === 'photos') {
+			setPhotos((prevPhotos) => [...prevPhotos, ...uploadedFiles]);
+		  } else if (val === 'amenities') {
+			setAmenities((prevAmenities) => [...prevAmenities, ...uploadedFiles]);
+		  }
+	  
+		  setUploading(false); // Stop uploading state
 		} catch (error) {
-			console.error("Error during file upload:", error);
-			setUploading(false); // Stop uploading state on error
+		  console.error("Error during file upload:", error);
+		  setUploading(false); // Stop uploading state on error
 		}
-	};
-
+	  };
 
 	console.log(photos)
 	return (
@@ -265,6 +329,7 @@ export default function AddProperty() {
 								<input
 									type="file"
 									className="form-control style-1"
+									multiple // Allow multiple file selection
 									onChange={(e) => uploadFileHandler(e, 'photos')}
 								/>
 							</fieldset>
@@ -372,6 +437,7 @@ export default function AddProperty() {
 									<input
 										type="file"
 										className="form-control style-1"
+										multiple // Allow multiple file selection
 										onChange={(e) => uploadFileHandler(e, 'amenities')}
 									/>
 								</fieldset>
