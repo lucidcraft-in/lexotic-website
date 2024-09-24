@@ -18,7 +18,7 @@ export default function Header2({
 							<div className="inner-container d-flex justify-content-between align-items-center">
 								{/* Logo Box */}
 								<div className="logo-box flex">
-									<div className="logo"><Link href="/"><img src="/images/logo/logo@2x.png" alt="logo" width={174} height={44} /></Link></div>
+									<div className="logo"><Link href="/"><img src="/images/logo/lexotic-logo.png" alt="logo" width={174} height={44} /></Link></div>
 								</div>
 								<div className="nav-outer flex align-center">
 									<div className="outer-search">

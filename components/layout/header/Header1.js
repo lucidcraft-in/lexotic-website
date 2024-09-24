@@ -64,7 +64,7 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
                     <Link href="/">
                       {hcls ? (
                         <img
-                          src="/images/logo/logo-footer@2x.png"
+                          src="/images/logo/lexotic-logo.png"
                           alt="logo"
                           width={174}
                           height={44}
@@ -144,7 +144,7 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
             <div className="nav-logo">
               <Link href="/">
                 <img
-                  src="/images/logo/logo@2x.png"
+                  src="/images/loglxotic-ologo.png"
                   alt="nav-logo"
                   width={174}
                   height={44}

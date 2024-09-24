@@ -24,7 +24,7 @@ export default function OffcanvasFilter({
 							<div className="col-lg-12">
 								<div className="inner-container d-flex justify-content-between align-items-center">
 									<div className="logo-box">
-										<div className="logo"><a href="index.html"><img src="images/logo/logo@2x.png" alt="logo" width={174} height={44} /></a></div>
+										<div className="logo"><a href="index.html"><img src="images/logo/lexotic-logo.png" alt="logo" width={174} height={44} /></a></div>
 									</div>
 									<div className="nav-outer-tab">
 										<div className="flat-tab flat-tab-form">

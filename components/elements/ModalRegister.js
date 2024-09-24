@@ -55,7 +55,14 @@ export default function ModalRegister({ isRegister, handleRegister, handleLogin 
 		try {
 			const res = await Axios.post(`/registeruser`, data)
 			// console.log(res, "data")
-			toast.success(res.json(201), { autoClose: 3000 })
+			// toast.success(res.json(201), { autoClose: 3000 })
+			if (res.status === 201) {
+				// console.log(res.data)
+				setLoading(false)
+				toast.success(res.json)
+			} else {
+				toast.warning('error occured')
+			}
 			setLoading(false)
 
 		} catch (error) {
@@ -74,7 +81,7 @@ export default function ModalRegister({ isRegister, handleRegister, handleLogin 
 		e.preventDefault()
 		setLoading(true)
 		const data = {
-			name, description, image, email, username, password,
+			name, description, email, username, password,
 			phone, altNumber: altphone, location,
 			accountnumber: acc, ifsc, branch, currency, status
 		}
@@ -125,11 +132,11 @@ export default function ModalRegister({ isRegister, handleRegister, handleLogin 
 										<input type="text" className="form-contact style-1" placeholder="describe yourself"
 											onChange={(e) => setDescription(e.target.value)} />
 									</fieldset>
-									<fieldset className="box-fieldset">
+									{/* <fieldset className="box-fieldset">
 										<label htmlFor="name">Image<span>*</span>:</label>
 										<input type="text" className="form-contact style-1" placeholder=""
 											onChange={(e) => setImage(e.target.value)} />
-									</fieldset>
+									</fieldset> */}
 
 									<fieldset className="box-fieldset">
 										<label htmlFor="name">Phone<span>*</span>:</label>

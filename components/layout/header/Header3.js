@@ -80,7 +80,7 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 				<div className="mobile-menu">
 					<div className="menu-backdrop" onClick={handleMobileMenu} />
 					<nav className="menu-box">
-						<div className="nav-logo"><Link href="/"><img src="/images/logo/logo@2x.png" alt="nav-logo" width={174} height={44} /></Link></div>
+						<div className="nav-logo"><Link href="/"><img src="/images/logo/lexotic-logo.png" alt="nav-logo" width={174} height={44} /></Link></div>
 						<div className="bottom-canvas">
 							<MobileMenu />
 							{/* <div className="button-mobi-sell">

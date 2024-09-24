@@ -27,6 +27,9 @@ export default function PropertyHalfmapList() {
 		getData()
 	}, [user])
 
+
+	const [showPopup, setShowPopup] = useState(false);
+
 	const [cart, setCart] = useState([])
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
@@ -97,8 +100,26 @@ export default function PropertyHalfmapList() {
 			try {
 				const res = await Axios.post(`/order`, data);
 				console.log("Order created successfully", res.data);
-				
-			} catch (error) {
+
+				if (res.status === 201) {
+					console.log("Order created successfully", res.data);
+					// Show the success popup
+					setShowPopup(true);
+
+					try {
+						await Axios.delete(`/cart/${selectedCart._id}`);
+						console.log("Cart deleted successfully");
+
+						// Redirect to "my-order" page after a delay (e.g., 3 seconds)
+						setTimeout(() => {
+							window.location.href = `/my-orderuser`;
+						}, 3000);
+					} catch (deleteError) {
+						console.log("Failed to delete cart", deleteError);
+					}
+				}
+			}
+			catch (error) {
 				console.log("Failed to create order", error);
 			}
 
@@ -1029,9 +1050,50 @@ export default function PropertyHalfmapList() {
 
 
 
-									<Button className="mt-3 w-100" onClick={handleCheckout}>
+									{/* <Button className="mt-3 w-100" onClick={handleCheckout}>
 										Checkout
-									</Button>
+									</Button> */}
+
+									<div>
+										<button onClick={handleCheckout} className="btn btn-info  text-center">Place Order</button>
+
+										{/* Popup message */}
+										{/* Modal Component */}
+										{showPopup && (
+											<div className="modal-overlay">
+												<div className="modal-content">
+													<p>Booking successful! You will be redirected shortly.</p>
+												</div>
+											</div>
+										)}
+
+										{/* Modal Styles */}
+										<style jsx>{`
+        .modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .modal-content {
+          background: white;
+          padding: 20px;
+          border-radius: 5px;
+          text-align: center;
+        }
+
+        p {
+          font-size: 18px;
+        }
+      `}</style>
+										{/* </div> */}
+									</div>
 
 
 

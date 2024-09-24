@@ -123,7 +123,7 @@ export default function SidebarList() {
 																		</select>
 																	</div>
 																</div>
-																<div className="form-style box-select">
+																{/* <div className="form-style box-select">
 																	<label className="title-select">Rooms</label>
 																	<select className="nice-select">
 
@@ -179,7 +179,7 @@ export default function SidebarList() {
 																<div className="form-style widget-price wd-price-2">
 																	<RangeSlider />
 																</div>
-																<SidebarFilter />
+																<SidebarFilter /> */}
 																<div className="form-style">
 																	<button type="submit" className="tf-btn primary" href="#">Find Properties</button>
 																</div>
@@ -1230,12 +1230,12 @@ export default function SidebarList() {
 												</div>
 											</div> */}
 										</div>
-										<ul className="justify-content-center wd-navigation">
+										{/* <ul className="justify-content-center wd-navigation">
 											<li><Link href="#" className="nav-item active">1</Link></li>
 											<li><Link href="#" className="nav-item">2</Link></li>
 											<li><Link href="#" className="nav-item">3</Link></li>
 											<li><Link href="#" className="nav-item"><i className="icon icon-arr-r" /></Link></li>
-										</ul>
+										</ul> */}
 									</div>
 								</div>
 							</div>

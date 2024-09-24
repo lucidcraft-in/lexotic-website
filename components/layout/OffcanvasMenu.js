@@ -15,7 +15,7 @@ export default function OffcanvasMenu({ isOffcanMenu, handleOffcanMenu, isLogin,
 			<div className={`offcanvas offcanvas-start canvas-menu ${isOffcanMenu ? "show" : ""}`} id="sidebarMenu">
 				<div className="offcanvas-header">
 					<nav className="nav-logo">
-						<Link href="/"><img src="images/logo/logo@2x.png" alt="logo" width={174} height={44} /></Link>
+						<Link href="/"><img src="images/logo/lexotic-logo.png" alt="logo" width={174} height={44} /></Link>
 					</nav>
 					<span className="icon-close2 icon-close-popup" onClick={handleOffcanMenu} />
 				</div>
