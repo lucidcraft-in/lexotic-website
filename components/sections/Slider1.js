@@ -36,7 +36,7 @@ export default function Slider1() {
 										</span>
 									</h1>
 
-									<p className="subtitle text-white body-1 wow fadeIn" data-wow-delay=".8s" data-wow-duration="2000ms">We are a real estate agency that will help you find the best residence you dream of, let’s discuss for your dream house?</p>
+									<p className="subtitle text-white body-1 wow fadeIn" data-wow-delay=".8s" data-wow-duration="2000ms">We are a reaiiiiiiiiiiiil estate agency that will help you find the best residence you dream of, let’s discuss for your dream house?</p>
 								</div>
 								<div className="flat-tab flat-tab-form">
 									<ul className="nav-tab-form style-1 justify-content-center" role="tablist">

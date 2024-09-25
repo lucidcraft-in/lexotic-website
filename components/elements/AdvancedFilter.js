@@ -1,11 +1,32 @@
 'use client'
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import RangeSlider from "./RangeSlider"
+import Axios from "../axios/axios"
 
 export default function AdvancedFilter({ sidecls }) {
 	const [isToggled, setToggled] = useState(false)
 	const handleToggle = () => setToggled(!isToggled)
+
+	const [categories, setCategories] = useState([]);
+	console.log(categories)
+	useEffect(() => {
+		fetchCategories();
+	}, []);
+
+	const fetchCategories = async () => {
+		try {
+			const res = await Axios.get(`getcategory`);
+
+			setCategories(res.data);
+
+			handleCategorySelect(0, res.data?.[0]?._id);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+
 	return (
 		<>
 			<div className={`wd-find-select ${sidecls ? sidecls : ""}`}>
@@ -24,16 +45,17 @@ export default function AdvancedFilter({ sidecls }) {
 					<div className="form-group-3 form-style">
 						<label>Type</label>
 						<div className="group-select">
-							<select className="nice-select">
-
-								<option data-value className="option selected">All</option>
-								<option data-value="villa" className="option">Villa</option>
-								<option data-value="studio" className="option">Studio</option>
-								<option data-value="office" className="option">Office</option>
-								<option data-value="house" className="option">House</option>
+							<select className="form-control" defaultValue="">
+								<option value="" disabled>Select a category</option>
+								{categories.map((cat) => (
+									<option style={{ 'color': "black" }} key={cat._id} className="option">
+										{cat.cattype}
+									</option>
+								))}
 							</select>
 						</div>
 					</div>
+
 					<div className="form-group-4 box-filter">
 						<a className="filter-advanced pull-right" onClick={handleToggle}>
 							<span className="icon icon-faders" />

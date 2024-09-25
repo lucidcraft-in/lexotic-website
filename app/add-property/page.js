@@ -125,7 +125,7 @@ export default function AddProperty() {
 			console.log(photos)
 
 			const res = await Axios.post(`/addproducts`, {
-				name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities,quantity
+				name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities, quantity
 			})
 			console.log(res.data)
 			if (res.status === 201) {
@@ -240,66 +240,66 @@ export default function AddProperty() {
 	const uploadFileHandler = async (e, val) => {
 		e.preventDefault();
 		const files = Array.from(e.target.files); // Convert FileList to Array
-	  
+
 		// Log the selected files to check size and other attributes
 		console.log("Selected files:", files);
-	  
+
 		const options = {
-		  maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
-		  maxWidthOrHeight: 800,
-		  useWebWorker: true,
+			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
+			maxWidthOrHeight: 800,
+			useWebWorker: true,
 		};
-	  
+
 		setUploading(true); // Start uploading state
 		try {
-		  const uploadedFiles = await Promise.all(
-			files.map(async (file) => {
-			  // Compress each image
-			  const compressedFile = await imageCompression(file, options);
-	  
-			  // Log the compressed file to check size reduction
-			  console.log("Compressed file:", compressedFile);
-	  
-			  const newFile = new File([compressedFile], file.name, { type: file.type });
-	  
-			  const formData = new FormData();
-			  formData.append('file', newFile);
-	  
-			  formData.forEach((value, key) => {
-				console.log(`${key}:${value}`);
-			  });
-	  
-			  const config = {
-				headers: {
-				  'Content-Type': 'multipart/form-data',
-				},
-			  };
-	  
-			  // Make POST request to /upload endpoint
-			  const { data } = await Axios.post('/upload', formData, config);
-			  console.log("Upload successful, response data:", data);
-	  
-			  // Return the uploaded file's title and url
-			  return {
-				title: data.title,
-				url: data.url,
-			  };
-			})
-		  );
-	  
-		  // Add uploaded files to the correct state based on 'val'
-		  if (val === 'photos') {
-			setPhotos((prevPhotos) => [...prevPhotos, ...uploadedFiles]);
-		  } else if (val === 'amenities') {
-			setAmenities((prevAmenities) => [...prevAmenities, ...uploadedFiles]);
-		  }
-	  
-		  setUploading(false); // Stop uploading state
+			const uploadedFiles = await Promise.all(
+				files.map(async (file) => {
+					// Compress each image
+					const compressedFile = await imageCompression(file, options);
+
+					// Log the compressed file to check size reduction
+					console.log("Compressed file:", compressedFile);
+
+					const newFile = new File([compressedFile], file.name, { type: file.type });
+
+					const formData = new FormData();
+					formData.append('file', newFile);
+
+					formData.forEach((value, key) => {
+						console.log(`${key}:${value}`);
+					});
+
+					const config = {
+						headers: {
+							'Content-Type': 'multipart/form-data',
+						},
+					};
+
+					// Make POST request to /upload endpoint
+					const { data } = await Axios.post('/upload', formData, config);
+					console.log("Upload successful, response data:", data);
+
+					// Return the uploaded file's title and url
+					return {
+						title: data.title,
+						url: data.url,
+					};
+				})
+			);
+
+			// Add uploaded files to the correct state based on 'val'
+			if (val === 'photos') {
+				setPhotos((prevPhotos) => [...prevPhotos, ...uploadedFiles]);
+			} else if (val === 'amenities') {
+				setAmenities((prevAmenities) => [...prevAmenities, ...uploadedFiles]);
+			}
+
+			setUploading(false); // Stop uploading state
 		} catch (error) {
-		  console.error("Error during file upload:", error);
-		  setUploading(false); // Stop uploading state on error
+			console.error("Error during file upload:", error);
+			setUploading(false); // Stop uploading state on error
 		}
-	  };
+	};
 
 	console.log(photos)
 	return (
@@ -340,6 +340,8 @@ export default function AddProperty() {
 								{photos?.map((photo) => (
 									<div>
 										<img src={photo.url} height={'100px'} width={'100px'} />
+										<p>{photo.title}</p>
+
 										<br />
 
 									</div>
@@ -377,7 +379,7 @@ export default function AddProperty() {
 								<fieldset className="box box-fieldset">
 									<label htmlFor="desc">Quantity:</label>
 									<input
-									type="number"
+										type="number"
 										// value={description}
 										onChange={(e) => setQuantity(e.target.value)} />
 								</fieldset>
@@ -449,6 +451,7 @@ export default function AddProperty() {
 										<li key={index}>
 											<img src={photo.url} alt={`uploaded-${index}`} style={{ width: '200px' }} />
 										</li>
+										
 									))}
 								</ul>
 								<div className="box grid-2 gap-30">

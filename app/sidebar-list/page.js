@@ -6,6 +6,7 @@ import TabNav from "@/components/elements/TabNav"
 import Layout from "@/components/layout/Layout"
 import Link from "next/link"
 import { useEffect, useState } from "react"
+import GoogleMapComponent from "../google-map/page"
 export default function SidebarList() {
 	const [isTab, setIsTab] = useState(2)
 	const handleTab = (i) => {
@@ -20,6 +21,10 @@ export default function SidebarList() {
 		getData()
 	}, [])
 
+	useEffect(() => {
+		fetchCategories();
+	}, []);
+
 	const getData = async () => {
 		try {
 			const res = await Axios.get(`getproducts`)
@@ -30,6 +35,61 @@ export default function SidebarList() {
 			console.log('error')
 		}
 	}
+
+
+	const [categories, setCategories] = useState([]);
+	console.log(categories)
+
+
+	const fetchCategories = async () => {
+		try {
+			const res = await Axios.get(`getcategory`);
+
+			setCategories(res.data);
+
+			handleCategorySelect(0, res.data?.[0]?._id);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+
+	const [keyword, setKeyword] = useState('');
+	const [location, setLocation] = useState('');
+	const [checkIn, setCheckIn] = useState('');
+	const [checkOut, setCheckOut] = useState('');
+	const [selectedCategory, setSelectedCategory] = useState('');
+
+	const handleSearch = (e) => {
+		e.preventDefault();
+
+		// Create a filter criteria object
+		const criteria = {
+			keyword,
+			location,
+			checkIn,
+			checkOut,
+			category: selectedCategory
+		};
+
+		// Assuming you have a function to filter the products
+		const filteredProducts = filterProducts(criteria);
+		console.log(filteredProducts); // Display the filtered products or set them in state
+	};
+
+	const filterProducts = (criteria) => {
+		// Filter logic based on the criteria
+		return product.filter(product => {
+			const matchesKeyword = criteria.keyword ? product.name.includes(criteria.keyword) : true;
+			// const matchesLocation = criteria.location ? product.location.includes(criteria.location) : true;
+			const matchesCheckIn = criteria.checkIn ? new Date(product.availableFrom) <= new Date(criteria.checkIn) : true;
+			const matchesCheckOut = criteria.checkOut ? new Date(product.availableTo) >= new Date(criteria.checkOut) : true;
+			const matchesCategory = criteria.category ? product.categoryId === criteria.category : true;
+
+			return matchesKeyword  && matchesCheckIn && matchesCheckOut && matchesCategory;
+		});
+	};
+
 
 	return (
 		<>
@@ -76,19 +136,38 @@ export default function SidebarList() {
 										<div className="tab-content">
 											<div className="tab-pane fade active show" role="tabpanel">
 												<div className="form-sl">
-													<form method="post">
+													<form onSubmit={handleSearch}>
 														<div className="wd-filter-select">
 															<div className="inner-group inner-filter">
 																<div className="form-style">
 																	<label className="title-select">Keyword</label>
-																	<input type="text" className="form-control" placeholder="Search Keyword." name="s" title="Search for" required />
+																	<input
+																		type="text"
+																		className="form-control"
+																		placeholder="Search Keyword."
+																		name="s"
+																		title="Search for"
+																		value={keyword}
+																		onChange={(e) => setKeyword(e.target.value)}
+																		required
+																	/>
 																</div>
 																<div className="form-style">
 																	<label className="title-select">Location</label>
-																	<div className="group-ip ip-icon">
-																		<input type="text" className="form-control" placeholder="Search Location" name="s" title="Search for" required />
+																	{/* <div className="group-ip ip-icon">
+																		<input
+																			type="text"
+																			className="form-control"
+																			placeholder="Search Location"
+																			name="s"
+																			title="Search for"
+																			value={location}
+																			onChange={(e) => setLocation(e.target.value)}
+																			required
+																		/>
 																		<Link href="#" className="icon-right icon-location" />
-																	</div>
+																	</div> */}
+																	<GoogleMapComponent/>
 																</div>
 
 																<div className="row p-3">
@@ -96,7 +175,13 @@ export default function SidebarList() {
 																		<div className="form-style">
 																			<label className="title-select">Check In</label>
 																			<div className="group-ip ip-icon">
-																				<input type="date" className="form-control" required />
+																				<input
+																					type="date"
+																					className="form-control"
+																					value={checkIn}
+																					onChange={(e) => setCheckIn(e.target.value)}
+																					required
+																				/>
 																			</div>
 																		</div>
 																	</div>
@@ -104,84 +189,40 @@ export default function SidebarList() {
 																		<div className="form-style">
 																			<label className="title-select">Check Out</label>
 																			<div className="group-ip ip-icon">
-																				<input type="date" className="form-control" required />
+																				<input
+																					type="date"
+																					className="form-control"
+																					value={checkOut}
+																					onChange={(e) => setCheckOut(e.target.value)}
+																					required
+																				/>
 																			</div>
 																		</div>
 																	</div>
 																</div>
 
-
 																<div className="form-style">
 																	<label className="title-select">Type</label>
 																	<div className="group-select">
-																		<select className="nice-select">
-
-																			<option data-value className="option selected">All</option>
-																			<option data-value="villa" className="option">Villa</option>
-																			<option data-value="studio" className="option">Studio</option>
-																			<option data-value="office" className="option">Office</option>
+																		<select
+																			className="form-control"
+																			defaultValue=""
+																			onChange={(e) => setSelectedCategory(e.target.value)}
+																		>
+																			<option value="" disabled>Select a category</option>
+																			{categories.map((cat) => (
+																				<option key={cat._id} value={cat._id} className="option">
+																					{cat.cattype}
+																				</option>
+																			))}
 																		</select>
 																	</div>
 																</div>
-																{/* <div className="form-style box-select">
-																	<label className="title-select">Rooms</label>
-																	<select className="nice-select">
 
-																		<option data-value={2} className="option">1</option>
-																		<option data-value={2} className="option selected">2</option>
-																		<option data-value={3} className="option">3</option>
-																		<option data-value={4} className="option">4</option>
-																		<option data-value={5} className="option">5</option>
-																		<option data-value={6} className="option">6</option>
-																		<option data-value={7} className="option">7</option>
-																		<option data-value={8} className="option">8</option>
-																		<option data-value={9} className="option">9</option>
-																		<option data-value={10} className="option">10</option>
-																	</select>
-																</div>
-																<div className="form-style box-select">
-																	<label className="title-select">Bathrooms</label>
-																	<select className="nice-select">
-
-																		<option data-value="all" className="option">All</option>
-																		<option data-value={1} className="option">1</option>
-																		<option data-value={2} className="option">2</option>
-																		<option data-value={3} className="option">3</option>
-																		<option data-value={4} className="option selected">4</option>
-																		<option data-value={5} className="option">5</option>
-																		<option data-value={6} className="option">6</option>
-																		<option data-value={7} className="option">7</option>
-																		<option data-value={8} className="option">8</option>
-																		<option data-value={9} className="option">9</option>
-																		<option data-value={10} className="option">10</option>
-																	</select>
-																</div>
-																<div className="form-style box-select">
-																	<label className="title-select">Bedrooms</label>
-																	<select className="nice-select">
-
-																		<option data-value={1} className="option">All</option>
-																		<option data-value={1} className="option">1</option>
-																		<option data-value={2} className="option">2</option>
-																		<option data-value={3} className="option">3</option>
-																		<option data-value={4} className="option selected">4</option>
-																		<option data-value={5} className="option">5</option>
-																		<option data-value={6} className="option">6</option>
-																		<option data-value={7} className="option">7</option>
-																		<option data-value={8} className="option">8</option>
-																		<option data-value={9} className="option">9</option>
-																		<option data-value={10} className="option">10</option>
-																	</select>
-																</div>
-																<div className="form-style widget-price">
-																	<RangeSlider />
-																</div>
-																<div className="form-style widget-price wd-price-2">
-																	<RangeSlider />
-																</div>
-																<SidebarFilter /> */}
 																<div className="form-style">
-																	<button type="submit" className="tf-btn primary" href="#">Find Properties</button>
+																	<button type="submit" className="tf-btn primary">
+																		Find Properties
+																	</button>
 																</div>
 															</div>
 														</div>

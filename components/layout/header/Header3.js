@@ -1,8 +1,9 @@
 'use client'
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Menu from "../Menu"
 import MobileMenu from "../MobileMenu"
+import Axios from "@/components/axios/axios"
 
 export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu, handleMobileMenu }) {
 	const [isToggled, setToggled] = useState(false)
@@ -20,8 +21,34 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 		user = userId
 		flag = isFlag
 	}
+	const [merchant, setMerchant] = useState(null); // For merchant data
+	const [userData, setUserData] = useState(null); // For regular user data
+	const [photos, setPhotos] = useState(''); // For the image URL
 
-	console.log(user)
+	useEffect(() => {
+		// Check for merchant or user and set the corresponding data
+		getData();
+	}, [user]);
+
+	// Fetch merchant data if the user is a merchant
+	const getData = async () => {
+		try {
+			// Attempt to fetch merchant data
+			const merchantRes = await Axios.get(`/merchants/${user}`);
+			if (merchantRes.status === 201) {
+				setMerchant(merchantRes.data); // Store merchant data
+				setPhotos(merchantRes.data?.image); // Set merchant image
+			} else {
+				// If not a merchant, fetch regular user data
+				const userRes = await Axios.get(`/user/${user}`);
+				setUserData(userRes.data); // Store regular user data
+				setPhotos(userRes.data?.image); // Set user image
+			}
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	};
+
 
 	return (
 		<>
@@ -51,7 +78,10 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 								<div className="header-account">
 									<a onClick={handleToggle} className={`box-avatar dropdown-toggle ${isToggled ? "show" : ""}`}>
 										<div className="avatar avt-40 round">
-											<img src="/images/avatar/avt-2.jpg" alt="avt" />
+											{/* <img src="/images/avatar/avt-2.jpg" alt="avt" /> */}
+											{/* <img src={photos} alt="avatar" /> */}
+											<img src={photos || '/default-avatar.jpg'} alt="avatar" />
+
 										</div>
 										<p className="name">{name}<span className="icon icon-arr-down" /></p>
 									</a>
