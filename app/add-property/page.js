@@ -15,7 +15,7 @@ export default function AddProperty() {
 
 
 
-	const [name, setName] = useState('');
+	const [productName, setProductName] = useState('');
 	const [title, setTitle] = useState('');
 	const [phototitle, setPhotoTitle] = useState('');
 	const [description, setDescription] = useState('');
@@ -82,27 +82,27 @@ export default function AddProperty() {
 		setLocation({ ...location, [name]: value });
 	};
 
-	const handlePhotoChange = (index, e) => {
-		const { name, value } = e.target;
-		const updatedPhotos = [...photos];
-		updatedPhotos[index][name] = value;
-		setPhotos(updatedPhotos);
-	};
+	// const handlePhotoChange = (index, e) => {
+	// 	const { name, value } = e.target;
+	// 	const updatedPhotos = [...photos];
+	// 	updatedPhotos[index][name] = value;
+	// 	setPhotos(updatedPhotos);
+	// };
 
-	const handleAmenityChange = (index, e) => {
-		const { name, value } = e.target;
-		const updatedAmenities = [...amenities];
-		updatedAmenities[index][name] = value;
-		setAmenities(updatedAmenities);
-	};
+	// const handleAmenityChange = (index, e) => {
+	// 	const { name, value } = e.target;
+	// 	const updatedAmenities = [...amenities];
+	// 	updatedAmenities[index][name] = value;
+	// 	setAmenities(updatedAmenities);
+	// };
 
-	const addPhotoField = () => {
-		setPhotos([...photos, { title: '', url: '' }]);
-	};
+	// const addPhotoField = () => {
+	// 	setPhotos([...photos, { title: '', url: '' }]);
+	// };
 
-	const addAmenityField = () => {
-		setAmenities([...amenities, { name: '', image: '' }]);
-	};
+	// const addAmenityField = () => {
+	// 	setAmenities([...amenities, { name: '', image: '' }]);
+	// };
 
 
 	const [product, setProduct] = useState([])
@@ -125,7 +125,7 @@ export default function AddProperty() {
 			console.log(photos)
 
 			const res = await Axios.post(`/addproducts`, {
-				name, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities, quantity
+				name: productName, title, description, price, offerPrice, location, categoryId, photos, owner: ownerData, amenities, quantity
 			})
 			console.log(res.data)
 			if (res.status === 201) {
@@ -357,8 +357,8 @@ export default function AddProperty() {
 										Name:<span>*</span>
 									</label>
 									<input type="text" className="form-control style-1"
-										value={name}
-										onChange={(e) => setName(e.target.value)}
+										value={productName}
+										onChange={(e) => setProductName(e.target.value)}
 										placeholder="enter name" />
 								</fieldset>
 								<fieldset className="box box-fieldset">
@@ -451,7 +451,7 @@ export default function AddProperty() {
 										<li key={index}>
 											<img src={photo.url} alt={`uploaded-${index}`} style={{ width: '200px' }} />
 										</li>
-										
+
 									))}
 								</ul>
 								<div className="box grid-2 gap-30">

@@ -33,6 +33,7 @@ export default function PropertyHalfmapList() {
 
 	if (storageUserInfo) {
 		const { user, username, token, isFlag } = JSON.parse(userInfo)
+		userId=user
 		flag = isFlag
 	}
 

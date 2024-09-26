@@ -20,7 +20,7 @@ export default function AddProperty({ searchParams }) {
 
 
 
-	const [name, setName] = useState('');
+	const [productName, setProductName] = useState('');
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
 	const [quantity, setQuantity] = useState('');
@@ -84,7 +84,7 @@ export default function AddProperty({ searchParams }) {
 			const res = await Axios.get(`/products/${id}`);
 			const product = res.data;
 			// console.log(product)
-			setName(product.name);
+			setProductName(product.name);
 			setTitle(product.title);
 			setDescription(product.description);
 			setPrice(product.price);
@@ -118,27 +118,27 @@ export default function AddProperty({ searchParams }) {
 		setLocation({ ...location, [name]: value });
 	};
 
-	const handlePhotoChange = (index, e) => {
-		const { name, value } = e.target;
-		const updatedPhotos = [...photos];
-		updatedPhotos[index][name] = value;
-		setPhotos(updatedPhotos);
-	};
+	// const handlePhotoChange = (index, e) => {
+	// 	const { name, value } = e.target;
+	// 	const updatedPhotos = [...photos];
+	// 	updatedPhotos[index][name] = value;
+	// 	setPhotos(updatedPhotos);
+	// };
 
-	const handleAmenityChange = (index, e) => {
-		const { name, value } = e.target;
-		const updatedAmenities = [...amenities];
-		updatedAmenities[index][name] = value;
-		setAmenities(updatedAmenities);
-	};
+	// const handleAmenityChange = (index, e) => {
+	// 	const { name, value } = e.target;
+	// 	const updatedAmenities = [...amenities];
+	// 	updatedAmenities[index][name] = value;
+	// 	setAmenities(updatedAmenities);
+	// };
 
-	const addPhotoField = () => {
-		setPhotos([...photos, { title: '', url: '' }]);
-	};
+	// const addPhotoField = () => {
+	// 	setPhotos([...photos, { title: '', url: '' }]);
+	// };
 
-	const addAmenityField = () => {
-		setAmenities([...amenities, { name: '', image: '' }]);
-	};
+	// const addAmenityField = () => {
+	// 	setAmenities([...amenities, { name: '', image: '' }]);
+	// };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -151,7 +151,7 @@ export default function AddProperty({ searchParams }) {
 		}
 
 		const productData = {
-			name,
+			name: productName,
 			title,
 			description,
 			price,
@@ -443,8 +443,8 @@ export default function AddProperty({ searchParams }) {
 										Name:<span>*</span>
 									</label>
 									<input type="text" className="form-control style-1"
-										value={name}
-										onChange={(e) => setName(e.target.value)}
+										value={productName}
+										onChange={(e) => setProductName(e.target.value)}
 										placeholder="enter name" />
 								</fieldset>
 								<fieldset className="box box-fieldset">
