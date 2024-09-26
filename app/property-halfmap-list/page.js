@@ -19,7 +19,7 @@ export default function PropertyHalfmapList() {
 	}
 
 
-	let userid = null
+	let userId = null
 	let flag = null
 	let storageUserInfo
 
@@ -32,7 +32,7 @@ export default function PropertyHalfmapList() {
 	}, [])
 
 	if (storageUserInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		const { user, username, token, isFlag } = JSON.parse(userInfo)
 		flag = isFlag
 	}
 
