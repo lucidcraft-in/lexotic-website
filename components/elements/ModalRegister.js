@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from "react";
 import Axios from "../axios/axios";
 import { ToastContainer, toast } from "react-toastify";

@@ -1,3 +1,4 @@
+'use client'
 
 import Layout from "@/components/layout/Layout"
 import Categories3 from "@/components/sections/Categories3"

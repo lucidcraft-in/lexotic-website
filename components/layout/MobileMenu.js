@@ -8,17 +8,38 @@ export default function MobileMenu() {
 	const [currentMenuItem, setCurrentMenuItem] = useState("")
 
 
+	const [userInfo, setUserInfo] = useState(null)
 
-	let user = null
-	let isUser = null
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		isUser = isFlag
+	let user = null;
+	let isUser = null;
+	let sessionUserInfo
+
+	useEffect(() => {
+	  if (typeof window !== "undefined") {
+		sessionUserInfo = sessionStorage.getItem('UserInfo');
+		setUserInfo(userInfo)
+
+	  }
+	}, [])
+
+	if (sessionUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo);
+	  // console.log(userId);
+	  user = userId;
+	  isUser = isFlag;
 	}
+
+	// let user = null
+	// let isUser = null
+
+	// const userInfo = sessionStorage.getItem("UserInfo")
+	// if (userInfo) {
+	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	// 	// console.log(userId)
+	// 	user = userId
+	// 	isUser = isFlag
+	// }
 
 	console.log(user)
 

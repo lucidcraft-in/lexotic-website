@@ -1,4 +1,4 @@
-
+'use client'
 
 export default function Benefit1() {
 	return (

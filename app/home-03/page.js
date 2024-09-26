@@ -1,3 +1,4 @@
+'use client'
 
 import Layout from "@/components/layout/Layout"
 import Agents3 from "@/components/sections/Agents3"

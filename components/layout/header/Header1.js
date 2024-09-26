@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link"
 import Menu from "../Menu"
 import MobileMenu from "../MobileMenu"
@@ -5,38 +7,38 @@ import { useEffect, useState } from "react"
 
 export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogin, handleLogin, hcls, handleRegister }) {
 
-  // const [userInfo, setUserInfo] = useState(null)
+  const [userInfo, setUserInfo] = useState(null)
 
-  // let user = null
-  // let flag = null
-  // let storageUserInfo
+  let user = null
+  let flag = null
+  let storageUserInfo
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     storageUserInfo = sessionStorage.getItem('UserInfo')
-  //     setUserInfo(storageUserInfo)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      storageUserInfo = sessionStorage.getItem('UserInfo')
+      setUserInfo(storageUserInfo)
 
-  //   }
-  // }, [])
+    }
+  }, [])
 
-  // if (storageUserInfo) {
-  //   const { userId, username, token, isFlag } = JSON.parse(userInfo)
-  //   user = userId
-  //   flag = isFlag
-  // }
+  if (storageUserInfo) {
+    const { userId, username, token, isFlag } = JSON.parse(userInfo)
+    user = userId
+    flag = isFlag
+  }
 
 
-  
-	let user = null
-	let flag = null
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		flag = isFlag
-	}
+	// let user = null
+	// let flag = null
+
+	// const userInfo = sessionStorage.getItem("UserInfo")
+	// if (userInfo) {
+	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	// 	// console.log(userId)
+	// 	user = userId
+	// 	flag = isFlag
+	// }
 
 	console.log(user)
 

@@ -19,24 +19,32 @@ export default function PropertyHalfmapList() {
 	}
 
 
-	let user = null
+	let userid = null
 	let flag = null
+	let storageUserInfo
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			storageUserInfo = sessionStorage.getItem('UserInfo')
+			setUserInfo(storageUserInfo)
+
+		}
+	}, [])
+
+	if (storageUserInfo) {
+		const { userId, username, token, isFlag } = JSON.parse(userInfo)
+		flag = isFlag
+	}
 
 	useEffect(() => {
 
 		getData()
-	}, [user])
+	}, [userId])
 
 
 	const [showPopup, setShowPopup] = useState(false);
 
 	const [cart, setCart] = useState([])
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-	}
 
 	const [paymentMethod, setPaymentMethod] = useState('');
 	const [showModal, setShowModal] = useState(false);
@@ -49,7 +57,7 @@ export default function PropertyHalfmapList() {
 
 	const getData = async () => {
 		try {
-			const res = await Axios.get(`/cart/${user}`);
+			const res = await Axios.get(`/cart/${userId}`);
 			// console.log(res.data);
 			// Ensure the response structure matches your expectations
 			setCart(res.data || { items: [] }); // Default to empty items array if data is not available

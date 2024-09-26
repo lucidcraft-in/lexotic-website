@@ -14,14 +14,33 @@ export default function Reviews() {
 
 	let user = null
 	let flag = null
+	let storageUserInfo
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			storageUserInfo = sessionStorage.getItem('UserInfo')
+			setUserInfo(storageUserInfo)
+
+		}
+	}, [])
+
+	if (storageUserInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
 		user = userId
 		flag = isFlag
 	}
+
+
+	// let user = null
+	// let flag = null
+
+	// const userInfo = sessionStorage.getItem("UserInfo")
+	// if (userInfo) {
+	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	// 	// console.log(userId)
+	// 	user = userId
+	// 	flag = isFlag
+	// }
 
 	console.log(user)
 

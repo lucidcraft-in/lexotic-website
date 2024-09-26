@@ -8,37 +8,37 @@ import { useEffect, useState } from "react"
 export default function MyProperty() {
 
 
-	// const [userInfo, setUserInfo] = useState(null)
-
-	// let userid = null
-	// let flag = null
-	// let storageUserInfo
-  
-	// useEffect(() => {
-	//   if (typeof window !== "undefined") {
-	// 	storageUserInfo = sessionStorage.getItem('UserInfo')
-	// 	setUserInfo(storageUserInfo)
-  
-	//   }
-	// }, [])
-  
-	// if (storageUserInfo) {
-	//   const { userId, username, token, isFlag } = JSON.parse(userInfo)
-	//   userid = userId
-	//   flag = isFlag
-	// }
-
+	const [userInfo, setUserInfo] = useState(null)
 
 	let userid = null
 	let flag = null
+	let storageUserInfo
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		userid = userId
-		flag = isFlag
+	useEffect(() => {
+	  if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+
+	  }
+	}, [])
+
+	if (storageUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	  userid = userId
+	  flag = isFlag
 	}
+
+
+	// let userid = null
+	// let flag = null
+
+	// const userInfo = sessionStorage.getItem("UserInfo")
+	// if (userInfo) {
+	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	// 	// console.log(userId)
+	// 	userid = userId
+	// 	flag = isFlag
+	// }
 
 
 

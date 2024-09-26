@@ -108,15 +108,35 @@ export default function PropertyDetailsV1({ searchParams }) {
 
 	console.log(product)
 
-	let user = null
-	let flag = null
+	const [userInfo, setUserInfo] = useState(null)
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
+  	let user = null
+	let flag = null
+	let storageUserInfo
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+
+		}
+	}, [])
+
+	if (storageUserInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
 		user = userId
 		flag = isFlag
 	}
+
+	// let user = null
+	// let flag = null
+
+	// const userInfo = sessionStorage.getItem("UserInfo")
+	// if (userInfo) {
+	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	// 	user = userId
+	// 	flag = isFlag
+	// }
 
 	console.log(user)
 

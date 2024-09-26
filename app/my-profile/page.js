@@ -1,5 +1,5 @@
-
 'use client'
+
 import Axios from "@/components/axios/axios";
 import LayoutAdmin from "@/components/layout/LayoutAdmin"
 import Link from "next/link"
@@ -8,37 +8,37 @@ import imageCompression from "browser-image-compression";
 import { toast } from "react-toastify";
 export default function MyProfile() {
 
-	// const [userInfo, setUserInfo] = useState(null)
-
-	// let user = null
-	// let flag = null
-	// let storageUserInfo
-
-	// useEffect(() => {
-	//   if (typeof window !== "undefined") {
-	// 	storageUserInfo = sessionStorage.getItem('UserInfo')
-	// 	setUserInfo(storageUserInfo)
-
-	//   }
-	// }, [])
-
-	// if (storageUserInfo) {
-	//   const { userId, username, token, isFlag } = JSON.parse(userInfo)
-	//   user = userId
-	//   flag = isFlag
-	// }
-
+	const [userInfo, setUserInfo] = useState(null)
 
 	let user = null
 	let flag = null
+	let storageUserInfo
 
-	const userInfo = sessionStorage.getItem("UserInfo")
-	if (userInfo) {
-		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
-		user = userId
-		flag = isFlag
+	useEffect(() => {
+	  if (typeof window !== "undefined") {
+		storageUserInfo = sessionStorage.getItem('UserInfo')
+		setUserInfo(storageUserInfo)
+
+	  }
+	}, [])
+
+	if (storageUserInfo) {
+	  const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	  user = userId
+	  flag = isFlag
 	}
+
+
+	// let user = null
+	// let flag = null
+
+	// const userInfo = sessionStorage.getItem("UserInfo")
+	// if (userInfo) {
+	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
+	// 	// console.log(userId)
+	// 	user = userId
+	// 	flag = isFlag
+	// }
 
 	console.log(user)
 
@@ -103,42 +103,42 @@ export default function MyProfile() {
 	const uploadFileHandler = async (e, val) => {
 		e.preventDefault();
 		const file = e.target.files[0];
-	
+
 		if (!file) {
 			console.error("No file selected");
 			return;
 		}
-	
+
 		// Log file info
 		console.log("Selected file:", file);
-	
+
 		const options = {
 			maxSizeMB: 0.2, // Compress to a maximum of 0.2 MB
 			maxWidthOrHeight: 800,
 			useWebWorker: true,
 		};
-	
+
 		try {
 			const compressedFile = await imageCompression(file, options);
-	
+
 			const newFile = new File([compressedFile], file.name, { type: file.type });
-	
+
 			const formData = new FormData();
 			formData.append('file', newFile);
-	
+
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 				},
 			};
-	
+
 			const response = await Axios.post('/upload', formData, config);
 			console.log("Upload successful, response data:", response.data);
-	
+
 			// if (val === 'photos') {
 				setPhotos(response.data.url);
 			// }
-	
+
 		} catch (error) {
 			console.error("Error during file upload:", error);
 		}

@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link"
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -33,8 +35,21 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
       const { token, userId, isFlag } = res.data;
 
+      // let user = null
+      // let flag = null
+      // let storageUserInfo
 
-      sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
+      useEffect(() => {
+        if (typeof window !== "undefined") {
+          sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
+        }
+      }, [])
+
+      // if (storageUserInfo) {
+      //   const { userId, username, token, isFlag } = JSON.parse(userInfo)
+      //   user = userId
+      //   flag = isFlag
+      // }
 
       // Store user or merchant data in session storage
 
@@ -64,8 +79,13 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
 
       // Now check the status after the response
       if (status === 'approved') {
-        // Store user or merchant data in session storage
-        sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
+
+        useEffect(() => {
+          if (typeof window !== "undefined") {
+            // Store user or merchant data in session storage
+            sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
+          }
+        }, [])
 
         toast.success("Login successful", { autoClose: 3000 });
       } else {

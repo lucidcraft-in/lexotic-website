@@ -1,3 +1,4 @@
+'use client'
 
 import PropertyMap from "@/components/elements/PropertyMap"
 import Layout from "@/components/layout/Layout"

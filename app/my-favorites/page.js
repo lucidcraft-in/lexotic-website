@@ -1,3 +1,4 @@
+'use client'
 
 import DeleteFile from "@/components/elements/DeleteFile"
 import LayoutAdmin from "@/components/layout/LayoutAdmin"

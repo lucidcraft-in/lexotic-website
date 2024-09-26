@@ -1,3 +1,5 @@
+'use client'
+
 import AdvancedFilter from "../elements/AdvancedFilter"
 
 export default function OffcanvasFilter({
