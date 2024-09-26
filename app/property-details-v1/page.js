@@ -96,7 +96,6 @@ export default function PropertyDetailsV1({ searchParams }) {
 	const [startDate, setStartDate] = useState("")
 	const [endDate, setEndDate] = useState("")
 	const [persons, setPersons] = useState("")
-	// const router = useRouter()
 
 	useEffect(() => {
 		getProductById()
@@ -104,32 +103,10 @@ export default function PropertyDetailsV1({ searchParams }) {
 
 	const getProductById = async () => {
 		const res = await Axios.get(`/products/${searchParams._id}`)
-		// console.log(res.data, "data")
 		setProduct(res.data)
 	}
 
 	console.log(product)
-
-	// const [userInfo, setUserInfo] = useState(null)
-
-	// let user = null
-	// let flag = null
-	// let storageUserInfo
-
-	// useEffect(() => {
-	// 	if (typeof window !== "undefined") {
-	// 		storageUserInfo = sessionStorage.getItem('UserInfo')
-	// 		setUserInfo(storageUserInfo)
-
-	// 	}
-	// }, [])
-
-	// if (storageUserInfo) {
-	// 	const { userId, username, token, isFlag } = JSON.parse(userInfo)
-	// 	user = userId
-	// 	flag = isFlag
-	// }
-
 
 	let user = null
 	let flag = null
@@ -137,7 +114,6 @@ export default function PropertyDetailsV1({ searchParams }) {
 	const userInfo = sessionStorage.getItem("UserInfo")
 	if (userInfo) {
 		const { userId, username, token, isFlag } = JSON.parse(userInfo)
-		// console.log(userId)
 		user = userId
 		flag = isFlag
 	}
@@ -146,51 +122,72 @@ export default function PropertyDetailsV1({ searchParams }) {
 
 
 	const [cart, setCart] = useState([])
+
 	const handleAddCart = async (e) => {
-		e.preventDefault()
-		// console.log(user)
-		let totalRentalPrice = 0
-		const items = [
-			{
-				productId: product._id,
-				rentalStartDate: startDate,
-				rentalEndDate: endDate,
-				pricePerDay: product.offerPrice,
-				quantity: persons
+		e.preventDefault();
 
-			}
-		]
-		items.forEach(item => {
-			const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24)
-			totalRentalPrice += item.pricePerDay * item.quantity * days
-		})
-
-		const createdAt = new Date().toISOString()
-		const updatedAt = new Date().toISOString()
-		const data = {
-			userId: user,
-			items,
-			totalRentalPrice,
-			merchantId: product.owner.merchantId,
-			createdAt,
-			updatedAt
-
-		}
-
-		// console.log(data)
-
+		// Check product availability first
 		try {
-			const res = await Axios.post(`/cart`, data)
-			setCart(res.data)
+			// const formattedStartDate = `${startDate}T00:00:00.000Z`;
+			// const formattedEndDate = `${endDate}T23:59:59.999Z`;
 
+			// Log the payload for debugging
+			const availabilityPayload = {
+				startDate,
+				endDate,
+				productId: product._id // Include product ID to check availability
+			};
+			console.log("Checking availability with payload:", availabilityPayload);
+
+			const availabilityResponse = await Axios.post('/products/availability', availabilityPayload);
+
+			if (!availabilityResponse.data.isAvailable) {
+				// Show error message if product is not available
+				alert("Product is not available for the selected dates.");
+				return; // Do not proceed with adding to cart
+			}
+
+			// If available, proceed to calculate total rental price
+			let totalRentalPrice = 0;
+			const items = [
+				{
+					productId: product._id,
+					rentalStartDate: startDate,
+					rentalEndDate: endDate,
+					pricePerDay: product.offerPrice,
+					quantity: persons
+				}
+			];
+
+			items.forEach(item => {
+				const days = (new Date(item.rentalEndDate) - new Date(item.rentalStartDate)) / (1000 * 60 * 60 * 24);
+				totalRentalPrice += item.pricePerDay * item.quantity * days;
+			});
+
+			const createdAt = new Date().toISOString();
+			const updatedAt = new Date().toISOString();
+			const data = {
+				userId: user,
+				items,
+				totalRentalPrice,
+				merchantId: product.owner.merchantId,
+				createdAt,
+				updatedAt
+			};
+
+			const res = await Axios.post(`/cart`, data);
+			setCart(res.data); // Update the cart state
+
+			// Redirect to the checkout page upon successful addition to the cart
+			window.location.href = `/property-halfmap-list?_id=${searchParams._id}`;
 		} catch (error) {
-			console.error("Failed to add to cart:", error)
+			console.error("Failed to add to cart:", error);
 		}
-	}
+	};
+
 
 	const cartId = (cart._id)
 
-	const dummyImage = '/images/2.jpg';
 	const photoUrls = (product?.photos || []).map(photo => photo.url);
 	console.log(photoUrls)
 	return (
@@ -202,54 +199,20 @@ export default function PropertyDetailsV1({ searchParams }) {
 						<div className="swiper tf-sw-location">
 							<Swiper {...swiperOptions} className="swiper-wrapper">
 								<SwiperSlide>
-									{/* <Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block"> */}
 									<img src={photoUrls} alt="img-property" />
-									{/* </Link> */}
 								</SwiperSlide>
 
 
 								<SwiperSlide>
 									<img src={photoUrls} alt="img-property" />
 								</SwiperSlide>
-								{/* <SwiperSlide>
-									<Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-1.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-3.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-3.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-1.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-1.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-3.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-3.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide>
-								<SwiperSlide>
-									<Link href="/images/banner/banner-property-2.jpg" data-fancybox="gallery" className="box-imgage-detail d-block">
-										<img src="/images/banner/banner-property-2.jpg" alt="img-property" />
-									</Link>
-								</SwiperSlide> */}
+
 							</Swiper>
 							<div className="box-navigation">
 								<div className="navigation swiper-nav-next nav-next-location"><span className="icon icon-arr-l" /></div>
 								<div className="navigation swiper-nav-prev nav-prev-location"><span className="icon icon-arr-r" /></div>
 							</div>
-							{/* <div className="icon-box">
-                  <Link href="#" className="item"><span className="icon icon-map-trifold"></span></Link>
-                  <Link href="/images/banner/banner-property-1.jpg" className="item active" data-fancybox="gallery"><span className="icon icon-images"></span></Link>
-              </div> */}
+
 						</div>
 					</section>
 					{product && (
@@ -355,13 +318,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 												</li>
 											</ul>
 										</div>
-										{/* <div className="single-property-element single-property-video">
-								<div className="h7 title fw-7">Video</div>
-								<div className="img-video">
-									<img src="/images/banner/img-video.jpg" alt="img-video" />
-									<VideoPopup />
-								</div>
-							</div> */}
+
 										<div className="single-property-element single-property-info">
 											<div className="h7 title fw-7">Property Details</div>
 											<div className="row">
@@ -515,183 +472,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 												</div>
 											</div>
 										</div>
-										{/* <div className="single-property-element single-property-map">
-								<div className="h7 title fw-7">Map</div>
-								<PropertyMap singleMap />
-								<ul className="info-map">
-									<li>
-										<div className="fw-7">Address</div>
-										<span className="mt-4 text-variant-1">8 Broadway, Brooklyn, New York</span>
-									</li>
-									<li>
-										<div className="fw-7">Downtown</div>
-										<span className="mt-4 text-variant-1">5 min</span>
-									</li>
-									<li>
-										<div className="fw-7">FLL</div>
-										<span className="mt-4 text-variant-1">15 min</span>
-									</li>
-								</ul>
-							</div> */}
-										{/* <div className="single-property-element single-property-floor">
-								<div className="h7 title fw-7">Floor plans</div>
-								<ul className="box-floor" id="parent-floor">
-									<li className="floor-item" onClick={() => handleAccordion(1)}>
-										<div className={`${isAccordion == 1 ? "floor-header" : "floor-header collapsed"}`}>
-											<div className="inner-left">
-												<i className="icon icon-arr-r" />
-												<span className="fw-7">First Floor</span>
-											</div>
-											<ul className="inner-right">
-												<li className="d-flex align-items-center gap-8">
-													<i className="icon icon-bed" />
-													2 Bedroom
-												</li>
-												<li className="d-flex align-items-center gap-8">
-													<i className="icon icon-bathtub" />
-													2 Bathroom
-												</li>
-											</ul>
-										</div>
-										<div id="floor-one" className={`${isAccordion == 1 ? "collapse show" : "collapse"}`} data-bs-parent="#parent-floor">
-											<div className="faq-body">
-												<div className="box-img">
-													<img src="/images/banner/floor.png" alt="img-floor" />
-												</div>
-											</div>
-										</div>
-									</li>
-									<li className="floor-item" onClick={() => handleAccordion(2)}>
-										<div className={`${isAccordion == 2 ? "floor-header" : "floor-header collapsed"}`}>
-											<div className="inner-left">
-												<i className="icon icon-arr-r" />
-												<span className="fw-7">Second Floor</span>
-											</div>
-											<ul className="inner-right">
-												<li className="d-flex align-items-center gap-8">
-													<i className="icon icon-bed" />
-													2 Bedroom
-												</li>
-												<li className="d-flex align-items-center gap-8">
-													<i className="icon icon-bathtub" />
-													2 Bathroom
-												</li>
-											</ul>
-										</div>
-										<div id="floor-two" className={`${isAccordion == 2 ? "collapse show" : "collapse"}`} data-bs-parent="#parent-floor">
-											<div className="faq-body">
-												<div className="box-img">
-													<img src="/images/banner/floor.png" alt="img-floor" />
-												</div>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div> */}
-										{/* <div className="single-property-element single-property-attachments">
-								<div className="h7 title fw-7">File Attachments</div>
-								<div className="row">
-									<div className="col-sm-6">
-										<Link href="#" target="_blank" className="attachments-item">
-											<div className="box-icon w-60">
-												<img src="/images/home/file-1.png" alt="file" />
-											</div>
-											<span>Villa-Document.pdf</span>
-											<i className="icon icon-download" />
-										</Link>
-									</div>
-									<div className="col-sm-6">
-										<Link href="#" target="_blank" className="attachments-item">
-											<div className="box-icon w-60">
-												<img src="/images/home/file-2.png" alt="file" />
-											</div>
-											<span>Villa-Document.pdf</span>
-											<i className="icon icon-download" />
-										</Link>
-									</div>
-								</div>
-							</div>
-							<div className="single-property-element single-property-explore">
-								<div className="h7 title fw-7">Explore Property</div>
-								<div className="box-img">
-									<img src="/images/banner/img-explore.jpg" alt="img" />
-									<div className="box-icon w-80">
-										<span className="icon icon-360" />
-									</div>
-								</div>
-							</div> */}
-										{/* <div className="single-property-element single-property-loan">
-								<div className="h7 title fw-7">Loan Calculator</div>
-								<form action="#" className="box-loan-calc">
-									<div className="box-top">
-										<div className="item-calc">
-											<label htmlFor="loan1" className="label">Total Amount:</label>
-											<input type="number" id="loan1" placeholder="10,000" className="form-control" />
-										</div>
-										<div className="item-calc">
-											<label htmlFor="loan1" className="label">Down Payment:</label>
-											<input type="number" id="loan1" placeholder={3000} className="form-control" />
-										</div>
-										<div className="item-calc">
-											<label htmlFor="loan1" className="label">Amortization Period (months):</label>
-											<input type="number" id="loan1" placeholder={12} className="form-control" />
-										</div>
-										<div className="item-calc">
-											<label htmlFor="loan1" className="label">Interest rate (%):</label>
-											<input type="number" id="loan1" placeholder={5} className="form-control" />
-										</div>
-									</div>
-									<div className="box-bottom">
-										<button className="tf-btn primary">Calculator</button>
-										<div className="d-flex gap-4">
-											<span className="h7 fw-7">Monthly Payment:</span>
-											<span className="result h7 fw-7">$599.25</span>
-										</div>
-									</div>
-								</form>
-							</div> */}
-										{/* <div className="single-property-element single-property-nearby">
-								<div className="h7 title fw-7">What’s nearby?</div>
-								<p className="body-2">Explore nearby amenities to precisely locate your property and identify surrounding conveniences, providing a comprehensive overview of the living environment and the property's convenience.</p>
-								<div className="grid-2 box-nearby">
-									<ul className="box-left">
-										<li className="item-nearby">
-											<span className="label">School:</span>
-											<span className="fw-7">0.7 km</span>
-										</li>
-										<li className="item-nearby">
-											<span className="label">University:</span>
-											<span className="fw-7">1.3 km</span>
-										</li>
-										<li className="item-nearby">
-											<span className="label">Grocery center:</span>
-											<span className="fw-7">0.6 km</span>
-										</li>
-										<li className="item-nearby">
-											<span className="label">Market:</span>
-											<span className="fw-7">1.1 km</span>
-										</li>
-									</ul>
-									<ul className="box-right">
-										<li className="item-nearby">
-											<span className="label">Hospital:</span>
-											<span className="fw-7">0.4 km</span>
-										</li>
-										<li className="item-nearby">
-											<span className="label">Metro station:</span>
-											<span className="fw-7">1.8 km</span>
-										</li>
-										<li className="item-nearby">
-											<span className="label">Gym, wellness:</span>
-											<span className="fw-7">1.3 km</span>
-										</li>
-										<li className="item-nearby">
-											<span className="label">River:</span>
-											<span className="fw-7">2.1 km</span>
-										</li>
-									</ul>
-								</div>
-							</div> */}
+
 										<div className="single-property-element single-wrapper-review">
 											<div className="box-title-review d-flex justify-content-between align-items-center flex-wrap gap-20">
 												<div className="h7 fw-7">Guest Reviews</div>
@@ -855,36 +636,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 													</li>
 												</ul>
 											</div>
-											{/* <div className="wrap-form-comment">
-									<div className="h7">Leave A Reply</div>
-									<div id="comments" className="comments">
-										<div className="respond-comment">
-											<form method="post" id="contactform" className="comment-form form-submit" action="./contact/contact-process.php" acceptCharset="utf-8" noValidate="novalidate">
-												<div className="form-wg group-ip">
-													<fieldset>
-														<label className="sub-ip">Name</label>
-														<input type="text" className="form-control" name="text" placeholder="Your name" required />
-													</fieldset>
-													<fieldset>
-														<label className="sub-ip">Email</label>
-														<input type="email" className="form-control" name="email" placeholder="Your email" required />
-													</fieldset>
-												</div>
-												<fieldset className="form-wg d-flex align-items-center gap-8">
-													<input type="checkbox" className="tf-checkbox" id="cb-ip" />
-													<label htmlFor="cb-ip" className="text-black text-checkbox">Save your name, email for the next time review </label>
-												</fieldset>
-												<fieldset className="form-wg">
-													<label className="sub-ip">Review</label>
-													<textarea id="comment-message" name="message" rows={4} tabIndex={4} placeholder="Write comment " aria-required="true" defaultValue={""} />
-												</fieldset>
-												<button className="form-wg tf-btn primary" name="submit" type="submit">
-													<span>Post Comment</span>
-												</button>
-											</form>
-										</div>
-									</div>
-								</div> */}
+
 										</div>
 									</div>
 									<div className="col-lg-4">
@@ -895,10 +647,7 @@ export default function PropertyDetailsV1({ searchParams }) {
 													<div className="avatar avt-100 round">
 														<img src="/images/avatar/avt-12.jpg" alt="avatar" />
 													</div>
-													{/* <div className="info">
-											<div className="text-1 name">Shara Conner</div>
-											<span>1-333-345-6868 themesflat@gmail.com</span>
-										</div> */}
+
 												</div>
 												<form className="contact-form" onSubmit={handleAddCart}>
 													<div className="ip-group">
@@ -954,34 +703,19 @@ export default function PropertyDetailsV1({ searchParams }) {
 										</div> */}
 													<div className="d-grid gap-3">
 														{userInfo ? (
-															<>
-																<button
-																	className="btn btn-primary w-100 mb-3"
-																	onClick={() => {
-																		const confirmBooking = window.confirm("Are you sure you want to book?");
-																		if (confirmBooking) {
-																			// Redirect to the checkout page upon confirmation
-																			window.location.href = `/property-halfmap-list?_id=${searchParams._id}`;
-																		} else {
-																			// Refresh the page if the user cancels
-																			window.location.reload();
-																		}
-																	}}
-																>
-																	Book Now
-																</button>
-															</>
+															<button className="btn btn-primary w-100 mb-3" onClick={handleAddCart}>
+																Book Now
+															</button>
 														) : (
-															<>
-																<button
-																	className="p-2 btn btn-secondary"
-																	onClick={() => alert("Please log in to book!")}
-																>
-																	Book Now
-																</button>
-															</>
+															<button
+																className="p-2 btn btn-secondary"
+																onClick={() => alert("Please log in to book!")}
+															>
+																Book Now
+															</button>
 														)}
 													</div>
+
 
 
 
