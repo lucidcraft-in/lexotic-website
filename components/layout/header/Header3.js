@@ -18,7 +18,7 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			storageUserInfo = sessionStorage.getItem('UserInfo')
-			setUserInfo(storageUserInfo)
+			// setUserInfo(storageUserInfo)
 
 		}
 	}, [])
@@ -154,6 +154,3 @@ export default function Header3({ scroll, isSidebar, handleSidebar, isMobileMenu
 		</>
 	)
 }
-
-
-

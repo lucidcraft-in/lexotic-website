@@ -21,7 +21,7 @@ let storageUserInfo
 useEffect(() => {
   if (typeof window !== "undefined") {
     storageUserInfo = sessionStorage.getItem('UserInfo')
-    setUserInfo(storageUserInfo)
+    // setUserInfo(storageUserInfo)
 
   }
 }, [])
@@ -149,8 +149,8 @@ export default function Recommended1() {
                             <div className="images-style">
                               {/* Carousel for product photos */}
                               {pro.photos && pro.photos.length > 0 ? (
-                                <Swiper spaceBetween={10} 
-                                slidesPerView={1} loop={true} 
+                                <Swiper spaceBetween={10}
+                                slidesPerView={1} loop={true}
                                 // pagination={false}
                                 >
                                   {pro.photos.map((photo, idx) => (

@@ -8,9 +8,9 @@ export default function Reviews() {
 
 	const [review, setReview] = useState([])
 
-	
-	// 
-	
+
+	//
+
 
 	let user = null
 	let flag = null
@@ -19,7 +19,7 @@ export default function Reviews() {
 	useEffect(() => {
 		if (typeof window !== "undefined") {
 			storageUserInfo = sessionStorage.getItem('UserInfo')
-			setUserInfo(storageUserInfo)
+			// setUserInfo(storageUserInfo)
 
 		}
 	}, [])
