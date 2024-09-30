@@ -8,29 +8,12 @@ import { useParams } from 'next/navigation';
 
 
 // import 'swiper/css/pagination';
-import { Swiper,SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigate } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/navigation';
 
 
-let user = null
-let flag = null
-let storageUserInfo
-
-useEffect(() => {
-  if (typeof window !== "undefined") {
-    storageUserInfo = sessionStorage.getItem('UserInfo')
-    // setUserInfo(storageUserInfo)
-
-  }
-}, [])
-
-if (storageUserInfo) {
-  const { userId, username, token, isFlag } = JSON.parse(userInfo)
-  user = userId
-  flag = isFlag
-}
 
 // let user = null
 // let flag = null
@@ -43,7 +26,6 @@ if (storageUserInfo) {
 //   flag = isFlag
 // }
 
-console.log(user)
 
 
 export default function Recommended1() {
@@ -54,6 +36,27 @@ export default function Recommended1() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [product, setProduct] = useState([]);
   const { id } = useParams;
+
+
+  let user = null
+  let flag = null
+  let storageUserInfo
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      storageUserInfo = sessionStorage.getItem('UserInfo')
+      // setUserInfo(storageUserInfo)
+
+    }
+  }, [])
+
+  if (storageUserInfo) {
+    const { userId, username, token, isFlag } = JSON.parse(userInfo)
+    user = userId
+    flag = isFlag
+  }
+
+
 
   const photoUrls = (product?.photos || []).map(photo => {
     console.log(photo?.url); // Log each URL to check for correctness
@@ -150,7 +153,7 @@ export default function Recommended1() {
                               {/* Carousel for product photos */}
                               {pro.photos && pro.photos.length > 0 ? (
                                 <Swiper spaceBetween={10}
-                                slidesPerView={1} loop={true}
+                                  slidesPerView={1} loop={true}
                                 // pagination={false}
                                 >
                                   {pro.photos.map((photo, idx) => (
