@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Axios from "../axios/axios";
@@ -39,11 +39,9 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
       // let flag = null
       // let storageUserInfo
 
-      useEffect(() => {
         if (typeof window !== "undefined") {
           sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
         }
-      }, [])
 
       // if (storageUserInfo) {
       //   const { userId, username, token, isFlag } = JSON.parse(userInfo)
@@ -80,12 +78,10 @@ export default function ModalLogin({ isLogin, handleLogin, isRegister, handleReg
       // Now check the status after the response
       if (status === 'approved') {
 
-        useEffect(() => {
           if (typeof window !== "undefined") {
             // Store user or merchant data in session storage
             sessionStorage.setItem("UserInfo", JSON.stringify({ userId, username, token, isFlag }));
           }
-        }, [])
 
         toast.success("Login successful", { autoClose: 3000 });
       } else {

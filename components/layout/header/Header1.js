@@ -9,23 +9,30 @@ export default function Header1({ scroll, isMobileMenu, handleMobileMenu, isLogi
 
   const [userInfo, setUserInfo] = useState(null)
 
-  let user = null
-  let flag = null
-  let storageUserInfo
+  const [user, setUser] = useState(null);
+  const [flag, setFlag] = useState(null);
+  const [storageUserInfo, setStorageUserInfo] = useState(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      storageUserInfo = sessionStorage.getItem('UserInfo')
-      setUserInfo(storageUserInfo)
-
+      const userInfo = sessionStorage.getItem('UserInfo');
+      if (userInfo) {
+        const parsedInfo = JSON.parse(userInfo);
+        setStorageUserInfo(parsedInfo);
+      }
     }
-  }, [])
+  }, []);
 
-  if (storageUserInfo) {
-    const { userId, username, token, isFlag } = JSON.parse(userInfo)
-    user = userId
-    flag = isFlag
-  }
+  useEffect(() => {
+    if (storageUserInfo) {
+      const { userId, isFlag } = storageUserInfo;
+      setUser(userId);
+      setFlag(isFlag);
+    }
+  }, [storageUserInfo]);
+
+  console.log(user); // This will print the userId if it's set correctly
+  console.log(flag);
 
 
 
