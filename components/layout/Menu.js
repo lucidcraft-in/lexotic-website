@@ -8,27 +8,53 @@ export default function Menu() {
   const pathname = usePathname()
   const [currentMenuItem, setCurrentMenuItem] = useState("")
 
-  const [userInfo, setUserInfo] = useState(null)
+  // const [userInfo, setUserInfo] = useState(null)
 
 
-  let user = null;
-  let isUser = null;
-  let sessionUserInfo
+  // let user = null;
+  // let isUser = null;
+  // let sessionUserInfo
+
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     sessionUserInfo = sessionStorage.getItem('UserInfo');
+  //     setUserInfo(userInfo)
+
+  //   }
+  // }, [])
+
+  // if (sessionUserInfo) {
+  //   const { userId, username, token, isFlag } = JSON.parse(userInfo);
+  //   // console.log(userId);
+  //   user = userId;
+  //   isUser = isFlag;
+  // }
+
+  // console.log(isUser)
+
+
+
+  const [user, setUser] = useState(null);
+  const [flag, setFlag] = useState(null);
+  const [storageUserInfo, setStorageUserInfo] = useState(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      sessionUserInfo = sessionStorage.getItem('UserInfo');
-      setUserInfo(userInfo)
-
+      const userInfo = sessionStorage.getItem('UserInfo');
+      if (userInfo) {
+        const parsedInfo = JSON.parse(userInfo);
+        setStorageUserInfo(parsedInfo);
+      }
     }
-  }, [])
+  }, []);
 
-  if (sessionUserInfo) {
-    const { userId, username, token, isFlag } = JSON.parse(userInfo);
-    // console.log(userId);
-    user = userId;
-    isUser = isFlag;
-  }
+  useEffect(() => {
+    if (storageUserInfo) {
+      const { userId, isFlag } = storageUserInfo;
+      setUser(userId);
+      setFlag(isFlag);
+    }
+  }, [storageUserInfo]);
 
 
 
@@ -202,7 +228,7 @@ export default function Menu() {
             </li>
           </ul>
         </li> */}
-        {userInfo && (
+        {storageUserInfo && (
           <li
             className={`dropdown2 ${checkParentActive([
               '/dashboard',
@@ -216,7 +242,7 @@ export default function Menu() {
           >
             <Link href="#">Dashboard</Link>
             <ul>
-              {isUser === true ? (
+              {flag === true ? (
                 <>
                   <li className={`${checkCurrentMenuItem('/my-profileuser')}`}>
                     <Link href="/my-profileuser">My Profile</Link>
